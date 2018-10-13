@@ -1,8 +1,8 @@
 const data = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
+  labels: Array.apply(null, {length:30}).map(Number.call, Number),
   datasets: [
     {
-      label: "My First dataset",
+      label: "Sales Per Day",
       fill: false,
       lineTension: 0.1,
       backgroundColor: "rgba(72,166,242,0.6)",
@@ -20,7 +20,7 @@ const data = {
       pointHoverBorderWidth: 2,
       pointRadius: 1,
       pointHitRadius: 10,
-      data: [65, 59, 80, 81, 56, 55, 40]
+      data: Array.apply(null, {length:30}).map(Function.call, ()=>{return Math.random() * 100})
     }
   ]
 };
