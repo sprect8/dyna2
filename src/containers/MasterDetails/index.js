@@ -5,6 +5,10 @@ import { FullColumn } from '../../components/utility/rowColumn';
 import IntlMessages from '../../components/utility/intlMessages';
 import Button from '../../components/uielements/button';
 import Icon from '../../components/uielements/icon';
+import WorkIcon from '@material-ui/icons/Work'
+import SchoolIcon from '@material-ui/icons/School'
+import StarIcon from '@material-ui/icons/Star'
+
 import Scrollbars from '../../components/utility/customScrollBar'
 import { TableBody, TableCell, TableFooter, TableHead, TablePagination, TableRow, TableSortLabel } from '../../components/uielements/table';
 import Table from '../../components/uielements/table';
