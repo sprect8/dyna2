@@ -35,24 +35,24 @@ const routes = [
     component: asyncComponent(() => import('../Reports/CostEfficiency'))
   },
   {
-    path: 'inventory-page',
-    component: asyncComponent(() => import('../Reports/CostEfficiency'))
+    path: 'inventory-optimisation-page',
+    component: asyncComponent(() => import('../Reports/InventoryOptimisation'))
   },
   {
     path: 'business-waste',
-    component: asyncComponent(() => import('../Reports/CostEfficiency'))
+    component: asyncComponent(() => import('../Reports/BusinessWasteReduction'))
   },
   {
     path: 'business-improvement-page',
-    component: asyncComponent(() => import('../Reports/CostEfficiency'))
+    component: asyncComponent(() => import('../Reports/BusinessProcessImprovement'))
   },
   {
     path: 'customer-satisfaction-page',
-    component: asyncComponent(() => import('../Reports/CostEfficiency'))
+    component: asyncComponent(() => import('../Reports/CustomerSatisfaction'))
   },
   {
     path: 'platform-engagement-page',
-    component: asyncComponent(() => import('../Reports/CostEfficiency'))
+    component: asyncComponent(() => import('../Reports/PlatformEngagement'))
   },
 ];
 

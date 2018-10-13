@@ -67,7 +67,7 @@ const options = [
       },
       {
         label: 'Inventory Optimisation',
-        key: 'inventory-page',
+        key: 'inventory-optimisation-page',
         leftIcon: 'assignment_turned_in'
       },
       {

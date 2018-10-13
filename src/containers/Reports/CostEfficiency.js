@@ -14,7 +14,7 @@ import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeli
 import 'react-vertical-timeline-component/style.min.css';
 
 function getRow(color) {
-const row = {
+return {
     labels: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
     datasets: [
       {
@@ -29,7 +29,7 @@ const row = {
 const data = [
 	{
 		widgets: [
-			{ title: "Worker Score", currency: "d", amount: "3.2", progress: "67", color: "rgb(153, 102, 255)", direction:"upward", data:getRow("rgb(255, 99, 132)")},
+			{ title: "Worker Score", currency: "d", amount: "3.2", progress: "67", color: "rgb(153, 102, 255)", direction:"upward", data:getRow("rgba(72,166,242,1)")},
 			{ title: "Supplier Score", currency: "d", amount: "3.1", progress: "67", color: "rgb(153, 102, 255)", direction:"upward", data:getRow("orange")}
 		]
 	},
