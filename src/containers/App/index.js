@@ -69,7 +69,7 @@ class App extends Component {
 							</MUIPProvider>
 						</Main>
 
-						{anchor === 'right' ? <Sidebar {...options} anchor={anchor} /> : ''}
+						{anchor === 'right' ? <Sidebar {...options} anchor={anchor} /> : ''}						
 					</AppFrame>
 				</Root>
 			</IntlProvider>

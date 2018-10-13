@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import Collapse from '@material-ui/core/Collapse';
 import Scrollbars from '../../components/utility/customScrollBar';
 import IntlMessages from '../../components/utility/intlMessages';
@@ -50,23 +50,23 @@ const ListElement = ({
             expand_less
           </ExpandLessIcon>
         ) : (
-          <ExpandMoreIcon style={{ color: selectedTheme.textColor }}>
-            expand_more
+            <ExpandMoreIcon style={{ color: selectedTheme.textColor }}>
+              expand_more
           </ExpandMoreIcon>
-        )
+          )
       ) : (
-        ''
-      )}
+          ''
+        )}
     </div>
   );
 };
 
 const LogoElem = ({ onLogo }) => {
-  return (
-    <Link to="/dashboard" onClick={onLogo}>
-      {/* {<img src={"/favicon.png"} alt="Logo" style={{"height":"20px"}}/>} */}
-      Dynapreneurs
-    </Link>
+  return (    
+      <div to="/dashboard" onClick={onLogo} style={{"fontSize":"12px", fontWeight:"300", textTransform:"uppercase", color:"white", display:"inline-block"}}>
+        <img src={"/tm-logo.png"} alt="Logo" style={{ "height": "40px", "float":"left", "paddingRight":"5px"}} />
+        TM Dynapreneur Analytics Platform
+    </div>    
   );
 };
 
@@ -77,7 +77,7 @@ const stripTrailingSlash = str => {
   return str;
 };
 class Sidebar extends Component {
-  handleClick = () => {};
+  handleClick = () => { };
   onLogo = () => {
     const { changeOpenKeys, changeCurrent, toggleCollapsed } = this.props;
     changeOpenKeys({});
@@ -128,26 +128,26 @@ class Sidebar extends Component {
               />
             </ListItem>
           ) : (
-            <ListItem
-              className={current[key] ? 'selected' : ''}
-              onClick={collapsedClick}
-            >
-              <Link to={linkTo} onClick={toggleCollapsed}>
-                <ListElement
-                  {...option}
-                  isOpened={isOpened}
-                  optionCollapsed={optionCollapsed}
-                />
-              </Link>
-            </ListItem>
-          )}
+              <ListItem
+                className={current[key] ? 'selected' : ''}
+                onClick={collapsedClick}
+              >
+                <Link to={linkTo} onClick={toggleCollapsed}>
+                  <ListElement
+                    {...option}
+                    isOpened={isOpened}
+                    optionCollapsed={optionCollapsed}
+                  />
+                </Link>
+              </ListItem>
+            )}
           {optionCollapsed && !isNavTab ? (
             <Collapse in={true} timeout={200} unmountOnExit>
               {children.map(menuItem)}
             </Collapse>
           ) : (
-            ''
-          )}
+              ''
+            )}
         </div>
       );
     };
@@ -175,8 +175,10 @@ class Sidebar extends Component {
           </LogoWrapper>
           <Scrollbars style={{ height: scrollheight - 64 }}>
             <Lists>{options.map(menuItem)}</Lists>
-          </Scrollbars>
-        </div>
+            
+          </Scrollbars>          
+          <a href="https://www.tmdynapreneur.com" style={{"fontSize":"12px", "color":"white", "position":"absolute", "bottom":"0px"}}>Powered by <img src="/ie-logo.jpeg" style={{"height":"18px"}}/> (IE Consulting)   </a>
+        </div>             
       </Drawer>
     );
   }
