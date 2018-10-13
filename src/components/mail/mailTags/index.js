@@ -3,20 +3,20 @@ import Icon from '../../uielements/icon';
 import List, { ListItem, ListItemIcon, ListItemText } from './mailTags.style';
 
 const tags = [
-  'Friend',
-  'Family',
-  'Colleague',
-  'Teachers',
-  'Students',
-  'ClassMates',
+  'Cost',
+  'Inventory',
+  'Platform',
+  'Business Process',
+  'Business Waste',
+  'Customers',
 ];
 const tagsIcon = {
-  Friend: 'people',
-  Family: 'send',
-  Colleague: 'drafts',
-  Teachers: 'delete',
-  Students: 'done',
-  ClassMates: 'report',
+  Cost: 'people',
+  Inventory: 'send',
+  Platform: 'drafts',
+  "Business Process": 'delete',
+  "Business Waste": 'done',
+  Customers: 'report',
 };
 const tagColor = [
   '#405dfe',

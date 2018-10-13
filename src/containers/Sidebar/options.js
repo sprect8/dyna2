@@ -45,6 +45,11 @@ const options = [
         label: 'Deliveries',
         key: 'deliveries-page',
         leftIcon: 'departure_board'
+      },
+      {
+        label: 'Investments',
+        key: 'investments-page',
+        leftIcon: 'equalizer'
       }
     ]
   },
@@ -72,17 +77,17 @@ const options = [
       },
       {
         label: 'Business Process Improvement',
-        key: 'sales-page',
+        key: 'business-improvement-page',
         leftIcon: 'extension'
       },
       {
         label: 'Customer Satisfaction',
-        key: 'sales-page',
+        key: 'customer-satisfaction-page',
         leftIcon: 'face'
       },
       {
         label: 'Platform Engagement',
-        key: 'sales-page',
+        key: 'platform-engagement-page',
         leftIcon: 'thumb_up'
       }
     ]

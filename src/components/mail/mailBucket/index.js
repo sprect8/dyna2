@@ -2,7 +2,7 @@ import React from 'react';
 import Icon from '../../uielements/icon';
 import List, { ListItem, ListItemIcon, ListItemText } from './mailBucket.style';
 
-const buckets = ['Inbox', 'Sent', 'Done', 'Drafts', 'Bin', 'Spam'];
+const buckets = ['Inbox', 'Done'];
 
 const bucketIcon = {
   Inbox: 'inbox',

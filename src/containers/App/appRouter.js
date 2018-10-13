@@ -24,7 +24,36 @@ const routes = [
   {
     path: 'inbox',
     component: asyncComponent(() => import('../Mail')),
-  }
+  },
+  {
+    path: 'investments-page',
+    component: asyncComponent(() => import('../MasterDetails/index.js')),
+  },
+  // reports
+  {
+    path: 'cost-efficiency',
+    component: asyncComponent(() => import('../Reports/CostEfficiency'))
+  },
+  {
+    path: 'inventory-page',
+    component: asyncComponent(() => import('../Reports/CostEfficiency'))
+  },
+  {
+    path: 'business-waste',
+    component: asyncComponent(() => import('../Reports/CostEfficiency'))
+  },
+  {
+    path: 'business-improvement-page',
+    component: asyncComponent(() => import('../Reports/CostEfficiency'))
+  },
+  {
+    path: 'customer-satisfaction-page',
+    component: asyncComponent(() => import('../Reports/CostEfficiency'))
+  },
+  {
+    path: 'platform-engagement-page',
+    component: asyncComponent(() => import('../Reports/CostEfficiency'))
+  },
 ];
 
 class AppRouter extends Component {

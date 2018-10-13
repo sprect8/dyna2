@@ -1,0 +1,70 @@
+const data = {
+  labels: Array.apply(null, {length:30}).map(Number.call, Number),
+  datasets: [
+    {
+      label: "James",
+      fill: true,
+      lineTension: 0.1,
+      backgroundColor: "rgba(72,166,242,1)",
+      borderColor: "rgba(72,166,242,1)",
+      borderCapStyle: "butt",
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: "miter",
+      pointBorderColor: "rgba(72,166,242,1)",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "rgba(72,166,242,1)",
+      pointHoverBorderColor: "rgba(72,166,242,1)",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      data: Array.apply(null, {length:30}).map(Function.call, ()=>{return Math.random() * 100 + 100;})
+    },
+    {
+      label: "Jack",
+      fill: true,
+      lineTension: 0.1,
+      backgroundColor: "orange",
+      borderColor: "orange",
+      borderCapStyle: "butt",
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: "miter",
+      pointBorderColor: "orange",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "orange",
+      pointHoverBorderColor: "orange",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      data: Array.apply(null, {length:30}).map(Function.call, ()=>{return Math.random() * 100 + 20;})
+    },
+    {
+      label: "Natalie",
+      fill: true,
+      lineTension: 0.1,
+      backgroundColor: "purple",
+      borderColor: "purple",
+      borderCapStyle: "butt",
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: "miter",
+      pointBorderColor: "purple",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "purple",
+      pointHoverBorderColor: "purple",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      data: Array.apply(null, {length:30}).map(Function.call, ()=>{return Math.random() * 100 + 30})
+    }
+  ]
+};
+
+export { data };
