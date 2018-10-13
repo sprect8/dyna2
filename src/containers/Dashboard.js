@@ -6,6 +6,7 @@ import Breakdown from './Viz/Breakdown';
 import IntlMessages from '../components/utility/intlMessages';
 import Spider from './Viz/Spider';
 import Pie from './Viz/Pie';
+import Line from './Viz/LineOverTime';
 
 // data: [3.2, 3.1, 2.2, 4.8, 2.1, 4.2]
 const data = [
@@ -43,6 +44,9 @@ export default () => (
 		<Row>
 			<HalfColumn>
 				<Pie title="Sales by Product (Week)" description="Your sales for the week" />
+			</HalfColumn>
+			<HalfColumn>
+				<Line title="Sales Per Day(Month)" description="Your sales for the month by day" />
 			</HalfColumn>
 		</Row>
 	</LayoutWrapper>

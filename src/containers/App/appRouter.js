@@ -21,6 +21,10 @@ const routes = [
     path: 'staff-page',
     component: asyncComponent(() => import('../MasterDetails/index.js')),
   },
+  {
+    path: 'inbox',
+    component: asyncComponent(() => import('../Mail')),
+  }
 ];
 
 class AppRouter extends Component {
