@@ -30,6 +30,10 @@ const data = [
 	createData('Sorvino', 'Pencil', 56, 2.99, 167.44),
 ];
 
+
+/**
+ * This tool is for data entry into the system based on an underlying database model 
+ **/
 export default props => {
 	const { classes } = props;
 

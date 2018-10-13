@@ -64,8 +64,8 @@ const ListElement = ({
 const LogoElem = ({ onLogo }) => {
   return (
     <Link to="/dashboard" onClick={onLogo}>
-      {/* <img src={Logo} alt="Logo" /> */}
-      Mate admin
+      {/* {<img src={"/favicon.png"} alt="Logo" style={{"height":"20px"}}/>} */}
+      Dynapreneurs
     </Link>
   );
 };

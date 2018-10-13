@@ -3,7 +3,7 @@ import { getDefaultPath } from '../../helpers/urlSync';
 const options = [
   {
     label: 'Home',
-    key: 'blank-page',
+    key: '',
     leftIcon: 'home'
   },
   {
