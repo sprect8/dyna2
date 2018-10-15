@@ -33,6 +33,11 @@ const data = [
 
 export default () => (
 	<LayoutWrapper>
+		<Row><FullColumn>
+			<h2>Welcome Faizal</h2>
+			<p className="description">This is your overall score - you have <a href="/dashboard/inbox">32 Dynalitics</a> notifications</p>
+		</FullColumn></Row>
+		
 		<Row>
 			<HalfColumn>
 				<Spider title="Dynascore" description="Your overall score for this week" />

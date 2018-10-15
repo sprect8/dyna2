@@ -30,6 +30,23 @@ const data = [
 	createData('Sorvino', 'Pencil', 56, 2.99, 167.44),
 ];
 
+// configuration for the application
+const configuration = {
+	"tableName": "Staff",
+	"displayName": "Staff Records",
+	"description": "These are your staff records, edit, add, remove and view any details",
+	"columns":[
+		{"name":"staff_id", "display":"Staff Id", "type":"number", "sequence":"staff_id_seq", "mandatory":"true", "unique":"true", "key":"true"},		
+		{"name":"staff_fname", "display":"Staff Id", "type":"number", "sequence":"staff_id_seq", "mandatory":"true", "unique":"true", "key":"true"},
+		{"name":"staff_sname", "display":"Staff Id", "type":"number", "sequence":"staff_id_seq", "mandatory":"true", "unique":"true", "key":"true"},
+		{"name":"staff_joined", "display":"Staff Id", "type":"number", "sequence":"staff_id_seq", "mandatory":"true", "unique":"true", "key":"true"},
+		{"name":"staff_status", "display":"Staff Id", "type":"number", "sequence":"staff_id_seq", "mandatory":"true", "unique":"true", "key":"true"},
+		{"name":"staff_type", "display":"Staff Id", "type":"number", "sequence":"staff_id_seq", "mandatory":"true", "unique":"true", "key":"true"},
+		{"name":"staff_address", "display":"Staff Id", "type":"number", "sequence":"staff_id_seq", "mandatory":"true", "unique":"true", "key":"true"},
+		{"name":"staff_salary", "display":"Staff Id", "type":"number", "sequence":"staff_id_seq", "mandatory":"true", "unique":"true", "key":"true"}
+	]
+}
+
 
 /**
  * This tool is for data entry into the system based on an underlying database model 

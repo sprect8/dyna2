@@ -64,8 +64,8 @@ const ListElement = ({
 const LogoElem = ({ onLogo }) => {
   return (    
       <div to="/dashboard" onClick={onLogo} style={{"fontSize":"12px", fontWeight:"300", textTransform:"uppercase", color:"white", display:"inline-block"}}>
-        <img src={"/tm-logo.png"} alt="Logo" style={{ "height": "40px", "float":"left", "paddingRight":"5px"}} />
-        TM Dynapreneur Analytics Platform
+        <img src={"/dyna-logo.png"} alt="Logo" style={{ "height": "60px", "float":"left", "paddingRight":"5px"}} />
+        
     </div>    
   );
 };

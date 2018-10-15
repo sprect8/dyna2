@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createMuiTheme } from '@material-ui/core/styles';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import Scrollbars from '../../components/utility/customScrollBar';
 import MailList from '../../components/mail/mailList';
 import mailBuckets, {
@@ -10,23 +9,17 @@ import mailBuckets, {
 } from '../../components/mail/mailBucket';
 import mailTags from '../../components/mail/mailTags';
 import Divider from '../../components/uielements/dividers';
-import ComposeBtn from '../../components/mail/mailComposeBtn';
 import BulkMailActions from '../../components/mail/bulkMailActions';
 import mailActions from '../../redux/mail/actions';
 import mailSelector from '../../redux/mail/selector';
-import Dialog from '../../components/uielements/dialogs';
 import MailBox, {
   Navigations,
   MailListBox,
   MailActionBar,
   Icon,
-  IconButton,
   InputAdornment,
   InputSearch,
   FormControl,
-  ComposeModalHeader,
-  ComposeModalActionBtns,
-  ComposeMail,
 } from './mailBox.style';
 
 const theme = createMuiTheme({
@@ -79,33 +72,6 @@ const DesktopView = props => {
   const hideSearchbar = countCheckMailed(checkedMails) === 0;
   return (
     <MailBox style={{ height: scrollHeight }}>
-      <MuiThemeProvider theme={theme}>
-        <Dialog
-          open={composeMail}
-          onClose={() => changeComposeMail(false)}
-          disableBackdropClick
-        >
-          <ComposeModalHeader>
-            <Icon>drafts</Icon>
-
-            <ComposeModalActionBtns>
-              <IconButton>
-                <Icon>remove</Icon>
-              </IconButton>
-
-              <IconButton>
-                <Icon>fullscreen_exit</Icon>
-              </IconButton>
-
-              <IconButton onClick={() => changeComposeMail(false)}>
-                <Icon>close</Icon>
-              </IconButton>
-            </ComposeModalActionBtns>
-          </ComposeModalHeader>
-          <ComposeMail {...props} open={composeMail} />
-        </Dialog>
-      </MuiThemeProvider>
-
       <Navigations>
         <Scrollbars style={{ height: props.height - 70 }}>
           {mailBuckets(allMails, filterAction, filterAttr)}
@@ -142,8 +108,6 @@ const DesktopView = props => {
           />
         </Scrollbars>
       </MailListBox>
-
-      <ComposeBtn changeComposeMail={changeComposeMail} />
     </MailBox>
   );
 };

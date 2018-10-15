@@ -54,12 +54,7 @@ class SignIn extends Component {
         </div>
 
         <div className="mateSignInPageContent">
-          <div className="mateSignInPageLink">
-            <Link to="/signup">
-              <button className="mateSignInPageLinkBtn" type="button">
-                Register
-              </button>
-            </Link>
+          <div className="mateSignInPageLink">           
             <Link to="#">
               <button className="mateSignInPageLinkBtn active" type="button">
                 Login
@@ -68,9 +63,11 @@ class SignIn extends Component {
           </div>
           <Scrollbars style={{ height: "100%" }}>
             <div className="mateSignInPageGreet">
-              <h1>Hello User,</h1>
+              <p style={{"textAlign":"center"}}>
+                <img src={"/dyna-logo.png"} alt="Logo" />
+              </p>
               <p>
-                Welcome to Mate Admin, Please Login with your personal account
+                Welcome to TM Dynapreneur 2018, Please Login with your personal account
                 information.
               </p>
             </div>
@@ -106,62 +103,7 @@ class SignIn extends Component {
                 button.
               </span>
             </div>
-            <div className="mateLoginOtherBtn">
-              <div className="mateLoginOtherBtnWrap">
-                <Button
-                  onClick={this.handleLogin}
-                  type="primary btnFacebook"
-                  className="btnFacebook"
-                >
-                  <div className="mateLoginOtherIcon">
-                    <img src={fbBtnSvg} alt="facebook Btn" />
-                  </div>
-                  <IntlMessages id="page.signInFacebook" />
-                </Button>
-              </div>
-              <div className="mateLoginOtherBtnWrap">
-                <Button
-                  onClick={this.handleLogin}
-                  type="primary btnGooglePlus"
-                  className="btnGooglePlus"
-                >
-                  <div className="mateLoginOtherIcon">
-                    <img src={gpBtnSvg} alt="Google Plus Btn" />
-                  </div>
-                  <IntlMessages id="page.signInGooglePlus" />
-                </Button>
-              </div>
-              <div className="mateLoginOtherBtnWrap">
-                {Auth0.isValid ? (
-                  <Button
-                    type="primary btnAuthZero"
-                    className="btnAuthZero"
-                    onClick={() => {
-                      Auth0.login(this.handleLogin);
-                    }}
-                  >
-                    <div className="mateLoginOtherIcon">
-                      <img src={authBtnSvg} alt="Authentication Btn" />
-                    </div>
-                    <IntlMessages id="page.signInAuth0" />
-                  </Button>
-                ) : (
-                  <Button
-                    type="primary btnAuthZero"
-                    className="btnAuthZero"
-                    onClick={this.handleLogin}
-                  >
-                    <div className="mateLoginOtherIcon">
-                      <img src={authBtnSvg} alt="Authentication Btn" />
-                    </div>
-                    <IntlMessages id="page.signInAuth0" />
-                  </Button>
-                )}
-              </div>
-              <div className="mateLoginOtherBtnWrap">
-                {Firebase.isValid && <FirebaseLogin login={this.handleLogin} />}
-              </div>
-            </div>
+            
           </Scrollbars>
         </div>
       </SignInStyleWrapper>

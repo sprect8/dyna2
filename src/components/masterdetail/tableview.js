@@ -1,0 +1,1 @@
+// take a configuration and show it using the properties entered
