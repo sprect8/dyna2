@@ -60,7 +60,7 @@ const firebaseConfig = {
   messagingSenderId: '',
 };
 const googleConfig = {
-  apiKey: '', //
+  apiKey: 'AIzaSyDo5baybPqTU8rINZGsqQjOJlu_0hLKaNo', //
 };
 const mapboxConfig = {
   tileLayer: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',

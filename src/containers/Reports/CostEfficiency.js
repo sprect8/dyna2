@@ -1,12 +1,9 @@
 import React from 'react';
 import LayoutWrapper from '../../components/utility/layoutWrapper';
 import { FullColumn, HalfColumn, Row, OneThirdColumn, TwoThirdColumn } from '../../components/utility/rowColumn';
-import Breakdown from '../Viz/Breakdown';
-import Spider from '../Viz/Spider';
 import Area from '../Viz/Area';
 import StackedBar from '../Viz/StackedBar';
 import TxnBreakdown from '../Viz/TxnBreakdown';
-import WidgetBox from '../Viz/WidgetBox';
 import WorkIcon from '@material-ui/icons/Work'
 import SchoolIcon from '@material-ui/icons/School'
 import StarIcon from '@material-ui/icons/Star'

@@ -1,9 +1,7 @@
 import React from 'react';
 import LayoutWrapper from '../components/utility/layoutWrapper';
-import Papersheet from '../components/utility/papersheet';
 import { FullColumn, HalfColumn, Row } from '../components/utility/rowColumn';
 import Breakdown from './Viz/Breakdown';
-import IntlMessages from '../components/utility/intlMessages';
 import Spider from './Viz/Spider';
 import Pie from './Viz/Pie';
 import Line from './Viz/LineOverTime';
@@ -35,7 +33,7 @@ export default () => (
 	<LayoutWrapper>
 		<Row><FullColumn>
 			<h2>Welcome Faizal</h2>
-			<p className="description">This is your overall score - you have <a href="/dashboard/inbox">32 Dynalitics</a> notifications</p>
+			<p className="description">This is your overall score - you have <a href="/dashboard/inbox">32 Dynalitics</a> notifications</p>			
 		</FullColumn></Row>
 		
 		<Row>
