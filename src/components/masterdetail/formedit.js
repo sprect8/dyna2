@@ -89,7 +89,8 @@ export default class FormDialog extends React.Component {
                     fullWidth                    
                     error = {error}
                     label={control.display}
-                    type="date"
+                    type="date"                    
+                    onChange={this.handleChange(control.name)}
                     defaultValue={value}
                     InputLabelProps={{
                         shrink: true,
@@ -113,7 +114,7 @@ export default class FormDialog extends React.Component {
         let allValid = true;
 
         this.props.config.columns.forEach(x=>{
-            if (x.mandatory && !this.state[x.name] || this.state[x.name] === "") {
+            if (!x.key && x.mandatory && (!this.state[x.name] || this.state[x.name] === "")) {
                 allValid = false;
             }
         })
@@ -122,12 +123,16 @@ export default class FormDialog extends React.Component {
             this.setState({validating: true})
         }
         else {
-            this.setState({validating: false, open: false})            
+            this.setState({validating: false, open: false})    
+            this.props.onUpdate(this.state);        
         }
     }
 
     componentWillReceiveProps(props)  {
-        this.setState({open:props.open});        
+        this.setState({open:props.open}); 
+        if (props.data) {
+            this.setState(props.data);
+        }       
     }
 
     render() {

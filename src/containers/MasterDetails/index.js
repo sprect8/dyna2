@@ -26,7 +26,8 @@ const data = [
 
 export default class MasterView extends React.Component {
 	state = {
-        open: false,
+		open: false,
+		records: []
     };
 	handleClickOpen = () => {
         this.setState({ open: true });
@@ -34,7 +35,13 @@ export default class MasterView extends React.Component {
 
     handleClose = () => {
         this.setState({ open: false });
-    };
+	};
+	
+	handleUpdate = (record) => {
+		let st = this.state.records;
+		st.push(record);
+		this.setState({records:st, open: false});
+	}
 	
 	render() {
 		let {config} = this.props;
@@ -43,13 +50,13 @@ export default class MasterView extends React.Component {
 			<Papersheet title={config.displayName}>
 				<Button onClick={this.handleClickOpen} variant="fab" color="primary" aria-label="add" style={{ "float": "right", "marginRight": "auto", "marginLeft": "8px" }}><Icon>add</Icon></Button>
 				<p style={{"float":"left"}} className="description">{config.description}</p>
-				<TableView config={config} data={data}/>
+				<TableView config={config} data={this.state.records}/>
 			</Papersheet>
 		</FullColumn>
 		<FullColumn>
-			<HistoryView config={config} data={data}/>
+			<HistoryView config={config} data={this.state.records}/>
 		</FullColumn>
-		<FormEditView config={config} open={this.state.open} onClose={this.handleClose}/>
+		<FormEditView config={config} open={this.state.open} onClose={this.handleClose} onUpdate={this.handleUpdate}/>
 	</LayoutWrapper>
 	)
 	}

@@ -5,7 +5,7 @@ import Collapse from '@material-ui/core/Collapse';
 import Scrollbars from '../../components/utility/customScrollBar';
 import IntlMessages from '../../components/utility/intlMessages';
 import appActions from '../../redux/app/actions';
-// import Logo from '../../images/logo.png';
+// import Logo from '../../images/logo2.png';
 import options from './options';
 import Drawer, {
   LogoWrapper,
@@ -64,7 +64,7 @@ const ListElement = ({
 const LogoElem = ({ onLogo }) => {
   return (    
       <div to="/dashboard" onClick={onLogo} style={{"fontSize":"12px", fontWeight:"300", textTransform:"uppercase", color:"white", display:"inline-block"}}>
-        <img src={"/dyna-logo.png"} alt="Logo" style={{ "height": "60px", "float":"left", "paddingRight":"5px"}} />
+        <img src={"/dyna-logo2.png"} alt="Logo" style={{ "height": "60px", "float":"left", "paddingRight":"5px"}} />
         
     </div>    
   );

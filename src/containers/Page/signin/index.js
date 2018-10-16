@@ -64,7 +64,7 @@ class SignIn extends Component {
           <Scrollbars style={{ height: "100%" }}>
             <div className="mateSignInPageGreet">
               <p style={{"textAlign":"center"}}>
-                <img src={"/dyna-logo.png"} alt="Logo" />
+                <img src={"/dyna-logo2.png"} alt="Logo" />
               </p>
               <p>
                 Welcome to TM Dynapreneur 2018, Please Login with your personal account

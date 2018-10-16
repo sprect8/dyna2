@@ -47,7 +47,7 @@ const products = {
 		{"name":"prod_supl_id", "display":"Supplier", "type":"number", "mandatory":true, "ref":"Supplier"},
 		{"name":"prod_cate_id", "display":"Category", "type":"number", "mandatory":true, "ref":"Product_Category"},
 		{"name":"prod_units_on_order", "display":"Units on Order", "type":"number", "mandatory":true},		
-		{"name":"prod_discontinued", "display":"Discontinued", "type":"bool", "mandatory":true},
+		{"name":"prod_discontinued", "display":"Discontinued", "type":"text", "mandatory":true, "lov":["Discontinued", "In Stock", "Active", "Phase Out"]},
 		{"name":"prod_picture", "display":"Picture", "type":"text"}
 	]
 }
