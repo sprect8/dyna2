@@ -24,6 +24,7 @@ export default class FormDialog extends React.Component {
     };
 
     createControl = (control, value) => {
+        let error = (!value || value === "") && this.state.validating && control.mandatory && !control.key
         switch (control.type) {
             case "number":
                 let readonly = false;
@@ -37,6 +38,8 @@ export default class FormDialog extends React.Component {
 
                 }
                 return (<TextField
+                    error = {error}
+                    fullWidth
                     id="standard-number"
                     label={control.display}
                     value={value}
@@ -51,7 +54,9 @@ export default class FormDialog extends React.Component {
             case "text":
                 if (control.lov) {
                     return (<Select
-                        native
+                        native                        
+                        error = {error}
+                        fullWidth
                         value={value}
                         onChange={this.handleChange(control.name)}
                         name={control.name}
@@ -68,7 +73,9 @@ export default class FormDialog extends React.Component {
                 }
                 else {
                     return (<TextField
-                        id={control.name}
+                        id={control.name}                        
+                        error = {error}
+                        fullWidth
                         label={control.display}
                         value={value}
                         onChange={this.handleChange(control.name)}
@@ -79,6 +86,8 @@ export default class FormDialog extends React.Component {
             case "timestamp":
                 return <TextField
                     id="date"
+                    fullWidth                    
+                    error = {error}
                     label={control.display}
                     type="date"
                     defaultValue={value}
@@ -93,9 +102,29 @@ export default class FormDialog extends React.Component {
         }
     }
     handleClose = () => {
-        this.setState({ open: false });
+        this.setState({ open: false, validating: false });
         return this.props.onClose ? this.props.onClose() : null;
     };
+
+    handleSave = () => {
+        // validate all
+        // if invalid set state to validating and force mark invalid
+
+        let allValid = true;
+
+        this.props.config.columns.forEach(x=>{
+            if (x.mandatory && !this.state[x.name] || this.state[x.name] === "") {
+                allValid = false;
+            }
+        })
+
+        if (!allValid) {
+            this.setState({validating: true})
+        }
+        else {
+            this.setState({validating: false, open: false})            
+        }
+    }
 
     componentWillReceiveProps(props)  {
         this.setState({open:props.open});        
@@ -108,6 +137,7 @@ export default class FormDialog extends React.Component {
                     open={this.state.open}
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title"
+                    
                 >
                     <DialogTitle id="form-dialog-title">{this.props.config.displayName}</DialogTitle>
                     <DialogContent>
@@ -128,7 +158,7 @@ export default class FormDialog extends React.Component {
                         <Button onClick={this.handleClose}>
                             Cancel
             </Button>
-                        <Button onClick={this.handleClose} color="primary">
+                        <Button onClick={this.handleSave} color="primary">
                             Save
             </Button>
                     </DialogActions>
