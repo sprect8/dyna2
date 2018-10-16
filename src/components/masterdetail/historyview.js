@@ -12,14 +12,6 @@ function createData(name, item, units, unitcosts, total) {
     return { id, name, item, units, unitcosts, total };
 }
 
-const data = [
-    createData('Jones', 'Pencil', 95, 1.99, 189.05),
-    createData('Kivell', 'Binder', 50, 19.99, 999.5),
-    createData('Jardine', 'Pencil', 36, 4.99, 179.64),
-    createData('Gill', 'Pen', 27, 19.99, 539.73),
-    createData('Sorvino', 'Pencil', 56, 2.99, 167.44),
-];
-
 /**
  * This tool is for data entry into the system based on an underlying database model 
  **/
