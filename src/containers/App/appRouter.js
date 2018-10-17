@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import asyncComponent from '../../helpers/AsyncFunc';
 import Route from '../../components/utility/customRoute';
 import MasterDetailView from '../MasterDetails';
+import ReportView from '../Reports/reportview';
+import { data, data2, data3 } from '../Viz/Transactions/config';
+// the side views and their configuration
 
 // configuration for the application
 const staff = {
@@ -126,6 +129,83 @@ const investments = {
 	]
 }
 
+ const tableConfiguration = [
+   {"path":"staff-page", "table":staff},  
+   {"path":"inventory-page", "table":inventory},
+   {"path":"products-page", "table":products},
+   {"path":"sales-page", "table":sales},
+   {"path":"suppliers-page", "table":suppliers},
+   {"path":"deliveries-page", "table":deliveries},
+   {"path":"investments-page", "table":investments}
+ ]
+
+ const reportConfiguration = {
+  "title": "Business Process Improvement",
+  "description": "Measure your Business Process",
+  "rows": [
+      [
+          {
+              "title": "Malls In Malaysia",
+              "description": "A list of malls in Malaysia with target opportunities",
+              "type": "MAP",
+              "options": {},
+              "datasource": "",
+              "layout": "twothird"
+          },
+          {
+              "title": "Business Process Improvement Score",
+              "description": "A rating of your overall Business Process Improvement initiatives",
+              "type": "TRANSACTIONS",
+              "options": {},
+              "data": [
+                  {"title":"Presence Score", "duration":"Jun 24 - Jul 23", "amount":"2.01", "currency":"d", "data": data2, "direction":"upward"},
+                  {"title":"Opportunity Score", "duration":"Jun 24 - Jul 23", "amount":"3.51", "currency":"d", "data": data2, "direction":"upward"},
+                  {"title":"Product Sales Score", "duration":"Jun 24 - Jul 23", "amount":"4.71", "currency":"d", "data": data2, "direction":"upward"},
+                  {"title":"Product Backlog Score", "duration":"Jun 24 - Jul 23", "amount":"4.21", "currency":"d", "data": data2, "direction":"upward"}
+              ],
+              "datasource": "",
+              "layout": "onethird"
+          }
+      ],
+      [
+          {
+              "title": "Top Products by Revenue",
+              "description": "These are your top performing products",
+              "type": "AREA",
+              "options": {},
+              "datasource": "",
+              "layout": "halfcolumn"
+          },
+          {
+              "title": "Opportunity Analysis",
+              "description": "Customer Requesting similar product groups",
+              "type": "STACKEDBAR",
+              "options": {},
+              "datasource": "",
+              "layout": "halfcolumn"
+          }
+      ],
+      [
+          {
+              "title": "Products in Progress",
+              "description": "Products stuck in different manufacturing process steps",
+              "type": "PIE",
+              "options": {},
+              "datasource": "",
+              "layout": "halfcolumn"
+          },
+          {
+              "title": "Sales Generated per Location",
+              "description": "Location Analysis of different sales and opportunities",
+              "type": "LINE",
+              "options": {},
+              "datasource": "",
+              "layout": "halfcolumn"
+          }
+      ],
+  ]
+}
+
 const renderMergedProps = (component, ...rest) => {
   const finalProps = Object.assign({}, ...rest);
   return (
@@ -203,13 +283,12 @@ class AppRouter extends Component {
             />
           );
         })}
-        <PropsRoute path={`${url}/staff-page`} component={MasterDetailView} config={staff}/>
-        <PropsRoute path={`${url}/inventory-page`} component={MasterDetailView} config={inventory}/>
-        <PropsRoute path={`${url}/products-page`} component={MasterDetailView} config={products}/>
-        <PropsRoute path={`${url}/sales-page`} component={MasterDetailView} config={sales}/>
-        <PropsRoute path={`${url}/suppliers-page`} component={MasterDetailView} config={suppliers}/>
-        <PropsRoute path={`${url}/deliveries-page`} component={MasterDetailView} config={deliveries}/>
-        <PropsRoute path={`${url}/investments-page`} component={MasterDetailView} config={investments}/>
+        <PropsRoute path={`${url}/business-waste-lah`} component={ReportView} config={reportConfiguration}/>
+        {
+          tableConfiguration.map(x=>{
+            return (<PropsRoute path={`${url}/${x.path}`} component={MasterDetailView} config={x.table}/>)
+          })
+        }
 
       </div>
     );
