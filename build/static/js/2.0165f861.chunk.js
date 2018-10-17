@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[2],{1738:function(e,a,n){"use strict";n.r(a);var t=n(0),l=n.n(t),c=n(175),i=n(197),r=n(38);n(62);a.default=function(){return l.a.createElement(c.a,null,l.a.createElement(r.a,null,l.a.createElement(i.a,{title:"Home"},"This is a blank blankPage")))}}}]);
+//# sourceMappingURL=2.0165f861.chunk.js.map
