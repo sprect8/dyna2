@@ -72,7 +72,7 @@ const options = [
       },
       {
         label: 'Business Waste Reduction',
-        key: 'business-waste',
+        key: 'business-waste-page',
         leftIcon: 'delete_forever'
       },
       {

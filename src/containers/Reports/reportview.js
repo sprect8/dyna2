@@ -11,9 +11,13 @@ import MapView from '../Viz/Map';
 import StackedBar from '../Viz/StackedBar';
 import TxnView from '../Viz/TxnWidget';
 import WidgetBox from '../Viz/WidgetBox';
+import Timeline from '../Viz/Timeline';
+import TxnBreakdown from '../Viz/TxnBreakdown';
 
 function create(config) {
     switch (config.type) {
+        case "TXNBREAKDOWN":
+            return (<TxnBreakdown {...config}/>);
         case "MAP":
             return (<MapView {...config} />);
         case "TRANSACTIONS":
@@ -28,6 +32,8 @@ function create(config) {
             return (<Line {...config} />);
         case "BREAKDOWN":
             return (<Breakdown {...config} />);
+        case "HISTORY":
+            return (<Timeline {...config} />);
         default:
             return (<div></div>);
     }
