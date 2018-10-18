@@ -1,3 +1,4 @@
+//@Deprecated
 import React from 'react';
 import LayoutWrapper from '../../components/utility/layoutWrapper';
 import { FullColumn, HalfColumn, Row, OneThirdColumn, TwoThirdColumn } from '../../components/utility/rowColumn';

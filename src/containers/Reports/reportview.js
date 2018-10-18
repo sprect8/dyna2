@@ -10,7 +10,6 @@ import 'react-vertical-timeline-component/style.min.css';
 import MapView from '../Viz/Map';
 import StackedBar from '../Viz/StackedBar';
 import TxnView from '../Viz/TxnWidget';
-import WidgetBox from '../Viz/WidgetBox';
 import Timeline from '../Viz/Timeline';
 import TxnBreakdown from '../Viz/TxnBreakdown';
 
