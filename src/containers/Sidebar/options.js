@@ -7,6 +7,27 @@ const options = [
     leftIcon: 'home'
   },
   {
+    label: 'POS System',
+    leftIcon: 'shopping_cart',
+    children: [
+      {
+        label: 'Shop',
+        key: 'shop-page',
+        leftIcon: 'people'
+      },
+      {
+        label: 'Cart',
+        key: 'cart-page',
+        leftIcon: 'redeem'
+      },
+      {
+        label: 'Checkout',
+        key: 'checkout-page',
+        leftIcon: 'shopping_cart'
+      },
+    ]
+  },
+  {
     label: 'Inbox',
     key: 'inbox',
     leftIcon: 'inbox'

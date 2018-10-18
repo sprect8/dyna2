@@ -666,6 +666,19 @@ const routes = [
     path: 'platform-engagement-page',
     component: asyncComponent(() => import('../Reports/PlatformEngagement'))
   },*/
+  {
+    path: 'shop-page',
+    component: asyncComponent(() => import('../POS/Algolia')),
+  },
+   {
+    path: 'cart-page',
+    component: asyncComponent(() => import('../POS/Cart/')),
+  },
+  {
+    path: 'checkout-page',
+    component: asyncComponent(() => import('../POS/Checkout/')),
+  },
+ 
 ];
 
 class AppRouter extends Component {
