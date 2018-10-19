@@ -10,6 +10,7 @@ import 'react-vertical-timeline-component/style.min.css';
 import Select from '@material-ui/core/Select';
 
 import { Row, FullColumn } from '../../components/utility/rowColumn';
+import PictureBox from '../uielements/camera';
 /**
  * This tool is for data entry into the system based on an underlying database model 
  **/
@@ -82,7 +83,6 @@ export default class FormDialog extends React.Component {
                         margin="normal"
                     />);
                 }
-                break;
             case "timestamp":
                 return <TextField
                     id="date"
@@ -96,8 +96,10 @@ export default class FormDialog extends React.Component {
                         shrink: true,
                     }}
                 />
+            case "barcode":
+            case "picture":
+                return <PictureBox onChange={this.handleChange(control.name)}/>
 
-                break;
             default:
                 return (<div></div>);
         }

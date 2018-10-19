@@ -34,7 +34,8 @@ const inventory = {
 		{"name":"inv_purchase_date", "display":"Purchase Date", "type":"timestamp", "mandatory":true},
 		{"name":"inv_expiry_date", "display":"Expiry Date", "type":"timestamp", "mandatory":true},
 		{"name":"inv_units_in_stock", "display":"Amount in Stock", "type":"number", "mandatory":true, "lov":["ACTIVE", "INACTIVE", "PROBATION"]},
-		{"name":"inv_unit_price", "display": "Cost", "type":"number", "mandatory":true, "lov":["Full Time", "Part Time", "Sales", "Contractor"],},
+        {"name":"inv_unit_price", "display": "Cost", "type":"number", "mandatory":true, "lov":["Full Time", "Part Time", "Sales", "Contractor"],},
+		{"name":"inv_bar_code", "display": "Barcode", "type":"barcode", "mandatory":false},
 		
 	]
 }
@@ -46,12 +47,13 @@ const products = {
 	"columns":[
 		{"name":"prod_id", "display":"Product Id", "type":"number", "sequence":"prod_id_seq", "mandatory":true, "unique":true, "key":true},		
 		{"name":"prod_name", "display":"Name", "type":"text", "mandatory":true, "unique":true},
-		{"name":"prod_desc", "display":"Description", "type":"text"},
+        {"name":"prod_desc", "display":"Description", "type":"text"},        
+        {"name":"prod_picture", "display":"Picture", "type":"picture"},
 		{"name":"prod_supl_id", "display":"Supplier", "type":"number", "mandatory":true, "ref":"Supplier"},
 		{"name":"prod_cate_id", "display":"Category", "type":"number", "mandatory":true, "ref":"Product_Category"},
 		{"name":"prod_units_on_order", "display":"Units on Order", "type":"number", "mandatory":true},		
-		{"name":"prod_discontinued", "display":"Discontinued", "type":"text", "mandatory":true, "lov":["Discontinued", "In Stock", "Active", "Phase Out"]},
-		{"name":"prod_picture", "display":"Picture", "type":"text"}
+		{"name":"prod_discontinued", "display":"Discontinued", "type":"text", "mandatory":true, "lov":["Discontinued", "In Stock", "Active", "Phase Out"]},        
+        {"name":"prod_sku", "display":"SKU", "type":"text"},
 	]
 }
 
@@ -73,7 +75,7 @@ const sales = {
 	"columns":[
 		{"name":"sale_id", "display":"Sales Id", "type":"number", "sequence":"sale_id_seq", "mandatory":true, "unique":true, "key":true},		
 		{"name":"sale_staff_id", "display":"Staff", "type":"number", "mandatory":true, "unique":true, "ref":"Staff"},
-		{"name":"sale_prod_id", "display":"Product", "type":"number", "ref":"Product"},
+        {"name":"sale_inv_id", "display":"Inventory", "type":"number", "ref":"Inventory"},
 		{"name":"sale_price", "display":"Price", "type":"number", "mandatory":true},
 		{"name":"sale_cost", "display":"Cost", "type":"number", "mandatory":true},
 		{"name":"sale_timestamp", "display":"Sales Date", "type":"timestamp", "mandatory":true},		
