@@ -3,11 +3,12 @@ import { getDefaultPath } from '../../helpers/urlSync';
 const options = [
   {
     label: 'Home',
-    key: '',
+    key: 'home',
     leftIcon: 'home'
   },
   {
     label: 'POS System',
+    key: 'pos',
     leftIcon: 'shopping_cart',
     children: [
       {

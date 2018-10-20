@@ -67,7 +67,7 @@ export default class FormDialog extends React.Component {
                     >
                         {
                             control.lov.map(r => {
-                                return <option value={r}>{r}</option>
+                                return <option key={control.name+r} value={r}>{r}</option>
                             })
                         }
                     </Select>);
@@ -154,7 +154,7 @@ export default class FormDialog extends React.Component {
                         {
                             this.props.config.columns.map(x=>{
                                 return (
-                                    <Row>
+                                    <Row key={x.name}>
                                         <FullColumn>{this.createControl(x, this.state[x.name] ? this.state[x.name] : "")}</FullColumn>
                                     </Row>
                                 )

@@ -701,12 +701,12 @@ class AppRouter extends Component {
         })}
         {
           reportConfiguration.map(x=>{
-            return (<PropsRoute path={`${url}/${x.path}`} component={ReportView} config={x.config}/>)
+            return (<PropsRoute key={x.path} path={`${url}/${x.path}`} component={ReportView} config={x.config}/>)
           })
         }
         {
           tableConfiguration.map(x=>{
-            return (<PropsRoute path={`${url}/${x.path}`} component={MasterDetailView} config={x.table}/>)
+            return (<PropsRoute key={x.path} path={`${url}/${x.path}`} component={MasterDetailView} config={x.table}/>)
           })
         }
 
