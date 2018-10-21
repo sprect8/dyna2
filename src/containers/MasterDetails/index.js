@@ -49,7 +49,7 @@ export default class MasterView extends React.Component {
 		<FullColumn>
 			<Papersheet title={config.displayName}>
 				<Button onClick={this.handleClickOpen} variant="fab" color="primary" aria-label="add" style={{ "float": "right", "marginRight": "auto", "marginLeft": "8px" }}><Icon>add</Icon></Button>
-				<p style={{"float":"left"}} className="description">{config.description}</p>
+				
 				<TableView config={config} data={this.state.records}/>
 			</Papersheet>
 		</FullColumn>

@@ -5,7 +5,6 @@
 
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -13,18 +12,34 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import 'react-vertical-timeline-component/style.min.css';
 import Webcam from "react-webcam";
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 
 /**
  * This tool is for data entry into the system based on an underlying database model 
  **/
 
-export default class PictureBox extends React.Component {
+class PictureBox extends React.Component {
     state = {
         takeScreenshot: false,
         snapshot: "",
         open: false,
-        cameraModeUser: true 
+        cameraModeUser: true
     };
+
+    onFileLoad = (event, file) => {
+        //getBase64(event.target.files[0]);
+        var reader = new FileReader();
+        reader.readAsDataURL(event.target.files[0]);
+        let that = this;
+        reader.onload = function () {
+            that.setState({snapshot: reader.result});
+            if (that.props.onChange) {
+                that.props.onChange({target:{value: reader.result}});
+            }
+        };
+        reader.onerror = function (error) {
+        };
+    }
 
     handleClose = () => {
         this.setState({ open: false, validating: false });
@@ -34,8 +49,8 @@ export default class PictureBox extends React.Component {
     handleSave = () => {
         // validate all
         // if invalid set state to validating and force mark invalid
-        this.setState({ validating: false, open: false, snapshot: this.webcam.getScreenshot()})       
-        this.props.onChange({target:{value:this.webcam.getScreenshot()}});
+        this.setState({ validating: false, open: false, snapshot: this.webcam.getScreenshot() })
+        this.props.onChange({ target: { value: this.webcam.getScreenshot() } });
     }
 
     componentWillReceiveProps(props) {
@@ -46,7 +61,7 @@ export default class PictureBox extends React.Component {
     }
 
     handleFlipCamera = () => {
-        this.setState({cameraModeUser:!this.state.cameraModeUser})
+        this.setState({ cameraModeUser: !this.state.cameraModeUser })
     }
 
     setRef = webcam => {
@@ -57,15 +72,17 @@ export default class PictureBox extends React.Component {
     render() {
         const videoConstraints = {
             facingMode: this.state.cameraModeUser ? "user" : { exact: "environment" }
-          };
-      
+        };
+
         return (
             <div>
                 <Dialog
                     open={this.state.open}
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title"
-
+                    fullWidth
+                    maxWidth="lg"
+                    fullScreen={this.props.fullScreen}
                 >
                     <DialogTitle id="form-dialog-title">Snap a photo</DialogTitle>
                     <DialogContent>
@@ -87,9 +104,24 @@ export default class PictureBox extends React.Component {
                     </DialogActions>
                 </Dialog>
                 <Button onClick={() => { this.setState({ open: true }) }} color="primary">Take Photo</Button>
-                <Button onClick={() => { this.setState({ open: true }) }} color="primary">Upload Photo</Button>
+                <input
+                    accept="image/*"
+                    id="contained-button-file"
+                    type="file"
+                    style={{ "display": "none" }}
+                    onChange={this.onFileLoad}
+                />
+                <label htmlFor="contained-button-file">
+                    <Button variant="contained" component="span">
+                        Upload Photo
+                        </Button>
+                </label>
                 <img src={this.state.snapshot} />
             </div>
         )
     }
 };
+
+
+
+export default withMobileDialog()(PictureBox);

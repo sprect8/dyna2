@@ -78,7 +78,7 @@ export default class FormDialog extends React.Component {
                 open={this.state.open}
                 onClose={this.handleClose}
                 aria-labelledby="form-dialog-title"
-
+                fullScreen
             >
                 <DialogTitle id="form-dialog-title">Image for the row</DialogTitle>
                 <DialogContent>

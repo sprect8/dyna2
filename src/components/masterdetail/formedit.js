@@ -12,11 +12,14 @@ import Select from '@material-ui/core/Select';
 import { Row, FullColumn } from '../../components/utility/rowColumn';
 import PictureBox from '../uielements/camera';
 import BarcodeBox from '../uielements/barcode';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 /**
  * This tool is for data entry into the system based on an underlying database model 
  **/
 
-export default class FormDialog extends React.Component {
+class FormDialog extends React.Component {
     state = {
         open: false,
     };
@@ -40,7 +43,7 @@ export default class FormDialog extends React.Component {
 
                 }
                 return (<TextField
-                    error = {error}
+                    error={error}
                     fullWidth
                     id="standard-number"
                     label={control.display}
@@ -55,28 +58,34 @@ export default class FormDialog extends React.Component {
                 />);
             case "text":
                 if (control.lov) {
-                    return (<Select
-                        native                        
-                        error = {error}
-                        fullWidth
-                        value={value}
-                        onChange={this.handleChange(control.name)}
-                        name={control.name}
-                        inputProps={{
-                            id: control.name + '-native-required',
-                        }}
-                    >
-                        {
-                            control.lov.map(r => {
-                                return <option key={control.name+r} value={r}>{r}</option>
-                            })
-                        }
-                    </Select>);
+                    return (
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor={control.name + '-native-required'}>{control.display}</InputLabel>
+
+                            <Select
+                                native
+                                error={error}
+                                fullWidth
+                                value={value?value:""}
+                                onChange={this.handleChange(control.name)}
+                                name={control.name}
+                                label={control.display}
+                                inputProps={{
+                                    id: control.name + '-native-required',
+                                }}
+                            >
+                                {
+                                    [""].concat(control.lov).map(r => {
+                                        return <option key={control.name + r} value={r}>{r}</option>
+                                    })
+                                }
+                            </Select>
+                        </FormControl>);
                 }
                 else {
                     return (<TextField
-                        id={control.name}                        
-                        error = {error}
+                        id={control.name}
+                        error={error}
                         fullWidth
                         label={control.display}
                         value={value}
@@ -87,20 +96,20 @@ export default class FormDialog extends React.Component {
             case "timestamp":
                 return <TextField
                     id="date"
-                    fullWidth                    
-                    error = {error}
+                    fullWidth
+                    error={error}
                     label={control.display}
-                    type="date"                    
+                    type="date"
                     onChange={this.handleChange(control.name)}
-                    defaultValue={value}
+                    value={value}
                     InputLabelProps={{
                         shrink: true,
                     }}
                 />
             case "barcode":
-                return <BarcodeBox onChange={this.handleChange(control.name)}/>
+                return <BarcodeBox onChange={this.handleChange(control.name)} />
             case "picture":
-                return <PictureBox onChange={this.handleChange(control.name)}/>
+                return <PictureBox onChange={this.handleChange(control.name)} />
 
             default:
                 return (<div></div>);
@@ -117,26 +126,26 @@ export default class FormDialog extends React.Component {
 
         let allValid = true;
 
-        this.props.config.columns.forEach(x=>{
+        this.props.config.columns.forEach(x => {
             if (!x.key && x.mandatory && (!this.state[x.name] || this.state[x.name] === "")) {
                 allValid = false;
             }
         })
 
         if (!allValid) {
-            this.setState({validating: true})
+            this.setState({ validating: true })
         }
         else {
-            this.setState({validating: false, open: false})    
-            this.props.onUpdate(this.state);        
+            this.setState({ validating: false, open: false })
+            this.props.onUpdate(this.state);
         }
     }
 
-    componentWillReceiveProps(props)  {
-        this.setState({open:props.open}); 
+    componentWillReceiveProps(props) {
+        this.setState({ open: props.open });
         if (props.data) {
             this.setState(props.data);
-        }       
+        }
     }
 
     render() {
@@ -146,18 +155,20 @@ export default class FormDialog extends React.Component {
                     open={this.state.open}
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title"
-                    
+                    fullWidth
+                    maxWidth="lg"
+                    fullScreen={this.props.fullScreen}
                 >
                     <DialogTitle id="form-dialog-title">{this.props.config.displayName}</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            Edit the fields to manage the selected row. Click save to persist
+                            Edit Row data
                         </DialogContentText>
                         {
-                            this.props.config.columns.map(x=>{
+                            this.props.config.columns.map(x => {
                                 return (
                                     <Row key={x.name}>
-                                        <FullColumn>{this.createControl(x, this.state[x.name] ? this.state[x.name] : "")}</FullColumn>
+                                        <FullColumn>{this.createControl(x, this.state[x.name] ? this.state[x.name] : x.default ? x.default : "")}</FullColumn>
                                     </Row>
                                 )
                             })
@@ -176,3 +187,5 @@ export default class FormDialog extends React.Component {
         )
     }
 };
+
+export default withMobileDialog()(FormDialog);

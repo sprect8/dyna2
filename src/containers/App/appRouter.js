@@ -24,6 +24,18 @@ const staff = {
 	]
 }
 
+function formatDate() {
+    var d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
 const inventory = {
 	"tableName": "Inventory",
 	"displayName": "Inventory Records",
@@ -31,12 +43,11 @@ const inventory = {
 	"columns":[
 		{"name":"inv_id", "display":"Inventory Id", "type":"number", "sequence":"inv_id_seq", "mandatory":true, "unique":true, "key":true},		
 		{"name":"inv_prod_id", "display":"Product", "type":"text", "mandatory":true, "ref":"Product"},
-		{"name":"inv_purchase_date", "display":"Purchase Date", "type":"timestamp", "mandatory":true},
+        {"name":"inv_bar_code", "display": "Barcode", "type":"barcode", "mandatory":false},
+		{"name":"inv_purchase_date", "display":"Purchase Date", "type":"timestamp", "mandatory":true, "default": formatDate()},
 		{"name":"inv_expiry_date", "display":"Expiry Date", "type":"timestamp", "mandatory":true},
 		{"name":"inv_units_in_stock", "display":"Amount in Stock", "type":"number", "mandatory":true, "lov":["ACTIVE", "INACTIVE", "PROBATION"]},
-        {"name":"inv_unit_price", "display": "Cost", "type":"number", "mandatory":true, "lov":["Full Time", "Part Time", "Sales", "Contractor"],},
-		{"name":"inv_bar_code", "display": "Barcode", "type":"barcode", "mandatory":false},
-		
+        
 	]
 }
 
@@ -54,6 +65,8 @@ const products = {
 		{"name":"prod_units_on_order", "display":"Units on Order", "type":"number", "mandatory":true},		
 		{"name":"prod_discontinued", "display":"Discontinued", "type":"text", "mandatory":true, "lov":["Discontinued", "In Stock", "Active", "Phase Out"]},        
         {"name":"prod_sku", "display":"SKU", "type":"text"},
+        {"name":"prod_unit_price", "display": "Cost", "type":"number", "mandatory":true},
+		
 	]
 }
 
@@ -629,6 +642,10 @@ const PropsRoute = ({ component, ...rest }) => {
 const routes = [
   {
     path: '',
+    component: asyncComponent(() => import('../Dashboard.js')),
+  },
+  {
+    path: 'home',
     component: asyncComponent(() => import('../Dashboard.js')),
   },
   {

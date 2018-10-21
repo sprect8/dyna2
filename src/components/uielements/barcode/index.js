@@ -13,16 +13,18 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import 'react-vertical-timeline-component/style.min.css';
 import Quagga from 'quagga';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 
 /**
  * This tool is for data entry into the system based on an underlying database model 
  **/
 
-export default class BarcodeBox extends React.Component {
+class BarcodeBox extends React.Component {
     state = {
         takeScreenshot: false,
         snapshot: "",
         open: false,
+        value: "",
     };
 
     handleClose = () => {
@@ -105,6 +107,9 @@ export default class BarcodeBox extends React.Component {
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title"
                     onRendered={this.afterOpenModal}
+                    fullWidth                    
+                    maxWidth="lg"
+                    fullScreen={this.props.fullScreen}
                 >
                     <DialogTitle id="form-dialog-title">Snap a photo</DialogTitle>
                     <DialogContent>
@@ -119,9 +124,11 @@ export default class BarcodeBox extends React.Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                Barcode: <TextField value={this.state.value} onChange={(event) => { this.setState({ value: event.target.value }) }} />
+                <TextField label="Barcode" value={this.state.value} onChange={(event) => { this.setState({ value: event.target.value }) }} />
                 <Button onClick={this.handleOpen} color="primary">Scan</Button>
             </div>
         )
     }
 };
+
+export default withMobileDialog()(BarcodeBox);
