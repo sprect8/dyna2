@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[16],{1943:function(t,e,a){"use strict";a.r(e);var n=a(4),i=a(5),c=a(9),o=a(8),r=a(10),h=a(0),p=a.n(h),s=a(123),u=a(55),d=function(t){function e(){return Object(n.a)(this,e),Object(c.a)(this,Object(o.a)(e).apply(this,arguments))}return Object(r.a)(e,t),Object(i.a)(e,[{key:"render",value:function(){return p.a.createElement(s.a,{data:this.props.data,width:u.a.width,height:u.a.height,options:u.c})}}]),e}(p.a.Component);e.default=d}}]);
-//# sourceMappingURL=ReactChart2-bar.caa37a75.chunk.js.map

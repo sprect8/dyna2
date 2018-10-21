@@ -11,6 +11,7 @@ import Select from '@material-ui/core/Select';
 
 import { Row, FullColumn } from '../../components/utility/rowColumn';
 import PictureBox from '../uielements/camera';
+import BarcodeBox from '../uielements/barcode';
 /**
  * This tool is for data entry into the system based on an underlying database model 
  **/
@@ -97,6 +98,7 @@ export default class FormDialog extends React.Component {
                     }}
                 />
             case "barcode":
+                return <BarcodeBox onChange={this.handleChange(control.name)}/>
             case "picture":
                 return <PictureBox onChange={this.handleChange(control.name)}/>
 
