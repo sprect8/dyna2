@@ -12,39 +12,6 @@ import Table from '../../components/uielements/table';
 
 import 'react-vertical-timeline-component/style.min.css';
 
-let id = 0;
-function createData(name, item, units, unitcosts, total) {
-    id += 1;
-    return { id, name, item, units, unitcosts, total };
-}
-
-const data = [
-    createData('Jones', 'Pencil', 95, 1.99, 189.05),
-    createData('Kivell', 'Binder', 50, 19.99, 999.5),
-    createData('Jardine', 'Pencil', 36, 4.99, 179.64),
-    createData('Gill', 'Pen', 27, 19.99, 539.73),
-    createData('Sorvino', 'Pencil', 56, 2.99, 167.44),
-];
-
-// configuration for the application
-const conf = {
-    "tableName": "Staff",
-    "displayName": "Staff Records",
-    "description": "These are your staff records, edit, add, remove and view any details",
-    "columns": [
-        { "name": "staff_id", "display": "Staff Id", "type": "number", "sequence": "staff_id_seq", "mandatory": true, "unique": true, "key": true },
-        { "name": "staff_fname", "display": "First Name", "type": "text", "mandatory": true },
-        { "name": "staff_sname", "display": "Surname", "type": "text", "mandatory": true },
-        { "name": "staff_uid", "display": "Identity Card", "type": "text", "mandatory": true, "unique": true },
-        { "name": "staff_joined", "display": "Joined", "type": "timestamp", "mandatory": true },
-        { "name": "staff_status", "display": "Status", "type": "text", "mandatory": true, "lov": ["ACTIVE", "INACTIVE", "PROBATION"] },
-        { "name": "staff_type", "display": "Type", "type": "text", "mandatory": true, "lov": ["Full Time", "Part Time", "Sales", "Contractor"], },
-        { "name": "staff_address", "display": "Address", "type": "text", "mandatory": true },
-        { "name": "staff_salary", "display": "Salary (month)", "type": "number", "mandatory": true }
-    ]
-}
-
-
 export default class FormDialog extends React.Component {
     state = {
         open: false,

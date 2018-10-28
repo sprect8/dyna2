@@ -22,6 +22,7 @@ export default class Breakdown extends Component {
                         
                             // { title: "Daily Sales", currency: "$", amount: "60", progress: "67", color: "rgb(153, 102, 255)", direction:"downward" }
                             return (<Transaction
+                                key={row.title}
                                 title={row.title}
                                 duration={row.duration}
                                 amount={row.amount}

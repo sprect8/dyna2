@@ -15,6 +15,7 @@ export default class Breakdown extends Component {
       description,
       data
     } = this.props;
+    let index = 0;
     /*const progressFill = {
       width: `${progress}%`,
       backgroundColor: `${color}`,
@@ -27,16 +28,17 @@ export default class Breakdown extends Component {
         </h3>
         <p className="description">{description}</p>
 
-        <VerticalTimeline>
+        <VerticalTimeline key={index++}>
           {
             // each row will have n number of boxes to render
 
             data.map(x => {
-              let icon = <WorkIcon />
+              let icon = <WorkIcon key={index++} />
               if (x.type === "education") {
-                icon = <SchoolIcon />
+                icon = <SchoolIcon key={index++} />
               }
               return (<VerticalTimelineElement
+                key={index++}
                 className={"vertical-timeline-element--" + x.type}
                 date={x.date}
                 iconStyle={{ background: `rgb(33, 150, 243)`, color: "#fff" }}
@@ -51,8 +53,9 @@ export default class Breakdown extends Component {
             })
           }
           <VerticalTimelineElement
+            key={index++}
             iconStyle={{ background: 'rgb(16, 204, 82)', color: '#fff' }}
-            icon={<StarIcon />}
+            icon={<StarIcon key={index++} />}
           />
         </VerticalTimeline>
       </div>

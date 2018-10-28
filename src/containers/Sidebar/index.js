@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink, Link } from 'react-router-dom';
+import {  Link } from 'react-router-dom';
 import Collapse from '@material-ui/core/Collapse';
 import Scrollbars from '../../components/utility/customScrollBar';
 import IntlMessages from '../../components/utility/intlMessages';
 import appActions from '../../redux/app/actions';
-// import Logo from '../../images/logo2.png';
-import options from './options';
+
 import Drawer, {
   LogoWrapper,
   Lists,
@@ -17,7 +16,7 @@ import Drawer, {
   ExpandMoreIcon,
 } from './style';
 
-const { toggleCollapsed, changeOpenKeys, changeCurrent } = appActions;
+const { toggleCollapsed, changeOpenKeys, changeCurrent, loadConfigSidebar } = appActions;
 
 let selectedTheme = {};
 
@@ -78,6 +77,10 @@ const stripTrailingSlash = str => {
 };
 class Sidebar extends Component {
   handleClick = () => { };
+  componentWillMount = () => {
+    const { loadConfigSidebar } = this.props;
+    loadConfigSidebar();
+  }
   onLogo = () => {
     const { changeOpenKeys, changeCurrent, toggleCollapsed } = this.props;
     changeOpenKeys({});
@@ -96,9 +99,12 @@ class Sidebar extends Component {
       customizedTheme,
       toggleCollapsed,
       fixedNavbar,
+      config,
       view,
     } = this.props;
     selectedTheme = customizedTheme;
+    let opts = config || [];
+
     const scrollheight = height;
     const url = stripTrailingSlash(this.props.url);
     const menuItem = option => {
@@ -174,7 +180,7 @@ class Sidebar extends Component {
             <LogoElem onLogo={this.onLogo} />
           </LogoWrapper>
           <Scrollbars style={{ height: scrollheight - 64 }}>
-            <Lists>{options.map(menuItem)}</Lists>
+            <Lists>{opts.map(menuItem)}</Lists>
             
           </Scrollbars>          
           <a href="https://www.tmdynapreneur.com" style={{"fontSize":"12px", "color":"white", "position":"absolute", "bottom":"0px"}}>Powered by <img src="/ie-logo.jpeg" style={{"height":"18px"}}/> (IE Consulting)   </a>
@@ -189,5 +195,5 @@ export default connect(
     ...state.App,
     customizedTheme: state.ThemeSwitcher.sidebarTheme,
   }),
-  { toggleCollapsed, changeOpenKeys, changeCurrent }
+  { toggleCollapsed, changeOpenKeys, changeCurrent, loadConfigSidebar }
 )(Sidebar);

@@ -115,7 +115,7 @@ const options = [
     ]
   },
 ];
-const getBreadcrumbOption = () => {
+const getBreadcrumbOption = (options) => {
   const preKeys = getDefaultPath();
   let parent, activeChildren;
   options.forEach(option => {

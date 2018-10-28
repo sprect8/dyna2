@@ -16,17 +16,19 @@ export default class Breakdown extends Component {
       backgroundColor: `${color}`,
     };*/
 
+    let index = 0;
     return (
       <WidgetBox title={title} description={description} stretched={stretched}>
         {
           // each row will have n number of boxes to render
           data.map(row => {
-            return (<Row>
+            return (<Row key={index++}>
               {
                 row.widgets.map(col => {
                   // { title: "Daily Sales", currency: "$", amount: "60", progress: "67", color: "rgb(153, 102, 255)", direction:"downward" }
-                  return (<HalfColumn>
+                  return (<HalfColumn  key={index++}>
                     <SalesProgress
+                      key={index++}
                       title={col.title}
                       currency={col.currency}
                       amount={col.amount}

@@ -13,41 +13,41 @@ import TxnView from '../Viz/TxnWidget';
 import Timeline from '../Viz/Timeline';
 import TxnBreakdown from '../Viz/TxnBreakdown';
 
-function create(config) {
+function create(config, key) {
     switch (config.type) {
         case "TXNBREAKDOWN":
-            return (<TxnBreakdown {...config}/>);
+            return (<TxnBreakdown  key={key} {...config}/>);
         case "MAP":
-            return (<MapView {...config} />);
+            return (<MapView key={key} {...config} />);
         case "TRANSACTIONS":
-            return (<TxnView {...config} />);
+            return (<TxnView key={key} {...config} />);
         case "AREA":
-            return (<Area {...config} />);
+            return (<Area key={key} {...config} />);
         case "STACKEDBAR":
-            return (<StackedBar {...config} />);
+            return (<StackedBar key={key} {...config} />);
         case "PIE":
-            return (<Pie {...config} />);
+            return (<Pie key={key} {...config} />);
         case "LINE":
-            return (<Line {...config} />);
+            return (<Line key={key} {...config} />);
         case "BREAKDOWN":
-            return (<Breakdown {...config} />);
+            return (<Breakdown key={key} {...config} />);
         case "HISTORY":
-            return (<Timeline {...config} />);
+            return (<Timeline key={key} {...config} />);
         default:
-            return (<div></div>);
+            return (<div key={key}></div>);
     }
 }
 
-function layout(children, config) {
+function layout(children, config, key) {
     switch (config.layout) {
         case "twothird":
-            return (<TwoThirdColumn>{children}</TwoThirdColumn>);
+            return (<TwoThirdColumn key={key}>{children}</TwoThirdColumn>);
         case "onethird":
-            return (<OneThirdColumn>{children}</OneThirdColumn>);
+            return (<OneThirdColumn key={key}>{children}</OneThirdColumn>);
         case "halfcolumn":
-            return (<HalfColumn>{children}</HalfColumn>);
+            return (<HalfColumn key={key}>{children}</HalfColumn>);
         case "fullcolumn":
-            return (<FullColumn>{children}</FullColumn>);
+            return (<FullColumn key={key}>{children}</FullColumn>);
         default:
             return (<FullColumn>{children}</FullColumn>);
     }
@@ -55,15 +55,16 @@ function layout(children, config) {
 
 export default (props) => {
     let { config } = props;
+    let index = 0;
     return <LayoutWrapper>
         <h3 className={config.description ? 'withDescription' : 'widgetTitle'}>{config.title}</h3>
         {
             config.rows.map(x => {
 
-                return (<Row>
+                return (<Row key={index++}>
                     {
                         x.map(col => {
-                            return layout(create(col), col);
+                            return layout(create(col, index), col, index++);
                         })
                     }
                 </Row>);

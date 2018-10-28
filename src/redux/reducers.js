@@ -4,6 +4,7 @@ import ThemeSwitcher from './themeSwitcher/reducer';
 import LanguageSwitcher from './languageSwitcher/reducer';
 import Mails from './mail/reducer';
 import Ecommerce from "./ecommerce/reducer";
+import AppReducer from './app/reducer';
 
 export default {
 	Auth,
@@ -11,5 +12,6 @@ export default {
 	ThemeSwitcher,
 	LanguageSwitcher,
 	Mails,
-	Ecommerce
+	Ecommerce,
+	AppReducer,
 };

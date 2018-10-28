@@ -152,6 +152,7 @@ class FormDialog extends React.Component {
         return (
             <div>
                 <Dialog
+                    key={this.props.config.displayName}
                     open={this.state.open}
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title"

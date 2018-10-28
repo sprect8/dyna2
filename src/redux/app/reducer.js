@@ -19,6 +19,21 @@ const initState = {
 
 export default function appReducer(state = initState, action) {
   switch (action.type) {
+    case actions.LOAD_CONFIG_SIDEBAR:
+      return {
+        ...state,
+        config: action.sidebarConfig
+      };
+    case actions.LOAD_CONFIG_INPUT:
+      return {
+        ...state,
+        configInput: action.config
+      };
+    case actions.LOAD_CONFIG_REPORTS:
+      return {
+        ...state,
+        configReports: action.config
+      };
     case actions.COLLPSE_CHANGE:
       return {
         ...state,
