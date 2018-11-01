@@ -16,11 +16,20 @@ import Firebase from "../../../helpers/firebase";
 import FirebaseLogin from "../../../components/firebase";
 import { Checkbox } from "./signup.style";
 
-const { login } = authAction;
+const { login, register } = authAction;
 
 class SignUp extends Component {
   state = {
-    redirectToReferrer: false
+    redirectToReferrer: false,
+    register: {
+      user_name:"",
+      user_password: "",
+      user_fname:"",
+      user_lname:"",
+      authKey: "",      
+      confirmPassword: ""
+    },
+    validate: false,
   };
   componentWillReceiveProps(nextProps) {
     if (
@@ -31,10 +40,27 @@ class SignUp extends Component {
     }
   }
   handleLogin = () => {
-    const { login } = this.props;
-    login();
-    this.props.history.push("/dashboard");
+    const { register } = this.props;
+    // validate then submit?
+    let valid = true;
+
+    Object.keys(this.state.register).forEach(e=>{
+      if (this.state.register[e] === "") valid = false;
+    });
+
+    if (!valid) {
+      this.setState({validating:true});
+      return;
+    }
+
+    register(this.state.register); // i need the payload ...
+    // this.props.history.push("/dashboard");
   };
+  changedValue = (event) => {
+    let st = this.state
+    st.register[event.target.name] = event.target.value;
+    this.setState(st);
+  }
   render() {
     return (
       <SignUpStyleWrapper className="mateSignUpPage">
@@ -46,55 +72,85 @@ class SignUp extends Component {
 
         <div className="mateSignInPageContent">
           <div className="mateSignInPageLink">
-            <Link to="#">
-              <button className="mateSignInPageLinkBtn active" type="button">
-                Register
-              </button>
-            </Link>
-            <Link to="/signin">
-              <button className="mateSignInPageLinkBtn " type="button">
-                Login
-              </button>
-            </Link>
           </div>
           <Scrollbars style={{ height: "100%" }}>
-            <div className="mateSignInPageGreet">
-              <h1>Its Free, Join Us</h1>
-              <p>
-                Welcome to Mate Admin, Please SignUp with your personal account
-                information.
+              <p style={{"textAlign":"center"}}>
+                <img src={"/dyna-logo2.png"} alt="Logo" />
               </p>
-            </div>
+              <p>
+                Welcome to TM Dynapreneur 2018, This is the registration page. Only authorized users may use this
+              </p>
             <div className="mateSignInPageForm">
               <div className="mateInputWrapper">
                 <TextField
+                  name="user_name"
                   label="Username"
                   placeholder="Username"
                   margin="normal"
+                  onChange={this.changedValue}
+                  value={this.state.register.user_name}
+                  error={this.state.validate && this.state.register.user_name !== ""}
                 />
               </div>
               <div className="mateInputWrapper">
                 <TextField
-                  label="Email"
-                  placeholder="Email"
+                  name="user_fname"
+                  label="First Name"
+                  placeholder="First Name"
                   margin="normal"
-                  type="Email"
+                  type="text"
+                  onChange={this.changedValue}
+                  value={this.state.register.user_fname}
+                  error={this.state.validate && this.state.register.user_fname !== ""}
                 />
               </div>
               <div className="mateInputWrapper">
                 <TextField
+                  name="user_lname"
+                  label="Surname"
+                  placeholder="Surname"
+                  margin="normal"
+                  type="text"
+                  onChange={this.changedValue}
+                  value={this.state.register.user_lname}
+                  error={this.state.validate && this.state.register.user_lname !== ""}
+                />
+              </div>
+              <div className="mateInputWrapper">
+                <TextField
+                  name="user_password"
                   label="Password"
                   placeholder="Password"
                   margin="normal"
                   type="Password"
+                  onChange={this.changedValue}
+                  value={this.state.register.user_password}
+                  error={this.state.validate && this.state.register.user_password !== ""}
+                />
+              </div>
+              
+              <div className="mateInputWrapper">
+                <TextField
+                  name="authKey"
+                  label="Master Key"
+                  placeholder="Master Key"
+                  margin="normal"
+                  type="Password"
+                  onChange={this.changedValue}
+                  value={this.state.register.authKey}
+                  error={this.state.validate && this.state.register.authKey !== ""}     
                 />
               </div>
               <div className="mateInputWrapper">
                 <TextField
+                  name="confirmPassword"
                   label="Confirm Password"
                   placeholder="Confirm Password"
                   margin="normal"
-                  type="Password"
+                  type="Password"             
+                  onChange={this.changedValue}
+                  value={this.state.register.confirmPassword}
+                  error={this.state.validate && this.state.register.confirmPassword === this.state.register.user_password}     
                 />
               </div>
             </div>
@@ -111,67 +167,6 @@ class SignUp extends Component {
                 </Button>
               </div>
             </div>
-            <div className="mateLoginSubmitText">
-              <span>or Sign Up with </span>
-            </div>
-            <div className="mateLoginOtherBtn">
-              <div className="mateLoginOtherBtnWrap">
-                <Button
-                  onClick={this.handleLogin}
-                  type="primary btnFacebook"
-                  className="btnFacebook"
-                >
-                  <div className="mateLoginOtherIcon">
-                    <img src={fbBtnSvg} alt="facebook Btn" />
-                  </div>
-                  <IntlMessages id="page.signUpFacebook" />
-                </Button>
-              </div>
-              <div className="mateLoginOtherBtnWrap">
-                <Button
-                  onClick={this.handleLogin}
-                  type="primary btnGooglePlus"
-                  className="btnGooglePlus"
-                >
-                  <div className="mateLoginOtherIcon">
-                    <img src={gpBtnSvg} alt="Google Plus Btn" />
-                  </div>
-                  <IntlMessages id="page.signUpGooglePlus" />
-                </Button>
-              </div>
-              <div className="mateLoginOtherBtnWrap">
-                {Auth0.isValid ? (
-                  <Button
-                    type="primary btnAuthZero"
-                    className="btnAuthZero"
-                    onClick={() => {
-                      Auth0.login(this.handleLogin);
-                    }}
-                  >
-                    <div className="mateLoginOtherIcon">
-                      <img src={authBtnSvg} alt="Authentication Btn" />
-                    </div>
-                    <IntlMessages id="page.signUpAuth0" />
-                  </Button>
-                ) : (
-                  <Button
-                    type="primary btnAuthZero"
-                    className="btnAuthZero"
-                    onClick={this.handleLogin}
-                  >
-                    <div className="mateLoginOtherIcon">
-                      <img src={authBtnSvg} alt="Authentication Btn" />
-                    </div>
-                    <IntlMessages id="page.signUpAuth0" />
-                  </Button>
-                )}
-              </div>
-              <div className="mateLoginOtherBtnWrap">
-                {Firebase.isValid && (
-                  <FirebaseLogin signup={true} login={this.handleLogin} />
-                )}
-              </div>
-            </div>
           </Scrollbars>
         </div>
       </SignUpStyleWrapper>
@@ -181,7 +176,9 @@ class SignUp extends Component {
 
 export default connect(
   state => ({
-    isLoggedIn: state.Auth.idToken !== null ? true : false
+    isLoggedIn: state.Auth.idToken !== null ? true : false,
+    success: state.Auth.success,
+    message: state.Auth.message,
   }),
-  { login }
+  { login, register }
 )(SignUp);

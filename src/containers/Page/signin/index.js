@@ -59,6 +59,9 @@ class SignIn extends Component {
               <button className="mateSignInPageLinkBtn active" type="button">
                 Login
               </button>
+              <button className="mateSignInPageLinkBtn" type="button" onClick={()=>{    this.props.history.push("/signup");}}>
+                Sign Up
+              </button>
             </Link>
           </div>
           <Scrollbars style={{ height: "100%" }}>
@@ -94,7 +97,7 @@ class SignIn extends Component {
               <div className="mateLoginSubmit">
                 <Button type="primary" onClick={this.handleLogin}>
                   Login
-                </Button>
+                </Button>                
               </div>
             </div>
             <div className="mateLoginSubmitText">

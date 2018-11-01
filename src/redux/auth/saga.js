@@ -1,7 +1,8 @@
-import { all, takeEvery, put } from 'redux-saga/effects';
+import { all, takeEvery, put, call } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import { clearToken, getToken } from '../../helpers/utility';
 import actions from './actions';
+import { fetch } from '../api'
 
 const fakeApiCall = true; // auth0 or express JWT
 
@@ -21,7 +22,7 @@ export function* loginSuccess({ payload }) {
   yield localStorage.setItem('id_token', payload.token);
 }
 
-export function* loginError() {}
+export function* loginError() { }
 
 export function* logout() {
   clearToken();
@@ -37,6 +38,25 @@ export function* checkAuthorization() {
     });
   }
 }
+
+export function* registerUser(payload) {
+  let fetchData = {
+    method: 'POST',
+    body: payload,
+    headers: new Headers()
+  };
+
+  try {
+    let response = yield call(fetch, '/register', JSON.stringify(fetchData));
+    let json = response.json();
+    yield put({type: actions.REGISTER_REQUEST, result:json});
+  }
+  catch (e) {
+    yield put(actions.registerError(e));
+    return;
+  }
+}
+
 export default function* rootSaga() {
   yield all([
     yield takeEvery(actions.CHECK_AUTHORIZATION, checkAuthorization),
@@ -44,5 +64,6 @@ export default function* rootSaga() {
     yield takeEvery(actions.LOGIN_SUCCESS, loginSuccess),
     yield takeEvery(actions.LOGIN_ERROR, loginError),
     yield takeEvery(actions.LOGOUT, logout),
+    yield takeEvery(actions.REGiSTER_REQUEST_SAGA, registerUser),
   ]);
 }

@@ -7,6 +7,8 @@ const port = process.env.PORT || 3000;
 var bodyParser = require('body-parser')
 var morgan = require('morgan');
 
+const bcrypt = require('bcrypt');
+
 const app = express();
 // parse application/json
 app.use(bodyParser.json())
@@ -483,23 +485,52 @@ router.use(function (req, res, next) {
   }
 });
 
-
 generateRoutes(router, getConfiguration());
 
+app.post("/register", function (req, res) {
+  // create a new user
+  // we need to admin key when login, and this key is hard coded 
+
+  let payload = req.body;
+
+  if (payload.authKey !== "Dynapreneur2018") {
+    res.json({ success: false, message: "Invalid Auth Key" });
+    return;
+  }
+
+  payload.user_status = 'ACTIVE';
+  payload.user_timestamp = new Date();
+  payload.user_password = bcrypt.hashSync(payload.user_password, 10);
+
+  sharedPersistenceMapping["users"].create(payload, { fields: [Object.keys(payload).filter(e=>{return e.startsWith("user_");})] }).then(r => {
+    if (!r) {
+      res.json({ success: false, message: "Failed to create user" })
+    }
+    else {
+      res.json({ success: true, userId: r.user_id });
+    }
+  }).catch(e => {
+    console.log("Failed creating user because of ", e);
+    res.json({ success: false, message: "Failed to create user" });
+  })
+});
+
 // login the user
-router.post('/login', function (req, res) {
+app.post('/login', function (req, res) {
 
   // find the user
-  sharedPersistenceMapping["users"].findOne({where:{
-    name: req.body.name
-  }}).then((user) => {
+  sharedPersistenceMapping["users"].findOne({
+    where: {
+      name: req.body.name
+    }
+  }).then((user) => {
 
     if (!user) {
       res.json({ success: false, message: 'Authentication failed. User not found.' });
     } else if (user) {
 
       // check if password matches
-      if (user.user_password != req.body.password) {
+      if (!bcrypt.compareSync(req.body.password, user.user_password)) {
         res.json({ success: false, message: 'Authentication failed. Wrong password.' });
       } else {
 
@@ -522,7 +553,7 @@ router.post('/login', function (req, res) {
       }
     }
 
-  }).catch(e=>{
+  }).catch(e => {
     throw e;
   });
 });
