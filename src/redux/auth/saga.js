@@ -6,23 +6,44 @@ import { fetch } from '../api'
 
 const fakeApiCall = true; // auth0 or express JWT
 
-export function* loginRequest() {
-  if (fakeApiCall) {
-    yield put({
-      type: actions.LOGIN_SUCCESS,
-      payload: { token: 'secret token' },
-      profile: 'Profile',
-    });
-  } else {
-    yield put({ type: actions.LOGIN_ERROR });
+export function* loginRequest(payload) {
+  let {username, password} = payload.payload;
+  let fetchData = {
+    method: 'POST',
+    body: JSON.stringify({ "name": username, password }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  try {
+    let res = yield call(fetch, '/login', fetchData);
+    let json = yield res.json();
+
+    console.log("Login result", json);
+
+    if (json.success) {
+      yield put({
+        type: actions.LOGIN_SUCCESS,
+        payload: {token: json.token},
+        profile: "Profile",
+      })
+    }
+    else {
+      yield put({ type: actions.LOGIN_ERROR, message: "Failed to login because of " + json.message });  
+    }
+    return;
+  }
+  catch (e) {
+    console.log("Login error", e);
+    yield put({ type: actions.LOGIN_ERROR, message: "Failed to login because of " + e });
+    return;
   }
 }
 
 export function* loginSuccess({ payload }) {
   yield localStorage.setItem('id_token', payload.token);
 }
-
-export function* loginError() { }
 
 export function* logout() {
   clearToken();
@@ -42,17 +63,25 @@ export function* checkAuthorization() {
 export function* registerUser(payload) {
   let fetchData = {
     method: 'POST',
-    body: payload,
-    headers: new Headers()
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json'
+    }
   };
 
   try {
-    let response = yield call(fetch, '/register', JSON.stringify(fetchData));
-    let json = response.json();
-    yield put({type: actions.REGISTER_REQUEST, result:json});
+    console.log("Running fetch on register with", fetchData);
+    let response = yield call(fetch, '/register', fetchData);
+    let json = yield response.json();
+    if (json.success) {
+      yield put({ type: actions.REGISTER_REQUEST, result: json });
+    }
+    else {
+      yield put({ type: actions.REGISTER_ERROR, error: json.message }); // server side error caught and handled
+    }
   }
   catch (e) {
-    yield put(actions.registerError(e));
+    yield put(actions.registerError(e)); // unhandled server side error
     return;
   }
 }
@@ -62,7 +91,7 @@ export default function* rootSaga() {
     yield takeEvery(actions.CHECK_AUTHORIZATION, checkAuthorization),
     yield takeEvery(actions.LOGIN_REQUEST, loginRequest),
     yield takeEvery(actions.LOGIN_SUCCESS, loginSuccess),
-    yield takeEvery(actions.LOGIN_ERROR, loginError),
+    //yield takeEvery(actions.LOGIN_ERROR, loginError),
     yield takeEvery(actions.LOGOUT, logout),
     yield takeEvery(actions.REGiSTER_REQUEST_SAGA, registerUser),
   ]);

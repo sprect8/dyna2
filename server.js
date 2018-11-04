@@ -6,6 +6,7 @@ const Sequelize = require('sequelize');
 const port = process.env.PORT || 3000;
 var bodyParser = require('body-parser')
 var morgan = require('morgan');
+var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 const bcrypt = require('bcrypt');
 
@@ -185,7 +186,7 @@ function getUserStructures() {
     "description": "System User",
     "columns": [
       { "name": "user_id", "display": "User Id", "type": "number", "sequence": "user_id_seq", "mandatory": true, "unique": true, "key": true },
-      { "name": "user_name", "display": "Username", "type": "text", "mandatory": true },
+      { "name": "user_name", "display": "Username", "type": "text", "mandatory": true, "unique": true },
       { "name": "user_user_id", "display": "Parent User", "type": "number" },
       { "name": "user_fname", "display": "First Name", "type": "text", "mandatory": true },
       { "name": "user_lname", "display": "Surname", "type": "text", "mandatory": true },
@@ -487,22 +488,31 @@ router.use(function (req, res, next) {
 
 generateRoutes(router, getConfiguration());
 
+router.get('/tableProfiles', function (req, res) {
+  // get the table configurations
+
+  res.json(tableConfiguration);
+});
+
 app.post("/register", function (req, res) {
   // create a new user
   // we need to admin key when login, and this key is hard coded 
 
-  let payload = req.body;
+  let payload = req.body.payload;
+
+  console.log(payload)
 
   if (payload.authKey !== "Dynapreneur2018") {
     res.json({ success: false, message: "Invalid Auth Key" });
     return;
   }
 
+  payload.user_name = payload.user_name.toUpperCase();
   payload.user_status = 'ACTIVE';
-  payload.user_timestamp = new Date();
+  payload.user_timestamp = new Date().getTime();
   payload.user_password = bcrypt.hashSync(payload.user_password, 10);
 
-  sharedPersistenceMapping["users"].create(payload, { fields: [Object.keys(payload).filter(e=>{return e.startsWith("user_");})] }).then(r => {
+  sharedPersistenceMapping["users"].create(payload, { fields: Object.keys(payload).filter(e=>{return e.startsWith("user_");}) }).then(r => {
     if (!r) {
       res.json({ success: false, message: "Failed to create user" })
     }
@@ -521,7 +531,7 @@ app.post('/login', function (req, res) {
   // find the user
   sharedPersistenceMapping["users"].findOne({
     where: {
-      name: req.body.name
+      user_name: req.body.name
     }
   }).then((user) => {
 
@@ -541,7 +551,7 @@ app.post('/login', function (req, res) {
           admin: user.user_id // i want the user name
         };
         var token = jwt.sign(payload, app.get('superSecret'), {
-          expiresInMinutes: 1440 // expires in 24 hours
+          expiresIn: 86400 // expires in 24 hours
         });
 
         // return the information including token as JSON
@@ -559,12 +569,6 @@ app.post('/login', function (req, res) {
 });
 
 app.use('/api', router)
-
-app.get('/tableProfiles', function (req, res) {
-  // get the table configurations
-
-  res.json(tableConfiguration);
-});
 
 app.get('/reportProfiles', function (req, res) {
   // get report profile which defines the report 

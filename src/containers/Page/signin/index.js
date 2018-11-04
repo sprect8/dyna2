@@ -2,39 +2,40 @@ import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import signinImg from "../../../images/signup.svg";
-import fbBtnSvg from "../../../images/facebook-app-symbol.svg";
-import gpBtnSvg from "../../../images/google-plus.svg";
-import authBtnSvg from "../../../images/auth0.svg";
 import Button from "../../../components/uielements/button";
 import authAction from "../../../redux/auth/actions";
 import TextField from "../../../components/uielements/textfield";
-import IntlMessages from "../../../components/utility/intlMessages";
 import Scrollbars from "../../../components/utility/customScrollBar";
 import SignInStyleWrapper from "./signin.style";
-import Auth0 from "../../../helpers/auth0";
-import Firebase from "../../../helpers/firebase";
-import FirebaseLogin from "../../../components/firebase";
+
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+import Snackbar from '@material-ui/core/Snackbar';
 
 const { login } = authAction;
 class SignIn extends Component {
   state = {
     redirectToReferrer: false,
-    username: "demo@gmail.com",
-    password: "demodemo"
+    username: "",
+    password: ""
   };
   componentWillReceiveProps(nextProps) {
+    console.log("Next Props", nextProps);
     if (
       this.props.isLoggedIn !== nextProps.isLoggedIn &&
       nextProps.isLoggedIn === true
     ) {
       this.setState({ redirectToReferrer: true });
     }
+
+    if (nextProps.error) {
+      this.setState({error: nextProps.error});
+    }
   }
   handleLogin = () => {
     const { login } = this.props;
     const { username, password } = this.state;
     login({ username, password });
-    this.props.history.push("/dashboard");
+    // this.props.history.push("/dashboard");
   };
   onChangeUsername = event => this.setState({ username: event.target.value });
   onChangePassword = event => this.setState({ password: event.target.value });
@@ -42,7 +43,7 @@ class SignIn extends Component {
     const from = { pathname: "/dashboard" };
     const { redirectToReferrer, username, password } = this.state;
 
-    if (redirectToReferrer) {
+    if (redirectToReferrer || this.props.isLoggedIn) {
       return <Redirect to={from} />;
     }
     return (
@@ -73,6 +74,8 @@ class SignIn extends Component {
                 Welcome to TM Dynapreneur 2018, Please Login with your personal account
                 information.
               </p>
+              {this.state.error ? <SnackbarContent message={"Login Failed, please check username / password and try again"}  /> : ""}
+              
             </div>
             <div className="mateSignInPageForm">
               <div className="mateInputWrapper">
@@ -102,8 +105,7 @@ class SignIn extends Component {
             </div>
             <div className="mateLoginSubmitText">
               <span>
-                * Username: demo@gmail.com , Password: demodemo or click on any
-                button.
+                Please Email Faizal for more information on creating an account
               </span>
             </div>
             
@@ -115,7 +117,8 @@ class SignIn extends Component {
 }
 export default connect(
   state => ({
-    isLoggedIn: state.Auth.idToken !== null ? true : false
+    isLoggedIn: state.Auth.idToken !== null ? true : false,
+    error: state.Auth.loginError
   }),
   { login }
 )(SignIn);

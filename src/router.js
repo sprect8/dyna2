@@ -66,11 +66,6 @@ const PublicRoutes = ({ history, isLoggedIn }) => (
       />
       <Route
         exact
-        path="/signup"
-        component={asyncComponent(() => import("./containers/Page/signup"))}
-      />
-      <Route
-        exact
         path="/demopage"
         component={asyncComponent(()=>import('./containers/CustomApp'))}
       />

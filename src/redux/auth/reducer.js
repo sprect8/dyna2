@@ -6,7 +6,12 @@ export default function authReducer(state = initState, action) {
   switch (action.type) {
     case actions.LOGIN_SUCCESS:
       return {
-        idToken: action.token
+        idToken: action.payload.token
+      };
+    case actions.LOGIN_ERROR:
+      return {
+        loginError: action.message,
+        idToken: null
       };
     case actions.REGISTER_REQUEST:
       return {
@@ -16,7 +21,7 @@ export default function authReducer(state = initState, action) {
     case actions.REGISTER_ERROR:
       return {
         success: false,
-        message: action.error,
+        error: action.error,
       }
     case actions.LOGOUT:
       return initState;
