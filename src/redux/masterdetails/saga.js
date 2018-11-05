@@ -1,4 +1,4 @@
-import { all, takeEvery, put } from 'redux-saga/effects';
+import { all, takeEvery, put, call } from 'redux-saga/effects';
 import actions from './actions';
 import { fetch, get } from '../api';
 
@@ -15,36 +15,66 @@ import { fetch, get } from '../api';
 */
 
 export function* loadData({ config, pageStart, total }) {
-    yield put({
-        type: actions.INIT_DATA,
-        payload: fakeData
-    });
+    let fetchData = {
+        method: 'GET',
+        //body: JSON.stringify({ pageStart, total }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try {
+        let res = yield call(fetch, '/api/' + config.tableName.toLowerCase() + "?pageStart=" + pageStart + "&total=" + total, fetchData);
+        let json = yield res.json();
+        console.log(json);
+        yield put({ type: actions.LOAD_DATA, payload: json });
+        return;
+    }
+    catch (e) {
+        console.log("Login error", e);
+        yield put({ type: actions.DATA_ERROR, message: "Failed to load data because of " + e });
+        return;
+    }
 }
 export function* saveData({ config, row }) {
-    yield put({
-        type: actions.UPDATE_DATA,
-        products,
-        productQuantity
-    });
+    let fetchData = {
+        method: 'PUT',
+        body: JSON.stringify(row),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try {
+        let res = yield call(fetch, '/api/' + config.tableName.toLowerCase(), fetchData);
+        let json = yield res.json();
+        console.log(json);
+        yield put({ action: actions.ACTION_SUCCESS, name: "SAVE" });
+        yield put(loadData(config, 0, 10));
+        return;
+    }
+    catch (e) {
+        console.log("Login error", e);
+        yield put({ type: actions.DATA_ERROR, message: "Failed to save data because of " + e });
+        return;
+    }
 }
 export function* updateData({ config, row }) {
     yield put({
         type: actions.UPDATE_DATA,
-        products,
-        productQuantity
+
     });
 }
 export function* deleteData({ config, uniqueId }) {
     yield put({
         type: actions.UPDATE_DATA,
-        products,
-        productQuantity
     });
 }
 
 export default function* () {
     yield all([
-        takeEvery(actions.INIT_DATA_SAGA, initData),
-        takeEvery(actions.UPDATE_DATA_SAGA, updateData)
+        takeEvery(actions.LOAD_DATA_SAGA, loadData),
+        takeEvery(actions.UPDATE_DATA, updateData),
+        takeEvery(actions.SAVE_DATA, saveData)
     ]);
 }

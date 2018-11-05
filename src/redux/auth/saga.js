@@ -45,8 +45,9 @@ export function* loginSuccess({ payload }) {
   yield localStorage.setItem('id_token', payload.token);
 }
 
-export function* logout() {
+export function* logoutRequest() {
   clearToken();
+  yield put({type: actions.LOGOUT});
   yield put(push('/'));
 }
 export function* checkAuthorization() {
@@ -91,8 +92,7 @@ export default function* rootSaga() {
     yield takeEvery(actions.CHECK_AUTHORIZATION, checkAuthorization),
     yield takeEvery(actions.LOGIN_REQUEST, loginRequest),
     yield takeEvery(actions.LOGIN_SUCCESS, loginSuccess),
-    //yield takeEvery(actions.LOGIN_ERROR, loginError),
-    yield takeEvery(actions.LOGOUT, logout),
+    yield takeEvery(actions.LOGOUT_SAGA, logoutRequest),
     yield takeEvery(actions.REGiSTER_REQUEST_SAGA, registerUser),
   ]);
 }

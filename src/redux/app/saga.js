@@ -1,7 +1,7 @@
-import { all, takeEvery, put } from 'redux-saga/effects';
+import { all, takeEvery, put, call } from 'redux-saga/effects';
 import actions from './actions';
-import {reportConfiguration, tableConfiguration, sidebarOptions} from './fake';
-import { get } from '../api'
+import { push } from 'react-router-redux';
+import { clearToken, getToken } from '../../helpers/utility';
 
 
 // Load Data (paged)
@@ -16,32 +16,61 @@ import { get } from '../api'
 
 */
 
-export function* loadSidebarConfig() {
-    let res = yield get('/api/tableProfiles')
-    let json = yield res.json();
+export function* logoutRequest() {
+    clearToken();
+    yield put({ type: actions.LOGOUT });
+    yield put(push('/'));
+}
 
-    yield put({ 
-        type: actions.LOAD_CONFIG_SIDEBAR,
-        sidebarConfig: json
-    });
+function* loadConfigJson(action, path) {
+    var options = {
+        path: path,
+        method: 'GET',
+        json: true
+    }
+    try {
+        let res = yield call(fetch, path, options)
+        console.log(res);
+        if (res && res.json) {
+            let json = yield res.json();
+
+            console.log("Json Loaded", json);
+
+            if (res.status == 403) {
+                yield put(logoutRequest());
+                return;
+            }
+
+            yield put({
+                type: action, //actions.LOAD_CONFIG_SIDEBAR,
+                config: json
+            }); 
+        }
+        else {
+            // maybe a login problem?
+            logoutRequest();
+        }
+    }
+    catch (e) {
+        console.log("Failed", e);
+        logoutRequest();
+    }
+}
+
+export function* loadSidebarConfig() {
+    yield loadConfigJson(actions.LOAD_CONFIG_SIDEBAR, '/api/sidebarConfig');
 }
 
 export function* loadReportConfig() {
-    yield put({
-        type: actions.LOAD_CONFIG_REPORTS,
-        config: reportConfiguration
-    });
+    yield loadConfigJson(actions.LOAD_CONFIG_REPORTS, '/api/reportProfiles');
 }
 
 export function* loadInputConfig() {
-    yield put({
-        type: actions.LOAD_CONFIG_INPUT,
-        config: tableConfiguration
-    });
+    yield loadConfigJson(actions.LOAD_CONFIG_INPUT, '/api/tableProfiles');
 }
 export default function* () {
     yield all([
-        takeEvery(actions.LOAD_CONFIG_SIDEBAR_SAGA, loadSidebarConfig),        
+        takeEvery(actions.LOAD_CONFIG_SIDEBAR_SAGA, loadSidebarConfig),
         takeEvery(actions.LOAD_CONFIG_REPORTS_SAGA, loadReportConfig),
         takeEvery(actions.LOAD_CONFIG_INPUT_SAGA, loadInputConfig),
     ]);

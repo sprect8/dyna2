@@ -66,6 +66,9 @@ class AppRouter extends Component {
         loadConfigInput();
         loadConfigReports();
     }
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps)
+    }
     render() {
         const { url, style, configInput, configReports } = this.props;
         let reportConfiguration = configReports || [];

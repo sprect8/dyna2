@@ -5,6 +5,7 @@ import LanguageSwitcher from './languageSwitcher/reducer';
 import Mails from './mail/reducer';
 import Ecommerce from "./ecommerce/reducer";
 import AppReducer from './app/reducer';
+import MasterDetailsReducer from './masterdetails/reducer';
 
 export default {
 	Auth,
@@ -14,4 +15,5 @@ export default {
 	Mails,
 	Ecommerce,
 	AppReducer,
+	MasterDetailsReducer
 };

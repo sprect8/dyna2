@@ -74,10 +74,10 @@ class TopbarUser extends Component {
             <Icon>feedback</Icon>
             <IntlMessages id="topbar.help" />
           </a>
-          <Link to="/" onClick={this.props.logout} className="dropdownLink">
+          <a href="#!" onClick={this.props.logout} className="dropdownLink">
             <Icon>input</Icon>
             <IntlMessages id="topbar.logout" />
-          </Link>
+          </a>
         </SettingsList>
       </TopbarDropdown>
     );

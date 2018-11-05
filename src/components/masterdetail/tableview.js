@@ -72,10 +72,10 @@ export default class FormDialog extends React.Component {
                     {data.map(n => {
                         return (<TableRow key={n[config.columns[0].name]}>
                             {config.columns.map(c => {
-                                if (c.type == "picture") {
-                                    return <TableCell key={c.name +index++}><Button onClick={createImageButton(n[c.name])}>Show Image</Button></TableCell>
+                                if (c.type === "picture" || c.type === "file") {
+                                    return (<TableCell key={c.name +index++}><Button onClick={createImageButton(n[c.name])}>Show Image</Button></TableCell>)
                                 }
-                                return <TableCell key={c.name + index++}>{n[c.name]}</TableCell>
+                                return (<TableCell key={c.name + index++}>{n[c.name]}</TableCell>)
                             })}
                         </TableRow>
                         )

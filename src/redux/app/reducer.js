@@ -22,7 +22,7 @@ export default function appReducer(state = initState, action) {
     case actions.LOAD_CONFIG_SIDEBAR:
       return {
         ...state,
-        config: action.sidebarConfig
+        config: action.config
       };
     case actions.LOAD_CONFIG_INPUT:
       return {

@@ -22,10 +22,13 @@ import InputLabel from '@material-ui/core/InputLabel';
 class FormDialog extends React.Component {
     state = {
         open: false,
+        data: {}
     };
 
     handleChange = name => event => {
-        this.setState({ [name]: event.target.value });
+        let data = this.state.data;
+        data[name] = event.target.value;
+        this.setState({data});
     };
 
     createControl = (control, value) => {
@@ -127,7 +130,7 @@ class FormDialog extends React.Component {
         let allValid = true;
 
         this.props.config.columns.forEach(x => {
-            if (!x.key && x.mandatory && (!this.state[x.name] || this.state[x.name] === "")) {
+            if (!x.key && x.mandatory && (!this.state.data[x.name] || this.state.data[x.name] === "")) {
                 allValid = false;
             }
         })
@@ -137,14 +140,15 @@ class FormDialog extends React.Component {
         }
         else {
             this.setState({ validating: false, open: false })
-            this.props.onUpdate(this.state);
+            this.props.onUpdate(this.state.data);
         }
     }
 
     componentWillReceiveProps(props) {
         this.setState({ open: props.open });
         if (props.data) {
-            this.setState(props.data);
+            
+            this.setState({data:props.data});
         }
     }
 
@@ -169,7 +173,7 @@ class FormDialog extends React.Component {
                             this.props.config.columns.map(x => {
                                 return (
                                     <Row key={x.name}>
-                                        <FullColumn>{this.createControl(x, this.state[x.name] ? this.state[x.name] : x.default ? x.default : "")}</FullColumn>
+                                        <FullColumn>{this.createControl(x, this.state.data[x.name] ? this.state.data[x.name] : x.default ? x.default : "")}</FullColumn>
                                     </Row>
                                 )
                             })

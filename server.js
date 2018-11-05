@@ -1,12 +1,13 @@
 
 const express = require('express');
+var cookieParser = require('cookie-parser')
 const favicon = require('express-favicon');
 const path = require('path');
 const Sequelize = require('sequelize');
 const port = process.env.PORT || 3000;
 var bodyParser = require('body-parser')
 var morgan = require('morgan');
-var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
+var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 const bcrypt = require('bcrypt');
 
@@ -21,11 +22,133 @@ app.set('superSecret', "dyna2018"); // secret variable
 app.use(favicon(__dirname + '/build/favicon.png'));
 // the __dirname is the current directory from where the script is running
 app.use(express.static(__dirname));
+app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'build')));
 app.get('/ping', function (req, res) {
   return res.send('pong');
 });
+
+function sidebarConfiguration() {
+
+  const sidebarOptions = [
+    {
+      label: 'Home',
+      key: 'home',
+      leftIcon: 'home'
+    },
+    {
+      label: 'POS System',
+      key: 'pos',
+      leftIcon: 'shopping_cart',
+      children: [
+        {
+          label: 'Shop',
+          key: 'shop-page',
+          leftIcon: 'people'
+        },
+        {
+          label: 'Cart',
+          key: 'cart-page',
+          leftIcon: 'redeem'
+        },
+        {
+          label: 'Checkout',
+          key: 'checkout-page',
+          leftIcon: 'shopping_cart'
+        },
+      ]
+    },
+    {
+      label: 'Inbox',
+      key: 'inbox',
+      leftIcon: 'inbox'
+    },
+    {
+      label: "Data Entry",
+      leftIcon: "ballot",
+      key: "entrepreneur-main",
+      children: [
+        {
+          label: 'Staff',
+          key: 'staff-page',
+          leftIcon: 'people'
+        },
+        {
+          label: 'Inventory',
+          key: 'inventory-page',
+          leftIcon: 'redeem'
+        },
+        {
+          label: 'Products',
+          key: 'products-page',
+          leftIcon: 'shopping_cart'
+        },
+        {
+          label: 'Sales',
+          key: 'sales-page',
+          leftIcon: 'shop_two'
+        },
+        {
+          label: 'Suppliers',
+          key: 'suppliers-page',
+          leftIcon: 'local_shipping'
+        },
+        {
+          label: 'Deliveries',
+          key: 'deliveries-page',
+          leftIcon: 'departure_board'
+        },
+        {
+          label: 'Investments',
+          key: 'investments-page',
+          leftIcon: 'equalizer'
+        }
+      ]
+    },
+
+    {
+      label: "Reports",
+      leftIcon: "pie_chart",
+      key: "dashboard-reports",
+      children: [
+        {
+          label: 'Cost Efficiency',
+          key: 'cost-efficiency',
+          leftIcon: 'monetization_on'
+
+        },
+        {
+          label: 'Inventory Optimisation',
+          key: 'inventory-optimisation-page',
+          leftIcon: 'assignment_turned_in'
+        },
+        {
+          label: 'Business Waste Reduction',
+          key: 'business-waste-page',
+          leftIcon: 'delete_forever'
+        },
+        {
+          label: 'Business Process Improvement',
+          key: 'business-improvement-page',
+          leftIcon: 'extension'
+        },
+        {
+          label: 'Customer Satisfaction',
+          key: 'customer-satisfaction-page',
+          leftIcon: 'face'
+        },
+        {
+          label: 'Platform Engagement',
+          key: 'platform-engagement-page',
+          leftIcon: 'thumb_up'
+        }
+      ]
+    },
+  ];
+
+  return sidebarOptions;
+}
 
 function getConfiguration() {
   const staff = {
@@ -161,7 +284,7 @@ function getConfiguration() {
       { "name": "inst_cost", "display": "Total Cost", "type": "number", "mandatory": true },
       { "name": "inst_status", "display": "Status", "type": "text", "mandatory": true, "lov": ["DECOMMISSIONED", "ACTIVE", "ORDERED"] },
       { "name": "inst_comment", "display": "Comment", "type": "text" },
-      { "name": "inst_comment", "display": "Picture", "type": "file" }
+      { "name": "inst_picture", "display": "Picture", "type": "file" }
     ]
   }
 
@@ -237,6 +360,483 @@ function getUserStructures() {
   ]
 
   return tableConfiguration;
+}
+
+function getReportConfig() {
+  let data2 = []
+  const businessProcess = {
+    "title": "Business Process Improvement",
+    "description": "Measure your Business Process",
+    "rows": [
+      [
+        {
+          "title": "Malls In Malaysia",
+          "description": "A list of malls in Malaysia with target opportunities",
+          "type": "MAP",
+          "options": {},
+          "datasource": "",
+          "layout": "twothird"
+        },
+        {
+          "title": "Business Process Improvement Score",
+          "description": "A rating of your overall Business Process Improvement initiatives",
+          "type": "TRANSACTIONS",
+          "options": {},
+          "data": [
+            { "title": "Presence Score", "duration": "Jun 24 - Jul 23", "amount": "2.01", "currency": "d", "data": data2, "direction": "upward" },
+            { "title": "Opportunity Score", "duration": "Jun 24 - Jul 23", "amount": "3.51", "currency": "d", "data": data2, "direction": "upward" },
+            { "title": "Product Sales Score", "duration": "Jun 24 - Jul 23", "amount": "4.71", "currency": "d", "data": data2, "direction": "upward" },
+            { "title": "Product Backlog Score", "duration": "Jun 24 - Jul 23", "amount": "4.21", "currency": "d", "data": data2, "direction": "upward" }
+          ],
+          "datasource": "",
+          "layout": "onethird"
+        }
+      ],
+      [
+        {
+          "title": "Top Products by Revenue",
+          "description": "These are your top performing products",
+          "type": "AREA",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        },
+        {
+          "title": "Opportunity Analysis",
+          "description": "Customer Requesting similar product groups",
+          "type": "STACKEDBAR",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        }
+      ],
+      [
+        {
+          "title": "Products in Progress",
+          "description": "Products stuck in different manufacturing process steps",
+          "type": "PIE",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        },
+        {
+          "title": "Sales Generated per Location",
+          "description": "Location Analysis of different sales and opportunities",
+          "type": "LINE",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        }
+      ],
+    ]
+  }
+
+  function getRow(color) {
+    return {
+      labels: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+      datasets: [
+        {
+          label: "",
+          backgroundColor: color,
+          borderWidth: 0,
+          data: [65, 59, 80, 81, 56, 55, 40, 88, 58, 19, 22, 60, 40, 85, 22, 21]
+        }
+      ]
+    };
+  }
+  const datax = [
+    {
+      widgets: [
+        { title: "Worker Score", currency: "d", amount: "3.2", progress: "67", color: "rgb(153, 102, 255)", direction: "upward", data: getRow("rgba(72,166,242,1)") },
+        { title: "Supplier Score", currency: "d", amount: "3.1", progress: "67", color: "rgb(153, 102, 255)", direction: "upward", data: getRow("orange") }
+      ]
+    },
+    {
+      widgets: [
+        { title: "Sales Agent Score", currency: "d", amount: "2.1", progress: "42", color: "rgb(153, 102, 255)", direction: "downward", data: getRow("purple") },
+        { title: "Investment Score", currency: "d", amount: "4.2", progress: "80", color: "rgb(153, 102, 255)", direction: "upward", data: getRow("darkgreen") }
+      ]
+    }
+  ]
+
+  const costEfficiency = {
+    "title": "Cost Efficiency Matrix",
+    "description": "Measure your Business Process",
+    "rows": [
+      [
+        {
+          "title": "Cost Efficiency Score",
+          "description": "Your Cost Efficiency Score over time",
+          "type": "STACKEDBAR",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        },
+        {
+          "title": "Cost Efficiency Matrix",
+          "description": "Your Cost Efficiency Score for different scores",
+          "type": "BREAKDOWN",
+          "options": {},
+          "data": datax,
+          "datasource": "",
+          "layout": "halfcolumn"
+        }
+      ],
+      [
+        {
+          "title": "Sales Agent Profitability",
+          "description": "Your Sales Staff and the revenue they bring in",
+          "type": "AREA",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        },
+        {
+          "title": "Supplier Score",
+          "description": "A rating of your suppliers and how well they perform",
+          "type": "AREA",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        }
+      ],
+      [
+        {
+          "title": "Investments",
+          "description": "These are records of investments you made (Last Month: 3,214 RM Total: 92,321 RM)",
+          "type": "HISTORY",
+          "options": {},
+          "datasource": "",
+          "data": [
+            { "type": "work", "date": "2011 - Present", "title": "Laptop Computer", "subtitle": "HP Spectre", "description": "text mother father" },
+            { "type": "work", "date": "2011 - Present", "title": "Laser Printer", "subtitle": "HP LaserJet", "description": "text mother father" },
+            { "type": "work", "date": "2011 - Present", "title": "Color Ink Jet Printer", "subtitle": "HP InkJet", "description": "text mother father" },
+            { "type": "education", "date": "2011 - Present", "title": "Digital Camera", "subtitle": "Canon 7D", "description": "text mother father" },
+            { "type": "education", "date": "2011 - Present", "title": "Scanner", "subtitle": "HP Flatbed Scanner", "description": "text mother father" },
+            { "type": "work", "date": "2011 - Present", "title": "Fridge", "subtitle": "Samsung Smart Fridge", "description": "text mother father" },
+            { "type": "work", "date": "2011 - Present", "title": "Cake Mixer", "subtitle": "Kitchen mate Express Mixer", "description": "text mother father" },
+          ],
+          "layout": "fullcolumn"
+        }
+      ],
+    ]
+  }
+
+
+  const businessWaste = {
+    "title": "Business Waste Index",
+    "description": "How well are you managing revenue leakage on items, staff and suppliers",
+    "rows": [
+      [
+        {
+          "title": "Business Waste Index",
+          "description": "How well you are managing revenue leakage on items, staff and suppliers",
+          "type": "STACKEDBAR",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        },
+        {
+          "title": "Business Waste Score",
+          "description": "A rating of your overall Business Waste Management initiatives",
+          "type": "BREAKDOWN",
+          "options": {},
+          "data": [
+            {
+              "widgets": [{ "title": "Overproduction Score", "progress": 40, "duration": "Jun 24 - Jul 23", "amount": "2.01", "currency": "d", "data": data2, "direction": "upward" },
+              { "title": "Overspending Score", "progress": 70, "duration": "Jun 24 - Jul 23", "amount": "3.51", "currency": "d", "data": data2, "direction": "upward" }]
+            },
+            {
+              "widgets": [{ "title": "Productivity Score", "progress": 94, "duration": "Jun 24 - Jul 23", "amount": "4.71", "currency": "d", "data": data2, "direction": "upward" },
+              { "title": "Process Issue Score", "progress": 84, "duration": "Jun 24 - Jul 23", "amount": "4.21", "currency": "d", "data": data2, "direction": "upward" }]
+            }
+          ],
+          "datasource": "",
+          "layout": "halfcolumn"
+        }
+      ],//Process Time aBaseline of each time and its impact on item deliveryes
+      [
+        {
+          "title": "Overproduced unprofitable products",
+          "description": "Items that are not profitable and over-produced",
+          "type": "AREA",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        },
+        {
+          "title": "Overspending on unnecessary expenses",
+          "description": "Expenses you are currently paying for (cost per month)",
+          "type": "STACKEDBAR",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        }
+      ],
+      [
+        {
+          "title": "Worker Productivity Score",
+          "description": "Worker activities and their profitability",
+          "type": "PIE",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        },
+        {
+          "title": "Process Time and baselines",
+          "description": "Baseline of each time and its impact on item delivery",
+          "type": "LINE",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        }
+      ],
+    ]
+  }
+
+  const customerSatisfaction = {
+    "title": "Business Process Improvement",
+    "description": "Measure your Business Process",
+    "rows": [
+      [
+        {
+          "title": "Malls In Malaysia",
+          "description": "A list of malls in Malaysia with target opportunities",
+          "type": "MAP",
+          "options": {},
+          "datasource": "",
+          "layout": "twothird"
+        },
+        {
+          "title": "Business Process Improvement Score",
+          "description": "A rating of your overall Business Process Improvement initiatives",
+          "type": "TRANSACTIONS",
+          "options": {},
+          "data": [
+            { "title": "Presence Score", "duration": "Jun 24 - Jul 23", "amount": "2.01", "currency": "d", "data": data2, "direction": "upward" },
+            { "title": "Opportunity Score", "duration": "Jun 24 - Jul 23", "amount": "3.51", "currency": "d", "data": data2, "direction": "upward" },
+            { "title": "Product Sales Score", "duration": "Jun 24 - Jul 23", "amount": "4.71", "currency": "d", "data": data2, "direction": "upward" },
+            { "title": "Product Backlog Score", "duration": "Jun 24 - Jul 23", "amount": "4.21", "currency": "d", "data": data2, "direction": "upward" }
+          ],
+          "datasource": "",
+          "layout": "onethird"
+        }
+      ],
+      [
+        {
+          "title": "Top Products by Revenue",
+          "description": "These are your top performing products",
+          "type": "AREA",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        },
+        {
+          "title": "Opportunity Analysis",
+          "description": "Customer Requesting similar product groups",
+          "type": "STACKEDBAR",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        }
+      ],
+      [
+        {
+          "title": "Products in Progress",
+          "description": "Products stuck in different manufacturing process steps",
+          "type": "PIE",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        },
+        {
+          "title": "Sales Generated per Location",
+          "description": "Location Analysis of different sales and opportunities",
+          "type": "LINE",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        }
+      ],
+    ]
+  }
+
+  function getRowX(color) {
+    return {
+      labels: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+      datasets: [
+        {
+          label: "",
+          backgroundColor: color,
+          borderWidth: 0,
+          data: [65, 59, 80, 81, 56, 55, 40, 88, 58, 19, 22, 60, 40, 85, 22, 21]
+        }
+      ]
+    };
+  }
+  const datainv = [
+    {
+      widgets: [
+        { title: "Stock Score", currency: "d", amount: "3.2", progress: "67", color: "rgb(153, 102, 255)", direction: "upward", data: getRowX("rgba(72,166,242,1)") },
+        { title: "Inventory Score", currency: "d", amount: "3.1", progress: "67", color: "rgb(153, 102, 255)", direction: "upward", data: getRowX("orange") }
+      ]
+    },
+    {
+      widgets: [
+        { title: "Inventory Health Score", currency: "d", amount: "2.1", progress: "42", color: "rgb(153, 102, 255)", direction: "downward", data: getRowX("purple") },
+        { title: "Expiration Score", currency: "d", amount: "4.2", progress: "80", color: "rgb(153, 102, 255)", direction: "upward", data: getRowX("darkgreen") }
+      ]
+    }
+  ]
+
+  const inventoryOptimisation = {
+    "title": "Inventory Optimisations",
+    "description": "Measure how well you manage your Inventory",
+    "rows": [
+      [
+        {
+          "title": "Inventory Optimisation Score",
+          "description": "How well are you managing your Inventory?",
+          "type": "STACKEDBAR",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        },
+        {
+          "title": "Inventory Optimisation Matrix",
+          "description": "Rating for each category we are evaluating",
+          "type": "TXNBREAKDOWN",
+          "options": {},
+          "data": datainv,
+          "datasource": "",
+          "layout": "halfcolumn"
+        }
+      ],
+      [
+        {
+          "title": "Inventory Stock Monitoring",
+          "description": "These are your top performing products",
+          "type": "AREA",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        },
+        {
+          "title": "Inventory Trend Analysis",
+          "description": "Customer Requesting similar product groups",
+          "type": "STACKEDBAR",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        }
+      ],
+      [
+        {
+          "title": "Inventory Count Sheet",
+          "description": "Products stuck in different manufacturing process steps",
+          "type": "PIE",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        },
+        {
+          "title": "Item Expiry",
+          "description": "Location Analysis of different sales and opportunities",
+          "type": "LINE",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        }
+      ],
+      [
+        {
+          "title": "Supplier Cost Comparisons",
+          "description": "Compare how much you pay vs price online",
+          "type": "PIE",
+          "options": {},
+          "datasource": "",
+          "layout": "fullcolumn"
+        }
+      ],
+    ]
+  }
+
+  const platformEngagement = {
+    "title": "Business Process Improvement",
+    "description": "Measure your Business Process",
+    "rows": [
+      [
+        {
+          "title": "Malls In Malaysia",
+          "description": "A list of malls in Malaysia with target opportunities",
+          "type": "MAP",
+          "options": {},
+          "datasource": "",
+          "layout": "twothird"
+        },
+        {
+          "title": "Business Process Improvement Score",
+          "description": "A rating of your overall Business Process Improvement initiatives",
+          "type": "TRANSACTIONS",
+          "options": {},
+          "data": [
+            { "title": "Presence Score", "duration": "Jun 24 - Jul 23", "amount": "2.01", "currency": "d", "data": data2, "direction": "upward" },
+            { "title": "Opportunity Score", "duration": "Jun 24 - Jul 23", "amount": "3.51", "currency": "d", "data": data2, "direction": "upward" },
+            { "title": "Product Sales Score", "duration": "Jun 24 - Jul 23", "amount": "4.71", "currency": "d", "data": data2, "direction": "upward" },
+            { "title": "Product Backlog Score", "duration": "Jun 24 - Jul 23", "amount": "4.21", "currency": "d", "data": data2, "direction": "upward" }
+          ],
+          "datasource": "",
+          "layout": "onethird"
+        }
+      ],
+      [
+        {
+          "title": "Top Products by Revenue",
+          "description": "These are your top performing products",
+          "type": "AREA",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        },
+        {
+          "title": "Opportunity Analysis",
+          "description": "Customer Requesting similar product groups",
+          "type": "STACKEDBAR",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        }
+      ],
+      [
+        {
+          "title": "Products in Progress",
+          "description": "Products stuck in different manufacturing process steps",
+          "type": "PIE",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        },
+        {
+          "title": "Sales Generated per Location",
+          "description": "Location Analysis of different sales and opportunities",
+          "type": "LINE",
+          "options": {},
+          "datasource": "",
+          "layout": "halfcolumn"
+        }
+      ],
+    ]
+  }
+
+  const reportConfiguration = [
+    { "path": "business-improvement-page", "config": businessProcess },
+    { "path": "business-waste-page", "config": businessWaste },
+    { "path": "platform-engagement-page", "config": platformEngagement },
+    { "path": "customer-satisfaction-page", "config": customerSatisfaction },
+    { "path": "inventory-optimisation-page", "config": inventoryOptimisation },
+    { "path": "cost-efficiency", "config": costEfficiency },
+  ];
+  return reportConfiguration;
 }
 
 // persistence mapping for our configurations
@@ -353,7 +953,6 @@ function generateSequelize(config, genUser) {
       key: persistenceKey["users"],
       deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
     }
-    console.log(columns)
   }
 
   let model = sequelize.define(tableName, columns);
@@ -370,6 +969,10 @@ function deleteAPI(app, tableName) {
 
     sharedPersistenceMapping[tableName].findById(req.params.id).then(inst => {
       if (inst) {
+        if (inst.owner_user_id !== req.decoded.admin) {
+          res.status(403).send({"success": false, "error": "User does not own the row " + inst.owner_user_id + " != " + req.decoded.admin});
+          return
+        }
         inst.destroy()
           .then(() => {
             res.json({ "success": true });
@@ -389,7 +992,7 @@ function deleteAPI(app, tableName) {
 function selectAPI(app, tableName) {
   app.get("/" + tableName, function (req, res) {
 
-    console.log("Get request called for table ", tableName);
+    //console.log("Get request called for table ", tableName);
     //res.status(200).send([{ "A": "A" }, { "B": "B" }]);
     // get the paging
     // get the size
@@ -400,6 +1003,7 @@ function selectAPI(app, tableName) {
     let column = null;
 
     let config = { limit: size, offset: page };
+    config.where = {"owner_user_id" : req.decoded.admin }
 
     if (order && column) {
       config.order = [[column, order]];
@@ -413,8 +1017,11 @@ function selectAPI(app, tableName) {
 
 function updateAPI(app, tableName) {
   app.put("/" + tableName, function (req, res) {
-    console.log("Update api called for table", tableName, req.body);
-    sharedPersistenceMapping[tableName].upsert(req.body)
+    let body = req.body;
+    body.owner_user_id = req.decoded.admin;
+    console.log("Update api called for table", tableName, body);
+    
+    sharedPersistenceMapping[tableName].upsert(body)
       .then(i => {
         res.json(i); // return as json instance
       })
@@ -460,6 +1067,11 @@ router.use(function (req, res, next) {
 
   // check header or url parameters or post parameters for token
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  console.log(req.cookies);
+
+  if (!token && req.cookies) {
+    token = req.cookies.authToken;
+  }
 
   // decode token
   if (token) {
@@ -491,16 +1103,29 @@ generateRoutes(router, getConfiguration());
 router.get('/tableProfiles', function (req, res) {
   // get the table configurations
 
-  res.json(tableConfiguration);
+  res.json(getConfiguration());
 });
+
+router.get('/sidebarConfig', function (req, res) {
+  res.json(sidebarConfiguration());
+})
+
+router.get('/reportProfiles', function (req, res) {
+  // get report profile which defines the report 
+  res.json(getReportConfig());
+});
+
+router.get('/report/:name', function (req, res) {
+  // get report based on name
+  // note that the report is dynamically generated and returned
+})
+
 
 app.post("/register", function (req, res) {
   // create a new user
   // we need to admin key when login, and this key is hard coded 
 
   let payload = req.body.payload;
-
-  console.log(payload)
 
   if (payload.authKey !== "Dynapreneur2018") {
     res.json({ success: false, message: "Invalid Auth Key" });
@@ -512,7 +1137,7 @@ app.post("/register", function (req, res) {
   payload.user_timestamp = new Date().getTime();
   payload.user_password = bcrypt.hashSync(payload.user_password, 10);
 
-  sharedPersistenceMapping["users"].create(payload, { fields: Object.keys(payload).filter(e=>{return e.startsWith("user_");}) }).then(r => {
+  sharedPersistenceMapping["users"].create(payload, { fields: Object.keys(payload).filter(e => { return e.startsWith("user_"); }) }).then(r => {
     if (!r) {
       res.json({ success: false, message: "Failed to create user" })
     }
@@ -555,6 +1180,16 @@ app.post('/login', function (req, res) {
         });
 
         // return the information including token as JSON
+
+        var date = new Date();
+        date.setTime(date.getTime() + 24 * 60 * 60 * 1000);
+
+        const cookie = {
+          httpOnly: true,
+          expires: date
+        }
+
+        res.cookie('authToken', token, cookie);
         res.json({
           success: true,
           message: 'Enjoy your token!',
@@ -570,15 +1205,6 @@ app.post('/login', function (req, res) {
 
 app.use('/api', router)
 
-app.get('/reportProfiles', function (req, res) {
-  // get report profile which defines the report 
-});
-
-app.get('/report/:name', function (req, res) {
-  // get report based on name
-  // note that the report is dynamically generated and returned
-})
-
 app.get('/', function (req, res) {
   console.log("Override");
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
@@ -587,5 +1213,5 @@ app.get('/', function (req, res) {
 // put will allow user to update / save record (if id does not exist we save, else we update)
 
 // delete will allow user to delete a record
-
+console.log("Server listening on port", port);
 app.listen(port);
