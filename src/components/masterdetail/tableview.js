@@ -9,6 +9,9 @@ import Button from '../../components/uielements/button';
 import Scrollbars from '../../components/utility/customScrollBar'
 import { TableBody, TableCell, TableHead, TableRow } from '../../components/uielements/table';
 import Table from '../../components/uielements/table';
+import DeleteIcon from '@material-ui/icons/Delete';
+
+import swal from 'sweetalert2';
 
 import 'react-vertical-timeline-component/style.min.css';
 
@@ -17,6 +20,7 @@ export default class FormDialog extends React.Component {
         open: false,
         image: "",
         product: "",
+        selectedItem: null,
     };
 
     handleClose = () => {
@@ -24,10 +28,32 @@ export default class FormDialog extends React.Component {
     };
 
     componentWillReceiveProps(props) {
-        this.setState({ open: props.open });
+        if (props.open !== null && props.open !== undefined) {
+            this.setState({ open: props.open });
+        }
         if (props.data) {
             this.setState(props.data);
         }
+
+    }
+
+    confirmDeleteRow = (row) => (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        swal({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result.value) {
+                this.props.deleteRow(row);              
+            }
+          });
+
     }
 
     render() {
@@ -61,22 +87,24 @@ export default class FormDialog extends React.Component {
             <Table>
                 <TableHead>
                     <TableRow>
+                        <TableCell key="Action">Actions</TableCell>
                         {
                             config.columns.map(x => {
                                 return <TableCell key={x.name + "col"} numeric={x.type === "number"}>{x.display + (x.mandatory ? "*" : "")}</TableCell>
                             })
                         }
-                    </TableRow>
+                    </TableRow> 
                 </TableHead>
                 <TableBody>
                     {data.map(n => {
-                        return (<TableRow key={n[config.columns[0].name]}>
+                        return (<TableRow key={n[config.columns[0].name]} hover onClick={event => this.props.editRow(n)}>
+                            <TableCell key={"edit"}><DeleteIcon style={{"color":"red"}} onClick={this.confirmDeleteRow(n)}/></TableCell>
                             {config.columns.map(c => {
                                 if (c.type === "picture" || c.type === "file") {
                                     return (<TableCell key={c.name +index++}><Button onClick={createImageButton(n[c.name])}>Show Image</Button></TableCell>)
                                 }
                                 return (<TableCell key={c.name + index++}>{n[c.name]}</TableCell>)
-                            })}
+                            })}                            
                         </TableRow>
                         )
                     })}

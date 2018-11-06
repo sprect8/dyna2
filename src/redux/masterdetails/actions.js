@@ -7,11 +7,22 @@
       
     LOAD_DATA_SAGA: "LOAD_DATA_SAGA",
     ACTION_SUCCESS: "ACTION_SUCCESS", // on success of actions
+    DELETE_SUCCESS: "DELETE_SUCCESS",
+    DELETE_FAILED: "DELETE_FAILED",
     LOAD_DATA: "LOAD_DATA",
     SAVE_DATA: "SAVE_DATA",
     UPDATE_DATA: "UPDATE_DATA",
     DELETE_DATA: "DELETE_DATA",
     DATA_ERROR: "DATA_ERROR", 
+    LOV_FETCH_SAGA: "LOV_FETCH_SAGA",
+    LOV_FETCH:"LOV_FETCH",
+    fetchLOV: (table, query) => {
+        return {
+            type: actions.LOV_FETCH_SAGA,
+            table,
+            query
+        }
+    },
     loadData: (config, pageStart, total) => {
         return {
             type: actions.LOAD_DATA_SAGA,

@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -8,6 +7,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import 'react-vertical-timeline-component/style.min.css';
 import Select from '@material-ui/core/Select';
+import classNames from 'classnames';
+import { withStyles } from '@material-ui/core/styles';
 
 import { Row, FullColumn } from '../../components/utility/rowColumn';
 import PictureBox from '../uielements/camera';
@@ -15,20 +16,72 @@ import BarcodeBox from '../uielements/barcode';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+import CircularProgress from '@material-ui/core/CircularProgress'; 
+import green from '@material-ui/core/colors/green';
+import red from '@material-ui/core/colors/red';
+import Button from '@material-ui/core/Button';
+import CheckIcon from '@material-ui/icons/Check';
+import SaveIcon from '@material-ui/icons/Save';
+import CrossIcon from '@material-ui/icons/Cancel';
+
 /**
  * This tool is for data entry into the system based on an underlying database model 
  **/
 
+const styles = theme => ({
+    root: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    wrapper: {
+        margin: theme.spacing.unit,
+        position: 'relative',
+    },
+    buttonSuccess: {
+        backgroundColor: green[500],
+        '&:hover': {
+            backgroundColor: green[700],
+        },
+    },
+    
+    buttonFailed: {
+        backgroundColor: red[500],
+        '&:hover': {
+            backgroundColor: red[700],
+        },
+    },
+    fabProgress: {
+        color: green[500],
+        position: 'absolute',
+        right: 20,
+        bottom: 20,
+        zIndex: 1,
+    },
+    buttonProgress: {
+        color: green[500],
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+    },
+});
+
+
+
 class FormDialog extends React.Component {
     state = {
         open: false,
-        data: {}
+        data: {},
+        loading: false,
+        success: false,
+        error: false,
     };
 
     handleChange = name => event => {
         let data = this.state.data;
         data[name] = event.target.value;
-        this.setState({data});
+        this.setState({ data });
     };
 
     createControl = (control, value) => {
@@ -69,7 +122,7 @@ class FormDialog extends React.Component {
                                 native
                                 error={error}
                                 fullWidth
-                                value={value?value:""}
+                                value={value ? value : ""}
                                 onChange={this.handleChange(control.name)}
                                 name={control.name}
                                 label={control.display}
@@ -119,7 +172,7 @@ class FormDialog extends React.Component {
         }
     }
     handleClose = () => {
-        this.setState({ open: false, validating: false });
+        this.setState({ open: false, validating: false, success: false, loading:false, error:false, saving: false });
         return this.props.onClose ? this.props.onClose() : null;
     };
 
@@ -139,7 +192,8 @@ class FormDialog extends React.Component {
             this.setState({ validating: true })
         }
         else {
-            this.setState({ validating: false, open: false })
+            this.setState({ validating: false, saving: true, loading: true, error: false, success: false }) 
+            // we don't control the closing
             this.props.onUpdate(this.state.data);
         }
     }
@@ -147,12 +201,25 @@ class FormDialog extends React.Component {
     componentWillReceiveProps(props) {
         this.setState({ open: props.open });
         if (props.data) {
-            
-            this.setState({data:props.data});
+
+            this.setState({ data: props.data });
+        }
+
+        if (props.updateError) {
+            this.setState({loading: false, success: false, error:true, message:props.message})
+        }
+        else if (props.updateSuccess) {
+            this.setState({loading: false, success: true, error: false, message: ""})
         }
     }
 
     render() {
+        const { loading, success, error } = this.state;
+        const { classes } = this.props;
+        const buttonClassname = classNames({
+            [classes.buttonSuccess]: success,
+        });
+
         return (
             <div>
                 <Dialog
@@ -181,11 +248,19 @@ class FormDialog extends React.Component {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClose}>
-                            Cancel
-            </Button>
-                        <Button onClick={this.handleSave} color="primary">
-                            Save
-            </Button>
+                            Close
+                        </Button>
+                        <div style={{marginRight:"22px", marginBottom:"18px"}}>
+                        <Button
+                            variant="fab"
+                            color="primary"
+                            className={buttonClassname}
+                            onClick={this.handleSave}
+                        >
+                            {success ? <CheckIcon /> : (error? <CrossIcon/> : <SaveIcon />) }
+                        </Button>
+                        {loading && <CircularProgress size={68} className={classes.fabProgress} />}
+                        </div>
                     </DialogActions>
                 </Dialog>
             </div>
@@ -193,4 +268,4 @@ class FormDialog extends React.Component {
     }
 };
 
-export default withMobileDialog()(FormDialog);
+export default withMobileDialog()(withStyles(styles)(FormDialog));

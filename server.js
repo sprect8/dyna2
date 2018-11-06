@@ -154,6 +154,8 @@ function getConfiguration() {
   const staff = {
     "tableName": "staffs",
     "displayName": "Staff Records",
+    "key": "staff_id", 
+    "display": ["staff_fname", "staff_lname"],
     "description": "These are your staff records, edit, add, remove and view any details",
     "columns": [
       { "name": "staff_id", "display": "Staff Id", "type": "number", "sequence": "staff_id_seq", "mandatory": true, "unique": true, "key": true },
@@ -183,6 +185,8 @@ function getConfiguration() {
   const inventory = {
     "tableName": "inventories",
     "displayName": "Inventory Records",
+    "key": "inv_id",        
+    "display": ["inv_prod_id"],
     "description": "These are your Inventory records, edit, add, remove and view any details. Records of what items you have (by batch)",
     "columns": [
       { "name": "inv_id", "display": "Inventory Id", "type": "number", "sequence": "inv_id_seq", "mandatory": true, "unique": true, "key": true },
@@ -198,6 +202,8 @@ function getConfiguration() {
   const products = {
     "tableName": "products",
     "displayName": "Product Records",
+    "key": "prod_id",    
+    "display": ["prod_name"],
     "description": "These are your Product records, edit, add, remove and view any details",
     "columns": [
       { "name": "prod_id", "display": "Product Id", "type": "number", "sequence": "prod_id_seq", "mandatory": true, "unique": true, "key": true },
@@ -217,6 +223,8 @@ function getConfiguration() {
   const productCategory = {
     "tableName": "product_categories",
     "displayName": "Product Categories Records",
+    "key": "cate_id",    
+    "display": ["cate_name"],
     "description": "These are your Product Category records, edit, add, remove and view any details",
     "columns": [
       { "name": "cate_id", "display": "Category Id", "type": "number", "sequence": "cate_id_seq", "mandatory": true, "unique": true, "key": true },
@@ -228,6 +236,7 @@ function getConfiguration() {
   const sales = {
     "tableName": "sales",
     "displayName": "Sales Records",
+    "key": "sale_id",
     "description": "These are your Sales records, edit, add, remove and view any details",
     "columns": [
       { "name": "sale_id", "display": "Sales Id", "type": "number", "sequence": "sale_id_seq", "mandatory": true, "unique": true, "key": true },
@@ -244,6 +253,8 @@ function getConfiguration() {
   const suppliers = {
     "tableName": "suppliers",
     "displayName": "Suppliers Records",
+    "key": "supl_id",
+    "display": ["supl_company"],
     "description": "These are your Supplier records, edit, add, remove and view any details",
     "columns": [
       { "name": "supl_id", "display": "Supplier Id", "type": "number", "sequence": "supl_id_seq", "mandatory": true, "unique": true, "key": true },
@@ -259,6 +270,7 @@ function getConfiguration() {
   const deliveries = {
     "tableName": "deliveries",
     "displayName": "Delivery Records",
+    "key": "devy_id",
     "description": "These are your Delivery records for your suppliers, edit, add, remove and view any details",
     "columns": [
       { "name": "devy_id", "display": "Delivery Id", "type": "number", "sequence": "devy_id_seq", "mandatory": true, "unique": true, "key": true },
@@ -274,6 +286,8 @@ function getConfiguration() {
   const investments = {
     "tableName": "investments",
     "displayName": "Investment Records",
+    "key": "inst_id",
+    "display": ["inst_name"],
     "description": "These are your Investment records, edit, add, remove and view any details",
     "columns": [
       { "name": "inst_id", "display": "Investment Id", "type": "number", "sequence": "inst_id_seq", "mandatory": true, "unique": true, "key": true },
@@ -868,7 +882,7 @@ function deriveType(entry, column) {
       entry.type = Sequelize.TEXT;
       break;
     case "file":
-      entry.type = Sequelize.BLOB;
+      entry.type = Sequelize.TEXT;
       break;
     default:
       entry.type = Sequelize.TEXT;
@@ -1047,6 +1061,17 @@ function generateRoutes(app, configuration) {
     updateAPI(app, tableName);
     generateSequelize(conf, true);
 
+    app.get("/lov/" + conf.table.tableName.toLowerCase() + "/:query", function (req, res) {
+      let key = conf.table.key;
+      let display = conf.table.display;
+      
+      // query for first 20 items matching the search
+      // if empty we return firt 20 items
+      // order it by the display
+      
+
+    });
+
   });
 
 
@@ -1055,9 +1080,7 @@ function generateRoutes(app, configuration) {
   // get LOV based on model
   // we will have query params for searching the lov with like
   // run a query? perhaps we can do some client side caching here
-  app.get("/lov/:model", function (req, res) {
-
-  });
+  
 }
 // get will return paged data
 let router = express.Router();

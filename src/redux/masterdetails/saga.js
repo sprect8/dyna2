@@ -1,4 +1,5 @@
 import { all, takeEvery, put, call } from 'redux-saga/effects';
+import { delay } from 'redux-saga';
 import actions from './actions';
 import { fetch, get } from '../api';
 
@@ -24,6 +25,7 @@ export function* loadData({ config, pageStart, total }) {
     };
 
     try {
+        //yield delay(10000);
         let res = yield call(fetch, '/api/' + config.tableName.toLowerCase() + "?pageStart=" + pageStart + "&total=" + total, fetchData);
         let json = yield res.json();
         console.log(json);
@@ -49,8 +51,8 @@ export function* saveData({ config, row }) {
         let res = yield call(fetch, '/api/' + config.tableName.toLowerCase(), fetchData);
         let json = yield res.json();
         console.log(json);
-        yield put({ action: actions.ACTION_SUCCESS, name: "SAVE" });
-        yield put(loadData(config, 0, 10));
+        yield put({ type: actions.ACTION_SUCCESS, name: "SAVE" });
+        yield put(actions.loadData(config, 0, 10));
         return;
     }
     catch (e) {
@@ -66,15 +68,41 @@ export function* updateData({ config, row }) {
     });
 }
 export function* deleteData({ config, uniqueId }) {
-    yield put({
-        type: actions.UPDATE_DATA,
-    });
+    let fetchData = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try {
+        let res = yield call(fetch, '/api/' + config.tableName.toLowerCase() + "/" + uniqueId, fetchData);
+        let json = yield res.json();
+        console.log(json);
+        if (res.status === 403) {
+            yield put({ type: actions.DELETE_FAILED, message: "Failed to delete, permission denied"});
+            return;
+        }
+        if (!json.success) {
+            yield put({ type: actions.DELETE_FAILED, message: "Failed to delete, " + json.error});
+            return;
+        }
+        yield put({ type: actions.DELETE_SUCCESS });
+        yield put(actions.loadData(config, 0, 10));
+        return;
+    }
+    catch (e) {
+        console.log("Login error", e);
+        yield put({ type: actions.DELETE_FAILED, message: "Failed to delete data because of " + e });
+        return;
+    }
 }
 
 export default function* () {
     yield all([
         takeEvery(actions.LOAD_DATA_SAGA, loadData),
         takeEvery(actions.UPDATE_DATA, updateData),
-        takeEvery(actions.SAVE_DATA, saveData)
+        takeEvery(actions.SAVE_DATA, saveData),
+        takeEvery(actions.DELETE_DATA, deleteData)
     ]);
 }
