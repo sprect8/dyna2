@@ -16,6 +16,26 @@
     DATA_ERROR: "DATA_ERROR", 
     LOV_FETCH_SAGA: "LOV_FETCH_SAGA",
     LOV_FETCH:"LOV_FETCH",
+    EDIT_DATA: "EDIT_DATA",
+    CREATE_DATA: "CREATE_DATA",
+    CLOSED_EDIT: "CLOSED_EDIT",
+    closedEditBox: () => {
+        return {
+            type: actions.CLOSED_EDIT
+        }
+    },
+    openToEdit: (data) => {
+        return {
+            type: actions.EDIT_DATA,
+            loaded: data,
+        }
+    }, 
+    openForNew: (data) => {
+        return {
+            type: actions.CREATE_DATA,
+            loaded: data
+        }
+    },
     fetchLOV: (table, query) => {
         return {
             type: actions.LOV_FETCH_SAGA,

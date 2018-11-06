@@ -19,7 +19,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
  * This tool is for data entry into the system based on an underlying database model 
  **/
 
-const { loadData, saveData, updateData, deleteData } = actions;
+const { loadData, saveData, updateData, deleteData, openToEdit, openForNew, closedEditBox } = actions;
 
 
 class MasterView extends React.Component {
@@ -41,35 +41,39 @@ class MasterView extends React.Component {
 				'Deleted!',
 				'Your row has been deleted.',
 				'success'
-			  )
+			)
 		}
 		if (this.deleting && !props.success) {
 			swal(
 				'Failed to Deleted!',
 				'Your row has not been deleted. Error was ' + props.message,
 				'error'
-			  )
+			)
 		}
 
 		this.deleting = false;
 
 		console.log(props);
 		if (props.rows) {
-			
-			this.setState({records:props.rows, loadingRows : false})
+
+			this.setState({ records: props.rows, loadingRows: false })
 		}
 		else {
-			this.setState({records:[]})
+			this.setState({ records: [] })
 		}
 
 		if (this.updating) {
 			// check error
-			let error = this.props.message;
+			let error = props.message;
 			let saved = !error;
 
-			this.setState({saved, error, message: this.props.message})
+			this.setState({ saved, error, message: props.message })
 		}
 		this.updating = false;
+
+		if (this.props.loaded !== props.loaded && props.loaded && props.selectedData) {
+			this.setState({ open: true, sel: props.selectedData });
+		}
 	}
 
 	handleClickOpen = () => {
@@ -78,15 +82,20 @@ class MasterView extends React.Component {
 		this.props.config.columns.forEach(x => {
 			data[x.name] = "";
 		});
-		this.setState({ open: true, sel: data });
+		data[this.props.config.key] = null;
+		//this.setState({ open: true, sel: data });
+		this.props.openForNew(data);
 	};
 
 	handleClose = () => {
+		this.props.closedEditBox();
 		this.setState({ open: false });
+
 	};
 
 	handleEditRow = (row) => {
-		this.setState({open: true, sel: row});
+		//this.setState({open: true, sel: row});
+		this.props.openToEdit(row);
 	}
 
 	handleUpdate = (record) => {
@@ -110,13 +119,13 @@ class MasterView extends React.Component {
 		return (<LayoutWrapper>
 
 			<FullColumn>
-			<LinearProgress style={{display: this.state.loadingRows ? "block" : "none"}}/>
-					
+				<LinearProgress style={{ display: this.state.loadingRows ? "block" : "none" }} />
+
 
 				<Papersheet title={config.displayName}>
-				
+
 					Click Row to Edit
-					
+
 					<Button onClick={this.handleClickOpen} variant="fab" color="primary" aria-label="add" style={{ "float": "right", "marginRight": "auto", "marginLeft": "8px" }}><Icon>add</Icon></Button>
 
 					<TableView config={config} data={this.state.records} editRow={this.handleEditRow} deleteRow={this.handleDeleteRow} />
@@ -125,14 +134,14 @@ class MasterView extends React.Component {
 			<FullColumn>
 				<HistoryView config={config} data={this.state.records} />
 			</FullColumn>
-			<FormEditView config={config} open={this.state.open} 
-			updateError={this.state.error}
-			updateSuccess={this.state.saved}
-			message={this.state.message}
+			<FormEditView config={config} open={this.state.open}
+				updateError={this.state.error}
+				updateSuccess={this.state.saved}
+				message={this.state.message}
 
-			onClose={this.handleClose} 
-			onUpdate={this.handleUpdate} 
-			data={this.state.sel} />
+				onClose={this.handleClose}
+				onUpdate={this.handleUpdate}
+				data={this.state.sel} />
 		</LayoutWrapper>
 		)
 	}
@@ -142,7 +151,7 @@ const appConect = connect(
 	state => ({
 		...state.MasterDetailsReducer,
 	}),
-	{ loadData, updateData, saveData, deleteData }
+	{ loadData, updateData, saveData, deleteData, openToEdit, openForNew, closedEditBox }
 )(MasterView);
 export default appConect;
 

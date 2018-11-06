@@ -7,31 +7,68 @@ export default function masterDetailsReducer(state = initState, action) {
     case actions.LOAD_DATA:
       return {
         ...state,
-        rows: action.payload
+        loaded: false,
+        rows: action.payload,
+        selectedData: null,
       };
     case actions.ACTION_SUCCESS:
       return {
         ...state,
+        loaded: false,
         success: true,
-        action: action.name
+        action: action.name,
+        selectedData: null,
       };
     case actions.DATA_ERROR:
       return {
         ...state,
+        loaded: false,
         success: false,
         message: action.message,
+        selectedData: null,
       }
     case actions.DELETE_FAILED:
       return {
         ...state,
+        loaded: false,
         success: false,
         message: action.message,
+        selectedData: null,
       }
     case actions.DELETE_SUCCESS:
       return {
         ...state,
+        loaded: false,
         success: true,
-        deleted: true,        
+        deleted: true,
+        selectedData: null,
+      }
+    case actions.CREATE_DATA:
+      return {
+        success: false,
+        deleted: false,
+        rows: state.rows,
+        message: "",
+        loaded: true,
+        selectedData: action.loaded
+      }
+    case actions.EDIT_DATA:
+      return {
+        success: false,
+        deleted: false,
+        rows: state.rows,
+        message: "",
+        loaded: true,
+        selectedData: action.loaded
+      }
+    case actions.CLOSED_EDIT:
+      return {
+        success: false,
+        deleted: false,
+        rows: state.rows,
+        message: "",
+        loaded: false,
+        selectedData: null
       }
     default:
       return state;

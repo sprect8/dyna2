@@ -24,6 +24,8 @@ import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
 import CrossIcon from '@material-ui/icons/Cancel';
 
+import Autocomplete from './autocomplete';
+
 /**
  * This tool is for data entry into the system based on an underlying database model 
  **/
@@ -91,6 +93,7 @@ class FormDialog extends React.Component {
                 let readonly = false;
                 if (control.ref) {
                     // table reference?
+                    return (<Autocomplete config={control.ref} label={control.display} value={value} error={error} onChange={this.handleChange(control.name)}/>)
                 }
                 else if (control.key) {
                     readonly = true;
@@ -210,6 +213,10 @@ class FormDialog extends React.Component {
         }
         else if (props.updateSuccess) {
             this.setState({loading: false, success: true, error: false, message: ""})
+        }
+
+        if (!props.updateSuccess && !props.updateError) {
+            this.setState({loading: false, success: false, error: false, message: ""});
         }
     }
 
