@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[10],{1943:function(e,a,n){"use strict";n.r(a);var t=n(0),l=n.n(t),i=n(224),r=n(232),c=n(45),s=n(67);a.default=function(){return l.a.createElement(i.a,null,l.a.createElement(c.a,null,l.a.createElement(r.a,{title:l.a.createElement(s.a,{id:"sidebar.blankPage"})},"This is a blank page")))}}}]);
-//# sourceMappingURL=10.e8a608ab.chunk.js.map

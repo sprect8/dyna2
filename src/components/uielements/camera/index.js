@@ -58,6 +58,15 @@ class PictureBox extends React.Component {
         if (props.data) {
             this.setState(props.data);
         }
+        if (props.value !== this.props.value) {
+            this.setState({snapshot : props.value});
+        }
+    }
+
+    componentWillMount() {
+        if (this.props.value) {
+            this.setState({snapshot: this.props.value});
+        }
     }
 
     handleFlipCamera = () => {

@@ -166,9 +166,9 @@ class FormDialog extends React.Component {
                     }}
                 />
             case "barcode":
-                return <BarcodeBox onChange={this.handleChange(control.name)} />
+                return <BarcodeBox onChange={this.handleChange(control.name)}/>
             case "picture":
-                return <PictureBox onChange={this.handleChange(control.name)} />
+                return <PictureBox onChange={this.handleChange(control.name)} value={value} />
 
             default:
                 return (<div></div>);

@@ -13,8 +13,8 @@ const bcrypt = require('bcrypt');
 
 const app = express();
 // parse application/json
-app.use(bodyParser.json())
-
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 //
 app.set('superSecret', process.env.superSecret || "dyna2018"); // secret variable
 

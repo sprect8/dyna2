@@ -62,7 +62,9 @@ export default class FormDialog extends React.Component {
 
         let index = 0;
 
-        let createImageButton = (img, product) => () => {
+        let createImageButton = (img, product) => (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             this.setState({ "image": img, "product": product, open:true });
         }
 
@@ -75,7 +77,9 @@ export default class FormDialog extends React.Component {
             >
                 <DialogTitle id="form-dialog-title">Image for the row</DialogTitle>
                 <DialogContent>
+                    <div style={{textAlign : "center"}}>
                     <img src={this.state.image} />
+                    </div>
                 </DialogContent>
                 <DialogActions>
 
