@@ -252,7 +252,10 @@ function getConfiguration() {
       { "name": "sale_cost", "display": "Cost", "type": "number", "mandatory": true },
       { "name": "sale_timestamp", "display": "Sales Date", "type": "timestamp", "mandatory": true },
       { "name": "sale_cust_id", "display": "Customer", "type": "number" },
-      { "name": "sale_status", "display": "Status", "type": "text", "lov": ["SOLD", "RETURNED", "EXCHANGE", "REFUNDED"] }
+      { "name": "sale_status", "display": "Status", "type": "text", "lov": ["SOLD", "RETURNED", "EXCHANGE", "REFUNDED"] },
+      { "name": "sale_latitude", "display": "Latitude", "type": "number"},
+      { "name": "sale_longitude", "display": "Longitude", "type": "number"},
+
     ]
   }
 
