@@ -91,6 +91,7 @@ class PictureBox extends React.Component {
                     aria-labelledby="form-dialog-title"
                     fullWidth
                     maxWidth="lg"
+                    style={{zIndex:5000}}
                     fullScreen={this.props.fullScreen}
                 >
                     <DialogTitle id="form-dialog-title">Snap a photo</DialogTitle>
@@ -125,7 +126,8 @@ class PictureBox extends React.Component {
                         Upload Photo
                         </Button>
                 </label>
-                <img src={this.state.snapshot} />
+                <br/>
+                <img src={this.state.snapshot} style={{"width":"40%"}}/>
             </div>
         )
     }

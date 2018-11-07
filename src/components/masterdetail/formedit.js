@@ -237,6 +237,7 @@ class FormDialog extends React.Component {
                     fullWidth
                     maxWidth="lg"
                     fullScreen={this.props.fullScreen}
+                    style={{zIndex:5000}}
                 >
                     <DialogTitle id="form-dialog-title">{this.props.config.displayName}</DialogTitle>
                     <DialogContent>

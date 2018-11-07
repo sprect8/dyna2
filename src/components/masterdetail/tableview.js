@@ -74,11 +74,12 @@ export default class FormDialog extends React.Component {
                 onClose={this.handleClose}
                 aria-labelledby="form-dialog-title"
                 fullScreen
+                style={{zIndex:5000}}
             >
                 <DialogTitle id="form-dialog-title">Image for the row</DialogTitle>
                 <DialogContent>
                     <div style={{textAlign : "center"}}>
-                    <img src={this.state.image} />
+                    <img src={this.state.image} style={{"width":"40%"}} />
                     </div>
                 </DialogContent>
                 <DialogActions>

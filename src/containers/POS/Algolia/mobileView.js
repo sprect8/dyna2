@@ -33,7 +33,6 @@ class Shop extends Component {
                 <Sidebar {...this.props} />
                 <CustomHits {...this.props} />
               </div>
-              <Footer />
             </div>
           </InstantSearch>
         ) : (

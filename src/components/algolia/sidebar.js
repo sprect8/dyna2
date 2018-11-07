@@ -14,14 +14,6 @@ const Sidebar = props => (
     <SidebarItem className="contentBox">
       <SearchText {...props} />
     </SidebarItem>
-    <SidebarItem className="contentBox">
-      <h3 className="algoliaSidebarTitle">Voice Search</h3>
-      <VoiceRecognition {...props} />
-    </SidebarItem>
-    <SidebarItem className="contentBox">
-      <h3 className="algoliaSidebarTitle">Multi Range</h3>
-      <MultiRangeSearch {...props} attribute="price" />
-    </SidebarItem>
     {/* <SidebarItem className="contentBox">
       <h3 className="algoliaSidebarTitle" style={{ marginBottom: 10 }}>
         Slider
@@ -35,10 +27,6 @@ const Sidebar = props => (
     {/* <SidebarItem className="contentBox">
       <NestedCategories {...props} />
     </SidebarItem> */}
-    <SidebarItem className="contentBox">
-      <h3 className="algoliaSidebarTitle">Rating</h3>
-      <RatingMenu attribute="rating" max={5} />
-    </SidebarItem>
     <SidebarItem className="contentBox">
       <ClearAll {...props} />
     </SidebarItem>
