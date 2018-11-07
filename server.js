@@ -172,7 +172,8 @@ function getConfiguration() {
       { "name": "staff_status", "display": "Status", "type": "text", "mandatory": true, "lov": ["ACTIVE", "INACTIVE", "PROBATION"] },
       { "name": "staff_type", "display": "Type", "type": "text", "mandatory": true, "lov": ["Full Time", "Part Time", "Sales", "Contractor"], },
       { "name": "staff_address", "display": "Address", "type": "text", "mandatory": true },
-      { "name": "staff_salary", "display": "Salary (month)", "type": "number", "mandatory": true }
+      { "name": "staff_salary", "display": "Salary (month)", "type": "number", "mandatory": true },
+      { "name": "staff_picture", "display": "Picture", "type": "picture" },
     ]
   }
 
