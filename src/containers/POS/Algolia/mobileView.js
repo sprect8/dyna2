@@ -7,6 +7,28 @@ import { AlgoliaSearchConfig } from '../../../settings';
 import AlgoliaSearchPageWrapper, { Button } from './algolia.style';
 import { withUrlSync } from '../../../helpers/urlSync';
 
+
+const customSearchClient = {
+	search(requests) {
+	  return fetch('/api/product-search', {
+		method: 'post',
+		headers: {
+		  'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ requests }),
+	  }).then(res => res.json());
+	},
+	searchForFacetValues(requests) {
+	  return fetch('/api/product-sffv', {
+		method: 'post',
+		headers: {
+		  'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ requests }),
+	  }).then(res => res.json());
+	}
+  };
+
 class Shop extends Component {
   render() {
     const { collapsed, changeCollapsed } = this.props;
@@ -16,9 +38,10 @@ class Shop extends Component {
       <AlgoliaSearchPageWrapper className={`${className}`}>
         {AlgoliaSearchConfig.appId ? (
           <InstantSearch
-            indexName="default_search"
-            {...AlgoliaSearchConfig}
-            {...this.props}
+          indexName="default_search"
+          searchClient={customSearchClient}
+          {...this.props}
+        
           >
             <Configure hitsPerPage={12} />
             <div>

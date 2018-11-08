@@ -125,7 +125,7 @@ class BarcodeBox extends React.Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                <TextField label="Barcode" value={this.state.value} onChange={(event) => { this.setState({ value: event.target.value }) }} />
+                <TextField style={{"display":this.props.hideField ? "none" : "inline-text"}} label="Barcode" value={this.state.value} onChange={(event) => { this.setState({ value: event.target.value }) }} />
                 <Button onClick={this.handleOpen} color="primary">Scan</Button>
             </div>
         )

@@ -8,6 +8,7 @@ import CheckboxCategory from './checkboxCategory';
 import MultiRangeSearch from './multiRangeSearch';
 import ClearAll from './clearAll';
 import { SidebarWrapper, SidebarItem } from './algoliaComponent.style';
+import Button from '../uielements/button';
 
 const Sidebar = props => (
   <SidebarWrapper className="algoliaSidebar">
@@ -27,7 +28,18 @@ const Sidebar = props => (
     {/* <SidebarItem className="contentBox">
       <NestedCategories {...props} />
     </SidebarItem> */}
+
+
     <SidebarItem className="contentBox">
+      <Button
+        color="primary"
+        variant="raised"
+      >
+        Scan
+      </Button>
+    </SidebarItem>
+    <SidebarItem className="contentBox">
+
       <ClearAll {...props} />
     </SidebarItem>
   </SidebarWrapper>
