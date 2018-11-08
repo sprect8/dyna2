@@ -248,7 +248,7 @@ class FormDialog extends React.Component {
                             this.props.config.columns.map(x => {
                                 return (
                                     <Row key={x.name}>
-                                        <FullColumn>{this.createControl(x, this.state.data[x.name] ? this.state.data[x.name] : x.default ? x.default : "")}</FullColumn>
+                                        <FullColumn>{this.createControl(x, this.state.data[x.name] ? this.state.data[x.name] : "")}</FullColumn>
                                     </Row>
                                 )
                             })

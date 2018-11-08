@@ -108,7 +108,8 @@ class BarcodeBox extends React.Component {
                     aria-labelledby="form-dialog-title"
                     onRendered={this.afterOpenModal}
                     fullWidth                    
-                    maxWidth="lg"
+                    maxWidth="lg"                    
+                    style={{zIndex:6000}}
                     fullScreen={this.props.fullScreen}
                 >
                     <DialogTitle id="form-dialog-title">Snap a photo</DialogTitle>
