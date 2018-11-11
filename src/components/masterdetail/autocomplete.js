@@ -14,7 +14,7 @@ export default class Async extends React.Component {
     };
 
     componentDidMount() {
-        this._handleSearch("*")
+        this._handleSearch("**")
     }
 
     componentWillMount() {
@@ -59,7 +59,7 @@ export default class Async extends React.Component {
     _handleSelected = (input) => {
         console.log("Selected", input);
         if (input.length > 0) {
-            this.props.onChange({ target: { value: input[0].label } })
+            this.props.onChange({ target: { value: input[0].label, id: input[0].id } })
         }
     }
 

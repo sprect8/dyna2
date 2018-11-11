@@ -40,7 +40,7 @@ export default (state = initState, action) => {
         message: action.message
       }
       
-    case actions.CHECKOUT_SAGA:
+    case actions.CHECKOUT_SUCCESS:
     return {
       ...state,
       success: true,

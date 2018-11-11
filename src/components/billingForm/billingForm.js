@@ -10,6 +10,7 @@ class BillingForm extends React.Component {
   };
 
   handleChange = name => event => {
+    console.log(this.props.notifyChange);
     if (this.props.notifyChange) {
       this.props.notifyChange(name, event.target.value);
     }
@@ -28,7 +29,8 @@ class BillingForm extends React.Component {
           value={this.state.name}
           onChange={(e) => {
             this.setState({name:e.target.value});
-            this.handleChange({"recp_customer" : e.target.value});
+            
+            this.handleChange("recp_customer")(e);
           }}
         />
         <br/>
@@ -42,8 +44,8 @@ class BillingForm extends React.Component {
           margin="normal"
           value={this.state.email}
           onChange={(e) => {
-            this.setState({name:e.target.value});
-            this.handleChange({"recp_customer_email" : e.target.value});
+            this.setState({email:e.target.value});
+            this.handleChange("recp_customer_email")(e);
           }}
         />
       </Form>

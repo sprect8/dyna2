@@ -230,6 +230,7 @@ function getConfiguration() {
       { "name": "prod_discontinued", "display": "Discontinued", "type": "text", "mandatory": true, "lov": ["Discontinued", "In Stock", "Active", "Phase Out"] },
       { "name": "prod_sku", "display": "SKU", "type": "text" },
       { "name": "prod_unit_price", "display": "Cost", "type": "number", "mandatory": true },
+      { "name": "prod_list_price", "display": "Price Sold", "type": "number", "mandatory": true },
 
     ]
   }
@@ -255,7 +256,7 @@ function getConfiguration() {
     "columns": [
       { "name": "recp_id", "display": "Receipts Id", "type": "number", "sequence": "recp_id_seq", "mandatory": true, "unique": true, "key": true },
       { "name": "recp_details", "display": "Details", "type": "text" },
-      { "name": "recp_staff_id", "display": "Staff", "type": "number", "mandatory": true, "unique": true, "ref": "staffs" },
+      { "name": "recp_staff_id", "display": "Staff", "type": "number", "mandatory": true, "ref": "staffs" },
       { "name": "recp_uuid", "display": "Unique ID", "type": "text", "mandatory": true },
       { "name": "recp_latitude", "display": "Latitude", "type": "number" },
       { "name": "recp_longitude", "display": "Longitude", "type": "number" },
@@ -288,8 +289,8 @@ function getConfiguration() {
       { "name": "sale_price", "display": "Price", "type": "number", "mandatory": true },
       { "name": "sale_cost", "display": "Cost", "type": "number", "mandatory": true },
       { "name": "sale_recp_id", "display": "Receipt", "type": "number", "ref": "receipts", "mandatory": true },
-      { "name": "sale_status", "display": "Status", "type": "text", "lov": ["SOLD", "RETURNED", "EXCHANGE", "REFUNDED"] },      
-      { "name": "sale_total_purchase", "display": "Total Purchase", "type": "number", "mandatory" : true, },
+      { "name": "sale_status", "display": "Status", "type": "text", "lov": ["SOLD", "RETURNED", "EXCHANGE", "REFUNDED"] },
+      { "name": "sale_total_purchase", "display": "Total Purchase", "type": "number", "mandatory": true, },
     ]
   }
 
@@ -1466,8 +1467,8 @@ function registerReceiptService(app) {
       "recp_customer": name,
       "recp_customer_email": email,
       "recp_timestamp": new Date().toString(),
-      "recp_staff_id" : body.staff_id,
-      "recp_latitude" : body.latitude,
+      "recp_staff_id": body.staff_id,
+      "recp_latitude": body.latitude,
       "recp_longitude": body.longitude,
       owner_user_id: user
     }
@@ -1480,20 +1481,24 @@ function registerReceiptService(app) {
         for (let i = 0; i < body.sales.length; ++i) {
           let b = body.sales[i];
           let inv = await sharedPersistenceMapping["inventories"].findById(b.inventoryId)
+          let price = await sharedPersistenceMapping["products"].findById(inv.inv_prod_id)
+          price = price.prod_unit_price;
+
           if (inv.inv_units_in_stock < b.sale_total_purchase) {
             // not enough to satisfy demand ...
             console.log("Not enough stock");
             t.rollback(); // rollback transaction!
             break;
           }
+          console.log(b)
           let sale = {
-            "sale_staff_id": b.sale_staff_id,
             "sale_inv_id": b.inventoryId,
             "sale_price": b.sale_price,
-            "sale_cost": b.sale_cost,
+            "sale_cost": price,
             "sale_recp_id": result.recp_id,
             "sale_status": "SOLD",
-            owner_user_id : user,
+            "sale_total_purchase": b.sale_total_purchase,
+            owner_user_id: user,
           }
 
           let item = {
@@ -1505,23 +1510,25 @@ function registerReceiptService(app) {
           let r = await sharedPersistenceMapping["sales"].create(sale);
           inv.inv_units_in_stock = inv.inv_units_in_stock - b.sale_total_purchase; // decrease
           inv.update(inv); // save
-          receipt.sales.push(item); 
+          receipt.sales.push(item);
         }
         t.commit();
         success = true;
       }
-      catch (e) {      
-        res.status(500).json({"success": false, "message" : "Failed because of " + e});
+      catch (e) {
+        console.log("Sale Prices is", e);
+        res.status(500).json({ "success": false, "message": "Failed because of " + e });
         t.rollback();
         return;
       }
-    });
 
-    if (success && email !== "Not Defined")
-      sendEmail(email, receipt);
-    if (success) {
-      res.json({"success":true, "message": "Done"});
-    }
+
+      if (success && email !== "Not Defined")
+        sendEmail(email, receipt);
+      if (success) {
+        res.json({ "success": true, "message": "Done" });
+      }
+    });
   })
 }
 
