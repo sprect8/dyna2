@@ -1,20 +1,17 @@
 import React from 'react';
-import { RatingMenu } from 'react-instantsearch/dom';
 import SearchText from './searchText';
-import VoiceRecognition from './voiceRecognition';
 import CheckboxCategory from './checkboxCategory';
 // import RangeSlider from './rangeSlider';
 // import NestedCategories from './nestedCategories';
-import MultiRangeSearch from './multiRangeSearch';
 import ClearAll from './clearAll';
 import { SidebarWrapper, SidebarItem } from './algoliaComponent.style';
-import Button from '../uielements/button';
+import Scanner from './barcode'
 
 const Sidebar = props => (
   <SidebarWrapper className="algoliaSidebar">
-    <SidebarItem className="contentBox">
+    {/*<SidebarItem className="contentBox">
       <SearchText {...props} />
-    </SidebarItem>
+</SidebarItem>*/}
     {/* <SidebarItem className="contentBox">
       <h3 className="algoliaSidebarTitle" style={{ marginBottom: 10 }}>
         Slider
@@ -31,12 +28,16 @@ const Sidebar = props => (
 
 
     <SidebarItem className="contentBox">
-      <Button
-        color="primary"
+      <Scanner
+        {...props}
         variant="raised"
+        color="primary"
+        style={{ marginRight: 10 }}
+        searchMode={true}
       >
         Scan
-      </Button>
+      </Scanner>
+
     </SidebarItem>
     <SidebarItem className="contentBox">
 

@@ -1,36 +1,47 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import OrderInfo from './orderInfo';
+
+import { connect } from 'react-redux';
 import BillingForm from '../../../components/billingForm/billingForm';
 import LayoutWrapper from '../../../components/utility/layoutWrapper';
 import Papersheet from '../../../components/utility/papersheet';
+
+import actions from '../../../redux/ecommerce/actions';
+
+
 import {
   Row,
   OneThirdColumn,
   TwoThirdColumn,
+  HalfColumn,
 } from '../../../components/utility/rowColumn';
 import CheckoutPageWrapper from './checkout.style';
 
 const styles = theme => ({});
+const { checkout } = actions;
 
 class Checkout extends React.Component {
+  handleChanged = (name, value) => {
+    
+  }
   render() {
     return (
       <LayoutWrapper>
         <CheckoutPageWrapper className="checkoutPageWrapper">
           <Row>
-            <TwoThirdColumn>
+            <HalfColumn>
               <Papersheet>
                 <h3 className="sectionTitle">Billing details</h3>
                 <BillingForm />
               </Papersheet>
-            </TwoThirdColumn>
+            </HalfColumn>
 
-            <OneThirdColumn>
+            <HalfColumn>
               <Papersheet>
                 <OrderInfo />
               </Papersheet>
-            </OneThirdColumn>
+            </HalfColumn>
           </Row>
         </CheckoutPageWrapper>
       </LayoutWrapper>
@@ -38,4 +49,10 @@ class Checkout extends React.Component {
   }
 }
 
-export default withStyles(styles, { withTheme: true })(Checkout);
+export default connect(
+  state => ({
+    ...state.App,
+  }),
+  { checkout }
+)(withStyles(styles, { withTheme: true })(Checkout));
+

@@ -588,6 +588,22 @@ const WDGridListViewWrapper = styled.div`
           background-color: ${palette('indigo', 5)};
           ${borderRadius('2px 0 0 2px')};
         }
+        
+        .alGridInventory {
+          top: 60px;
+        }
+
+        .alGridInvEmpty {
+          background-color: gray
+        }
+
+        .alGridInvLow {
+          background-color: orange
+        }
+
+        .alGridInvOk { 
+          background-color: green
+        }
 
         .alGridRating {
           display: none;

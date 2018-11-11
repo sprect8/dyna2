@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Scanner from '../../../components/uielements/barcode'
 import Table, {
   TableBody,
   TableCell,
@@ -122,15 +121,6 @@ class CartTable extends Component {
                   padding: 0,
                 }}
               >
-                <Scanner
-                  hideField={true}
-                  variant="raised"
-                  color="primary"
-                  style={{ marginRight: 10 }}
-                >
-                  Scan
-                </Scanner>
-
                 <Button color="primary" className="cartCheckoutBtn">
                   <Link to={'/dashboard/checkout'}>Checkout</Link>
                 </Button>

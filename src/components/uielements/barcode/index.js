@@ -33,14 +33,21 @@ class BarcodeBox extends React.Component {
     };
 
     componentWillReceiveProps(props) {
-        this.setState({ open: props.open });
+
+        this.setState({ open: props.open ? true : false });
         if (props.data) {
             this.setState(props.data);
+        }
+
+        if (props.searchState && props.searchState.query) {
+            this.setState({ value: props.searchState.query });
         }
     }
 
     componentDidMount() {
-
+        if (this.props.searchState && this.props.searchState.query) {
+            this.setState({ value: this.props.searchState.query });
+        }
     }
 
     componentWillUnmount = () => {
@@ -52,7 +59,22 @@ class BarcodeBox extends React.Component {
         //this.setState({ results: this.state.results.concat([result]) });
         this.setState({ value: result.codeResult.code, open: false });
         Quagga.stop();
-        this.props.onChange({target:{value:result.codeResult.code}});
+        
+        if (this.props.onChange)
+        this.props.onChange({ target: { value: result.codeResult.code } });
+    }
+
+    _onSearch = () => {
+        //
+        console.log(this.props.searchState);
+        console.log(this.state.value);
+
+        console.log(this.props.onSearchStateChange)
+
+        let value = this.props.searchState;
+        value.query = this.state.value;
+
+        this.props.onSearchStateChange(value);
     }
 
     afterOpenModal = () => {
@@ -80,7 +102,7 @@ class BarcodeBox extends React.Component {
                 readers: ["code_128_reader", "ean_reader", "upc_reader", "upc_e_reader"]
             },
             locate: true
-        },  (err) => {
+        }, (err) => {
             if (err) {
                 return console.log(err);
             }
@@ -96,7 +118,14 @@ class BarcodeBox extends React.Component {
     handleOpen = () => {
 
         this.setState({ open: true })
+
+    }
+
+    handleChanged = (event) => {
+        this.setState({ value: event.target.value })
         
+        if (this.props.onChange)
+        this.props.onChange({ target: { value: event.target.value } });
     }
 
     render() {
@@ -107,9 +136,9 @@ class BarcodeBox extends React.Component {
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title"
                     onRendered={this.afterOpenModal}
-                    fullWidth                    
-                    maxWidth="lg"                    
-                    style={{zIndex:6000}}
+                    fullWidth
+                    maxWidth="lg"
+                    style={{ zIndex: 6000 }}
                     fullScreen={this.props.fullScreen}
                 >
                     <DialogTitle id="form-dialog-title">Snap a photo</DialogTitle>
@@ -125,8 +154,10 @@ class BarcodeBox extends React.Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                <TextField style={{"display":this.props.hideField ? "none" : "inline-text"}} label="Barcode" value={this.state.value} onChange={(event) => { this.setState({ value: event.target.value }) }} />
-                <Button onClick={this.handleOpen} color="primary">Scan</Button>
+                <TextField style={{ "display": this.props.hideField ? "none" : "inline-text" }} label="Barcode" value={this.state.value} onChange={this.handleChanged} />
+
+                <Button style={{ display: this.props.searchMode ? "inline-flex" : "none" }} onClick={this._onSearch} color={this.props.color} variant={this.props.variant}>Search</Button>
+                <Button style={{ marginLeft: this.props.searchMode ? "12px" : "0px" }} onClick={this.handleOpen} color={this.props.color} variant={this.props.variant}>Scan</Button>
             </div>
         )
     }

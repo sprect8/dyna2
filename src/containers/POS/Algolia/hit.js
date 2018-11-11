@@ -30,6 +30,15 @@ class Hit extends Component {
 				addedTocart = true;
 			}
 		});
+		hit.stock = hit.total;
+		let stockLevel = "alGridInvOk";
+		if (!hit.stock || hit.stock<1) {
+			hit.stock = 0;
+			stockLevel = "alGridInvEmpty";
+		}
+		else if (+hit.stock < 10) {
+			stockLevel = "alGridInvLow";
+		}
 		return (
 			<GridListViewWrapper className={className}>
 				<div className="alGridImage">
@@ -44,9 +53,10 @@ class Hit extends Component {
 								};
 								setTimeout(update, 1500);
 							}}
+							disabled = {hit.stock < 1}
 						>
 							<CartIcon>shopping_cart</CartIcon>
-							Add to cart
+							{hit.stock < 1 ? "No Stock" : "Add to cart"}
 						</Button>
 					) : (
 						<Button
@@ -65,6 +75,7 @@ class Hit extends Component {
 					<div className="alGridPriceRating">
 						<span className="alGridPrice">${hit.price}</span>
 
+						<span className={"alGridPrice alGridInventory " + stockLevel}>{hit.stock}</span>
 						<div className="alGridRating">
 							<Rate
 								disabled

@@ -9,12 +9,14 @@ var bodyParser = require('body-parser')
 var morgan = require('morgan');
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
+var uuid = require('uuid/v4');
+
 const bcrypt = require('bcrypt');
 
 const app = express();
 // parse application/json
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 //
 app.set('superSecret', process.env.superSecret || "dyna2018"); // secret variable
 
@@ -88,6 +90,11 @@ function sidebarConfiguration() {
           label: 'Product Category',
           key: 'product-catalog',
           leftIcon: 'shopping_cart'
+        },
+        {
+          label: 'Receipts',
+          key: 'receipts-page',
+          leftIcon: 'shop_two'
         },
         {
           label: 'Sales',
@@ -240,6 +247,36 @@ function getConfiguration() {
     ]
   }
 
+  const receipts = {
+    "tableName": "receipts",
+    "displayName": "Receipts Records",
+    "key": "recp_id",
+    "description": "These are your Receipt records, edit, add, remove and view any details",
+    "columns": [
+      { "name": "recp_id", "display": "Receipts Id", "type": "number", "sequence": "recp_id_seq", "mandatory": true, "unique": true, "key": true },
+      { "name": "recp_details", "display": "Details", "type": "text" },
+      { "name": "recp_staff_id", "display": "Staff", "type": "number", "mandatory": true, "unique": true, "ref": "staffs" },
+      { "name": "recp_uuid", "display": "Unique ID", "type": "text", "mandatory": true },
+      { "name": "recp_latitude", "display": "Latitude", "type": "number" },
+      { "name": "recp_longitude", "display": "Longitude", "type": "number" },
+      { "name": "recp_customer", "display": "Customer Name", "type": "text", "mandatory": true },
+      { "name": "recp_customer_email", "display": "Customer Email", "type": "text", "mandatory": true },
+      { "name": "recp_timestamp", "display": "Receipt Date", "type": "timestamp", "mandatory": true },
+      { "name": "recp_customer_rating", "display": "Rating", "type": "number" },
+      { "name": "recp_customer_rating1", "display": "Rating", "type": "number" },
+      { "name": "recp_customer_rating2", "display": "Rating1", "type": "number" },
+      { "name": "recp_customer_rating3", "display": "Rating2", "type": "number" },
+      { "name": "recp_customer_rating4", "display": "Rating3", "type": "number" },
+      { "name": "recp_customer_rating5", "display": "Rating4", "type": "number" },
+      { "name": "recp_customer_rating6", "display": "Rating5", "type": "number" },
+      { "name": "recp_customer_rating7", "display": "Rating6", "type": "number" },
+      { "name": "recp_customer_rating8", "display": "Rating7", "type": "number" },
+      { "name": "recp_customer_rating9", "display": "Rating8", "type": "number" },
+      { "name": "recp_customer_rating10", "display": "Rating9", "type": "number" },
+      { "name": "recp_customer_comment", "display": "Comment", "type": "text" },
+    ]
+  }
+
   const sales = {
     "tableName": "sales",
     "displayName": "Sales Records",
@@ -247,16 +284,12 @@ function getConfiguration() {
     "description": "These are your Sales records, edit, add, remove and view any details",
     "columns": [
       { "name": "sale_id", "display": "Sales Id", "type": "number", "sequence": "sale_id_seq", "mandatory": true, "unique": true, "key": true },
-      { "name": "sale_staff_id", "display": "Staff", "type": "number", "mandatory": true, "unique": true, "ref": "staffs" },
       { "name": "sale_inv_id", "display": "Inventory", "type": "number", "ref": "inventories" },
       { "name": "sale_price", "display": "Price", "type": "number", "mandatory": true },
       { "name": "sale_cost", "display": "Cost", "type": "number", "mandatory": true },
-      { "name": "sale_timestamp", "display": "Sales Date", "type": "timestamp", "mandatory": true },
-      { "name": "sale_cust_id", "display": "Customer", "type": "number" },
-      { "name": "sale_status", "display": "Status", "type": "text", "lov": ["SOLD", "RETURNED", "EXCHANGE", "REFUNDED"] },
-      { "name": "sale_latitude", "display": "Latitude", "type": "number"},
-      { "name": "sale_longitude", "display": "Longitude", "type": "number"},
-
+      { "name": "sale_recp_id", "display": "Receipt", "type": "number", "ref": "receipts", "mandatory": true },
+      { "name": "sale_status", "display": "Status", "type": "text", "lov": ["SOLD", "RETURNED", "EXCHANGE", "REFUNDED"] },      
+      { "name": "sale_total_purchase", "display": "Total Purchase", "type": "number", "mandatory" : true, },
     ]
   }
 
@@ -319,6 +352,7 @@ function getConfiguration() {
     { "path": "investments-page", "table": investments },
     { "path": "products-page", "table": products },
     { "path": "inventory-page", "table": inventory },
+    { "path": "receipts-page", "table": receipts },
     { "path": "sales-page", "table": sales },
     { "path": "deliveries-page", "table": deliveries },
   ]
@@ -1098,7 +1132,7 @@ function scanAPI(app) {
         return res.json(r);
       }
       else {
-        return res.json({"success":"false", "message":"No product found with barcode " + req.params.barcode});
+        return res.json({ "success": "false", "message": "No product found with barcode " + req.params.barcode });
       }
       // resolve references
       // the value that is saved will be the id, but the ui wants the value as the display name
@@ -1214,7 +1248,7 @@ function createLOVService(app, conf) {
 }
 
 function generateProductSearch(app) {
-  app.post('/product-search', async function(req, res) {
+  app.post('/product-search', async function (req, res) {
     console.log(JSON.stringify(req.body));
 
     let query = req.body.requests[0];
@@ -1225,53 +1259,77 @@ function generateProductSearch(app) {
 
     let categoryFilters = query.params.facetFilters;
     let countSel = 'SELECT count(*) FROM products a where a.owner_user_id = ?';
-    let prodSel = 'SELECT a.prod_id, b.cate_desc, a.prod_name, a.prod_desc, a.prod_unit_price FROM products a inner join product_categories b on a.prod_cate_id = b.cate_id where a.owner_user_id = ? limit ' + query.params.hitsPerPage + ' offset ' + page;
+    let prodSel = `select a.prod_id, b.cate_desc, a.prod_name, a.prod_desc, a.prod_unit_price, c.inv_id,
+    sum(c.inv_units_in_stock) over (partition by prod_id) total
+    from products a
+    inner join product_categories b on a.prod_cate_id = b.cate_id
+    left outer join inventories c
+    on a.prod_id = c.inv_prod_id    
+    where a.owner_user_id = ?     
+    ${query.params.query && query.params.query !== "" ? "and c.inv_bar_code = ?" : ""}
+    limit ${query.params.hitsPerPage} offset ${page}`;
     console.log(categoryFilters);
 
-    if (categoryFilters && categoryFilters.length > 0) {
-      countSel = 'SELECT count(*) FROM products a inner join product_categories b on a.prod_cate_id = b.cate_id where a.owner_user_id = ? and b.cate_name in (?)'
-      replacements.push(categoryFilters[0].map(x=>{
-        return x.substring(x.indexOf(":")+1);
-      }));
-      prodSel = 'SELECT a.prod_id, b.cate_desc, a.prod_name, a.prod_desc, a.prod_unit_price FROM products a inner join product_categories b on a.prod_cate_id = b.cate_id where a.owner_user_id = ? and b.cate_name in (?) limit ' + query.params.hitsPerPage + ' offset ' + page;
+    if (query.params.query && query.params.query !== "") {
+      replacements.push(query.params.query);
     }
 
-    let total = await sequelize.query(countSel, 
-    { type: sequelize.QueryTypes.SELECT, replacements: replacements});
+    if (categoryFilters && categoryFilters.length > 0) {
+      countSel = `SELECT count(*) FROM products a inner join product_categories b on a.prod_cate_id = b.cate_id 
+      left outer join inventories c      
+      on a.prod_id = c.inv_prod_id    
+      where a.owner_user_id = ? 
+      and b.cate_name in (?)`
+      replacements.push(categoryFilters[0].map(x => {
+        return x.substring(x.indexOf(":") + 1);
+      }));
+      prodSel = `SELECT a.prod_id, b.cate_desc, a.prod_name, a.prod_desc, a.prod_unit_price, c.inv_id 
+      FROM products a inner join product_categories b on a.prod_cate_id = b.cate_id
+      left outer join inventories c      
+      on a.prod_id = c.inv_prod_id     
+      where a.owner_user_id = ? 
+      ${query.params.query && query.params.query !== "" ? "and c.inv_bar_code = ?" : ""}  
+      and b.cate_name in (?) limit ` + query.params.hitsPerPage + ' offset ' + page;
+    }
+
+    let total = await sequelize.query(countSel,
+      { type: sequelize.QueryTypes.SELECT, replacements: replacements });
     total = total[0].count;
     total = +total;
-    let result = await sequelize.query(prodSel, 
-    { type: sequelize.QueryTypes.SELECT, replacements: replacements});
+    let result = await sequelize.query(prodSel,
+      { type: sequelize.QueryTypes.SELECT, replacements: replacements });
 
     let pages = Math.round(total / query.params.hitsPerPage);
 
     let categories = {};
-    let cat = await sequelize.query("select cate_name from product_categories where owner_user_id = ? order by cate_name asc", 
-    { type: sequelize.QueryTypes.SELECT, replacements: [user]});
-    
-    cat.forEach(x=>{categories[x.cate_name] = 1})
+    let cat = await sequelize.query("select cate_name from product_categories where owner_user_id = ? order by cate_name asc",
+      { type: sequelize.QueryTypes.SELECT, replacements: [user] });
+
+    cat.forEach(x => { categories[x.cate_name] = 1 })
 
     // reduce results 
 
-    let hits = result.map(x=>{
+    let hits = result.map(x => {
       return {
+        "total": +x.total,
         "categories": [x.cate_desc],
         "price": +x.prod_unit_price,
-        "rating":4,
-        "image":"/api/product/image/" + x.prod_id,
-        "objectID":x.prod_id,
+        "rating": 4,
+        "image": "/api/product/image/" + x.prod_id,
+        "objectID": x.prod_id,
+        "inventoryID": x.inv_id,
         "_snippetResult": {
           "description": {
             "value": x.prod_desc,
             "matchLevel": "none"
-          }        
+          }
         },
         "_highlightResult": {
-          "name":{
-            "value":x.prod_name
+          "name": {
+            "value": x.prod_name
           },
-          "description":{
-            "value":x.prod_desc
+          "description": {
+            "value": x.prod_desc
           }
         }
       }
@@ -1292,11 +1350,11 @@ function generateProductSearch(app) {
         "hitsPerPage": 12,
         "processingTimeMS": 6,
         "facets": {
-          
+
           "categories": categories
         },
         "facets_stats": {
-          
+
         },
         "exhaustiveFacetsCount": true,
         "exhaustiveNbHits": true,
@@ -1312,7 +1370,7 @@ function generateProductSearch(app) {
         "nbPages": 1000,
         "hitsPerPage": 1,
         "processingTimeMS": 1,
-        
+
         "exhaustiveFacetsCount": true,
         "exhaustiveNbHits": true,
         "query": "",
@@ -1325,9 +1383,9 @@ function generateProductSearch(app) {
 }
 
 function generateProductSFFV(app) {
-  app.post('/product-ffv', function(req, res) {
+  app.post('/product-ffv', function (req, res) {
     console.log(JSON.stringify(req.body));
-    
+
   })
 }
 
@@ -1335,7 +1393,7 @@ const noImage = "iVBORw0KGgoAAAANSUhEUgAAAPAAAAC4CAIAAABSPPbEAAAACXBIWXMAAAsTAAA
 
 function generateProductImage(app) {
   app.get('/product/image/:productId', (req, res) => {
-   
+
     // query for first 20 items matching the search
     // if empty we return firt 20 items
     // order it by the display
@@ -1343,7 +1401,7 @@ function generateProductImage(app) {
     let query = req.params.productId;
     let user = req.decoded.admin;
 
-    sharedPersistenceMapping["products"].findById(query).then(inst=>{
+    sharedPersistenceMapping["products"].findById(query).then(inst => {
       let img = "";
       let type = "image/png";
       if (inst === null || !inst.prod_picture || inst.prod_picture === "" || inst.owner_user_id !== user) {
@@ -1361,7 +1419,109 @@ function generateProductImage(app) {
         'Content-Length': img.length
       });
       res.end(img);
-    });    
+    });
+  })
+}
+
+function sendEmail(to, receiptObj) {
+  var helper = require('sendgrid').mail;
+  var from_email = new helper.Email('admin@dynapreneur.com');
+  var to_email = new helper.Email(to);
+  var subject = 'Hello World from the SendGrid Node.js Library!';
+  var content = new helper.Content('text/plain', 'Hello, Email!');
+  var mail = new helper.Mail(from_email, subject, to_email, content);
+
+  var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
+  var request = sg.emptyRequest({
+    method: 'POST',
+    path: '/v3/mail/send',
+    body: mail.toJSON(),
+  });
+
+  sg.API(request, function (error, response) {
+    console.log(response.statusCode);
+    console.log(response.body);
+    console.log(response.headers);
+  });
+}
+
+function registerReceiptService(app) {
+  app.put('/saveReceipt', (req, res) => {
+    let body = req.body;
+    let user = req.decoded.admin;
+
+    // body will be a list of products sold ()
+    // items : [] <-- these are inv + total
+    //
+    // run in txn
+    // confirm that inventory items have enough stock
+    // create receipt
+    // then create sales items
+
+    let email = body.customerEmail || "Not Defined";
+    let name = body.customerName || "Not Defined";
+    let receipt =
+    {
+      "recp_uuid": uuid(),
+      "recp_customer": name,
+      "recp_customer_email": email,
+      "recp_timestamp": new Date().toString(),
+      "recp_staff_id" : body.staff_id,
+      "recp_latitude" : body.latitude,
+      "recp_longitude": body.longitude,
+      owner_user_id: user
+    }
+    let success = false;
+
+    sequelize.transaction().then(async function (t) {
+      try {
+        let result = await sharedPersistenceMapping["receipts"].create(receipt);
+        receipt.sales = [];
+        for (let i = 0; i < body.sales.length; ++i) {
+          let b = body.sales[i];
+          let inv = await sharedPersistenceMapping["inventories"].findById(b.inventoryId)
+          if (inv.inv_units_in_stock < b.sale_total_purchase) {
+            // not enough to satisfy demand ...
+            console.log("Not enough stock");
+            t.rollback(); // rollback transaction!
+            break;
+          }
+          let sale = {
+            "sale_staff_id": b.sale_staff_id,
+            "sale_inv_id": b.inventoryId,
+            "sale_price": b.sale_price,
+            "sale_cost": b.sale_cost,
+            "sale_recp_id": result.recp_id,
+            "sale_status": "SOLD",
+            owner_user_id : user,
+          }
+
+          let item = {
+            "name": b.prod_name,
+            "price": b.sale_price,
+            "quantity": b.sale_total_purchase,
+          }
+
+          let r = await sharedPersistenceMapping["sales"].create(sale);
+          inv.inv_units_in_stock = inv.inv_units_in_stock - b.sale_total_purchase; // decrease
+          inv.update(inv); // save
+          receipt.sales.push(item); 
+        }
+        t.commit();
+        success = true;
+      }
+      catch (e) {      
+        res.status(500).json({"success": false, "message" : "Failed because of " + e});
+        t.rollback();
+        return;
+      }
+    });
+
+    if (success && email !== "Not Defined")
+      sendEmail(email, receipt);
+    if (success) {
+      res.json({"success":true, "message": "Done"});
+    }
   })
 }
 
@@ -1389,6 +1549,8 @@ function generateRoutes(app, configuration) {
     scanAPI(app);
 
   });
+
+  registerReceiptService(app);
 
   sequelize.sync();
 
