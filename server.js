@@ -1509,7 +1509,7 @@ function registerReceiptService(app) {
 
           let r = await sharedPersistenceMapping["sales"].create(sale);
           inv.inv_units_in_stock = inv.inv_units_in_stock - b.sale_total_purchase; // decrease
-          inv.update(inv); // save
+          inv.save(); // save
           receipt.sales.push(item);
         }
         t.commit();
