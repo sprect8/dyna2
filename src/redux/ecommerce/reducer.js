@@ -33,6 +33,12 @@ export default (state = initState, action) => {
         products: action.products,
         productQuantity: action.productQuantity
       };
+    case actions.CHECKOUT_SAGA:
+      return {
+        ...state,
+        success: false,
+        message: ""
+      }
     case actions.CHECKOUT_FAIL:
       return {
         ...state,

@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
 import LayoutWrapper from '../components/utility/layoutWrapper';
 import { FullColumn, HalfColumn, Row } from '../components/utility/rowColumn';
 import Breakdown from './Viz/Breakdown';
@@ -29,11 +31,11 @@ const data = [
 	},
 ]
 
-export default () => (
+let component = (props) => (
 	<LayoutWrapper>
 		<Row><FullColumn>
-			<h2>Welcome Faizal</h2>
-			<p className="description">This is your overall score - you have <a href="/dashboard/inbox">32 Dynalitics</a> notifications</p>			
+			<h2>Welcome {props.name}</h2>
+			<p className="description">This is your overall score - you have <a href="/dashboard/inbox">{props.notifications} Dynalitics</a> notifications</p>			
 		</FullColumn></Row>
 		
 		<Row>
@@ -54,3 +56,11 @@ export default () => (
 		</Row>
 	</LayoutWrapper>
 );
+
+
+export default connect(
+	state => ({
+		...state.Auth
+	}),
+	[]
+)(component);

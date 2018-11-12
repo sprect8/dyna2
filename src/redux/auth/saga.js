@@ -27,6 +27,7 @@ export function* loginRequest(payload) {
         type: actions.LOGIN_SUCCESS,
         payload: {token: json.token},
         profile: "Profile",
+        name: json.name,
       })
     }
     else {
@@ -51,12 +52,28 @@ export function* logoutRequest() {
   yield put(push('/'));
 }
 export function* checkAuthorization() {
+  let response = yield call(fetch, '/api/ping');
+  
   const token = getToken();
-  if (token) {
+  if (response.status === 403) {
+    clearToken();
+    yield put({
+      type: actions.LOGIN_FAILED
+    });
+  }
+  let json = yield response.json();
+  if (json.success) {
     yield put({
       type: actions.LOGIN_SUCCESS,
       payload: { token },
+      name: json.name,
       profile: 'Profile',
+    });
+  }
+  else {
+    clearToken();
+    yield put({
+      type: actions.LOGIN_FAILED
     });
   }
 }

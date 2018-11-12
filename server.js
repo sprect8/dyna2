@@ -1424,12 +1424,46 @@ function generateProductImage(app) {
   })
 }
 
+/**
+ let receipt =
+    {
+      "recp_uuid": uuid(),
+      "recp_customer": name,
+      "recp_customer_email": email,
+      "recp_timestamp": new Date().toString(),
+      "recp_staff_id": body.staff_id,
+      "recp_latitude": body.latitude,
+      "recp_longitude": body.longitude,
+      owner_user_id: user
+    }
+    let success = false;
+
+          let item = {
+            "name": b.prod_name,
+            "price": b.sale_price,
+            "quantity": b.sale_total_purchase,
+          }*/
+
 function sendEmail(to, receiptObj) {
   var helper = require('sendgrid').mail;
   var from_email = new helper.Email('admin@dynapreneur.com');
   var to_email = new helper.Email(to);
-  var subject = 'Hello World from the SendGrid Node.js Library!';
-  var content = new helper.Content('text/plain', 'Hello, Email!');
+  var subject = 'Your Receipt';
+  let c = `Invoice from 
+  -----------------------------
+  Inv No: ${receiptObj.recp_uuid}
+  Time: ${new Date().toISOString()}
+  -----------------------------
+  ${
+    receiptObj.sales.map(x=>{
+      return x.name + "\t$" + x.price + "\t" + x.quantity 
+    })
+  }  
+  -----------------------------
+  Thank You
+  `
+
+  var content = new helper.Content('text/plain', c);
   var mail = new helper.Mail(from_email, subject, to_email, content);
 
   var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
@@ -1509,7 +1543,7 @@ function registerReceiptService(app) {
 
           let r = await sharedPersistenceMapping["sales"].create(sale);
           inv.inv_units_in_stock = inv.inv_units_in_stock - b.sale_total_purchase; // decrease
-          inv.save(); // save
+          let res = await inv.save(); // save
           receipt.sales.push(item);
         }
         t.commit();
@@ -1627,6 +1661,10 @@ router.get('/report/:name', function (req, res) {
   // note that the report is dynamically generated and returned
 })
 
+router.get('/ping', function(req, res) {
+  res.json({"success": true, "message": "Done", name:req.decoded.name})
+})
+
 
 app.post("/register", function (req, res) {
   // create a new user
@@ -1680,7 +1718,8 @@ app.post('/login', function (req, res) {
         // create a token with only our given payload
         // we don't want to pass in the entire user since that has the password
         const payload = {
-          admin: user.user_id // i want the user name
+          admin: user.user_id,// i want the user name
+          name: user.user_fname + " " + user.user_lname          
         };
         var token = jwt.sign(payload, app.get('superSecret'), {
           expiresIn: 86400 // expires in 24 hours
@@ -1700,7 +1739,8 @@ app.post('/login', function (req, res) {
         res.json({
           success: true,
           message: 'Enjoy your token!',
-          token: token
+          token: token,
+          name: user.user_fname + " " + user.user_lname
         });
       }
     }

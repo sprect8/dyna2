@@ -34,10 +34,10 @@ function* loadConfigJson(action, path) {
         if (res && res.json) {
             let json = yield res.json();
 
-            console.log("Json Loaded", json);
+            console.log("Json Loaded Mate", json);
 
             if (res.status == 403) {
-                yield put(logoutRequest());
+                logoutRequest();
                 return;
             }
 
