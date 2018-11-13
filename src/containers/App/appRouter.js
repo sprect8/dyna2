@@ -58,6 +58,10 @@ const routes = [
         path: 'checkout-page',
         component: asyncComponent(() => import('../POS/Checkout/')),
     },
+    {
+        path: 'user-settings',
+        component: asyncComponent(() => import('../Settings/'))
+    }
 ];
 
 class AppRouter extends Component {

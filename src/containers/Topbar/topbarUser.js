@@ -6,6 +6,8 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import { Link } from 'react-router-dom';
 import IntlMessages from '../../components/utility/intlMessages';
 import TopbarDropdownWrapper from './topbarDropdown.style';
+import { withRouter } from 'react-router-dom';
+
 import {
   IconButtons,
   TopbarDropdown,
@@ -62,7 +64,7 @@ class TopbarUser extends Component {
         </UserInformation>
 
         <SettingsList>
-          <a href="#!" className="dropdownLink">
+          <a href="#!" className="dropdownLink" onClick={()=>{this.props.history.push('/dashboard/user-settings')}}>
             <Icon>settings</Icon>
             <IntlMessages id="themeSwitcher.settings" />
           </a>
@@ -118,10 +120,10 @@ class TopbarUser extends Component {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   state => ({
     ...state.App,
     customizedTheme: state.ThemeSwitcher.topbarTheme,
   }),
   { logout }
-)(TopbarUser);
+)(TopbarUser));

@@ -13,8 +13,10 @@ import ecommerceActions from '../../../redux/ecommerce/actions';
 import SingleCart from '../../../components/cart/singleCart';
 import ProductsTable from './cartTable.style';
 import { rtl } from '../../../settings/withDirection';
+import appActions from '../../../redux/app/actions';
 
 const { changeProductQuantity } = ecommerceActions;
+const { changeCurrent } = appActions;
 
 let totalPrice = 0;
 class CartTable extends Component {
@@ -122,7 +124,7 @@ class CartTable extends Component {
                 }}
               >
                 <Button color="primary" className="cartCheckoutBtn">
-                  <Link to={'/dashboard/checkout'}>Checkout</Link>
+                  <Link to={'/dashboard/checkout-page'} onClick={()=>this.props.changeCurrent('checkout-page')}>Checkout</Link>
                 </Button>
               </TableCell>
             </TableRow>
@@ -138,5 +140,5 @@ function mapStateToProps(state) {
 }
 export default connect(
   mapStateToProps,
-  { changeProductQuantity }
+  { changeProductQuantity, changeCurrent }
 )(CartTable);

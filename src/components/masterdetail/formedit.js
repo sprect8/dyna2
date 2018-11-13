@@ -16,7 +16,7 @@ import BarcodeBox from '../uielements/barcode';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import CircularProgress from '@material-ui/core/CircularProgress'; 
+import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
 import red from '@material-ui/core/colors/red';
 import Button from '@material-ui/core/Button';
@@ -45,7 +45,7 @@ const styles = theme => ({
             backgroundColor: green[700],
         },
     },
-    
+
     buttonFailed: {
         backgroundColor: red[500],
         '&:hover': {
@@ -93,7 +93,7 @@ class FormDialog extends React.Component {
                 let readonly = false;
                 if (control.ref) {
                     // table reference?
-                    return (<Autocomplete config={control.ref} label={control.display} value={value} error={error} onChange={this.handleChange(control.name)}/>)
+                    return (<Autocomplete config={control.ref} label={control.display} value={value} error={error} onChange={this.handleChange(control.name)} />)
                 }
                 else if (control.key) {
                     readonly = true;
@@ -166,7 +166,7 @@ class FormDialog extends React.Component {
                     }}
                 />
             case "barcode":
-                return <BarcodeBox onChange={this.handleChange(control.name)}/>
+                return <BarcodeBox onChange={this.handleChange(control.name)} />
             case "picture":
                 return <PictureBox onChange={this.handleChange(control.name)} value={value} />
 
@@ -175,7 +175,7 @@ class FormDialog extends React.Component {
         }
     }
     handleClose = () => {
-        this.setState({ open: false, validating: false, success: false, loading:false, error:false, saving: false });
+        this.setState({ open: false, validating: false, success: false, loading: false, error: false, saving: false });
         return this.props.onClose ? this.props.onClose() : null;
     };
 
@@ -195,7 +195,7 @@ class FormDialog extends React.Component {
             this.setState({ validating: true })
         }
         else {
-            this.setState({ validating: false, saving: true, loading: true, error: false, success: false }) 
+            this.setState({ validating: false, saving: true, loading: true, error: false, success: false })
             // we don't control the closing
             this.props.onUpdate(this.state.data);
         }
@@ -209,14 +209,14 @@ class FormDialog extends React.Component {
         }
 
         if (props.updateError) {
-            this.setState({loading: false, success: false, error:true, message:props.message})
+            this.setState({ loading: false, success: false, error: true, message: props.message })
         }
         else if (props.updateSuccess) {
-            this.setState({loading: false, success: true, error: false, message: ""})
+            this.setState({ loading: false, success: true, error: false, message: "" })
         }
 
         if (!props.updateSuccess && !props.updateError) {
-            this.setState({loading: false, success: false, error: false, message: ""});
+            this.setState({ loading: false, success: false, error: false, message: "" });
         }
     }
 
@@ -226,6 +226,20 @@ class FormDialog extends React.Component {
         const buttonClassname = classNames({
             [classes.buttonSuccess]: success,
         });
+
+        if (this.props.isPanel) {
+            return (
+                <div>{
+                    this.props.config.columns.map(x => {
+                        return (
+                            <Row key={x.name}>
+                                <FullColumn>{this.createControl(x, this.state.data[x.name] ? this.state.data[x.name] : "")}</FullColumn>
+                            </Row>
+                        )
+                    })
+                }
+                </div>)
+        }
 
         return (
             <div>
@@ -237,7 +251,7 @@ class FormDialog extends React.Component {
                     fullWidth
                     maxWidth="lg"
                     fullScreen={this.props.fullScreen}
-                    style={{zIndex:5000}}
+                    style={{ zIndex: 5000 }}
                 >
                     <DialogTitle id="form-dialog-title">{this.props.config.displayName}</DialogTitle>
                     <DialogContent>
@@ -258,16 +272,16 @@ class FormDialog extends React.Component {
                         <Button onClick={this.handleClose}>
                             Close
                         </Button>
-                        <div style={{marginRight:"22px", marginBottom:"18px"}}>
-                        <Button
-                            variant="fab"
-                            color="primary"
-                            className={buttonClassname}
-                            onClick={this.handleSave}
-                        >
-                            {success ? <CheckIcon /> : (error? <CrossIcon/> : <SaveIcon />) }
-                        </Button>
-                        {loading && <CircularProgress size={68} className={classes.fabProgress} />}
+                        <div style={{ marginRight: "22px", marginBottom: "18px" }}>
+                            <Button
+                                variant="fab"
+                                color="primary"
+                                className={buttonClassname}
+                                onClick={this.handleSave}
+                            >
+                                {success ? <CheckIcon /> : (error ? <CrossIcon /> : <SaveIcon />)}
+                            </Button>
+                            {loading && <CircularProgress size={68} className={classes.fabProgress} />}
                         </div>
                     </DialogActions>
                 </Dialog>
