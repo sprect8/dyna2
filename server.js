@@ -180,6 +180,7 @@ function getConfiguration() {
       { "name": "staff_type", "display": "Type", "type": "text", "mandatory": true, "lov": ["Full Time", "Part Time", "Sales", "Contractor"], },
       { "name": "staff_address", "display": "Address", "type": "text", "mandatory": true },
       { "name": "staff_salary", "display": "Salary (month)", "type": "number", "mandatory": true },
+      { "name": "staff_contact", "display": "Contact Info", "type": "text" },
       { "name": "staff_picture", "display": "Picture", "type": "picture" },
     ]
   }
@@ -372,6 +373,7 @@ function getUserStructures() {
       { "name": "user_user_id", "display": "Parent User", "type": "number" },
       { "name": "user_fname", "display": "First Name", "type": "text", "mandatory": true },
       { "name": "user_lname", "display": "Surname", "type": "text", "mandatory": true },
+      { "name": "user_email", "display": "Email", "type": "text", "mandatory": false },
       { "name": "user_timestamp", "display": "Created Date", "type": "timestamp" },
       { "name": "user_status", "display": "Current Status", "type": "text", "mandatory": true, "lov": ["ACTIVE", "INACTIVE", "PENDING"] },
       { "name": "user_password", "display": "Password Hash", "type": "text", "mandatory": true },
@@ -411,11 +413,30 @@ function getUserStructures() {
     ]
   }
 
+  const settings = {
+    "tableName": "settings",
+    "displayName": "Settings table",
+    "key": "cate_id",
+    "display": "cate_name",
+    "description": "Settings Table",
+    "columns": [
+      { "name": "sett_id", "display": "Setting ID", "type": "number", "sequence": "cate_id_seq", "mandatory": true, "unique": true, "key": true },
+      { "name": "sett_user_id", "display": "User ID", "type": "number", "mandatory": true, "unique": true, "ref": "users" },
+      { "name": "sett_company_name", "display": "Company Name", "type": "text" },
+      { "name": "sett_company_logo", "display": "Logo", "type": "picture" },
+      { "name": "sett_company_motto", "display": "Motto", "type": "text" },
+      { "name": "sett_company_email", "display": "Email", "type": "text" },
+      { "name": "sett_company_phone", "display": "Phone", "type": "text" },
+      { "name": "sett_indt_id", "display": "Industry", "type": "text", "lov": ["Food and Beverage", "Clothing", "Local Spa", "Beauty Products", "Retail"] }
+    ]
+  }
+
   const tableConfiguration = [
     { "path": "user-page", "table": users },
     { "path": "roles-page", "table": roles },
     { "path": "user-roles-catalog", "table": user_roles },
     { "path": "logins-page", "table": logins },
+    { "path": "settings-page", "table": settings },
   ]
 
   return tableConfiguration;
@@ -1239,12 +1260,22 @@ function createLOVService(app, conf) {
       };
     }
 
-    sharedPersistenceMapping[table].findAll({
-      attributes: [key, display],
-      where: where
-    }).then(r => {
-      res.json(r.map(m => { return { id: "" + m[key], label: m[display] } }));
-    });
+    let r = (where) => {
+      sharedPersistenceMapping[table].findAll({
+        attributes: [key, display],
+        where: where
+      }).then(r => {
+        res.json(r.map(m => { return { id: "" + m[key], label: m[display] } }));
+      });
+    }
+
+    try {
+      r(where);
+    }
+    catch(e) {
+      delete r[display];
+      r(where);
+    }
   });
 }
 
@@ -1455,10 +1486,10 @@ function sendEmail(to, receiptObj) {
   Time: ${new Date().toISOString()}
   -----------------------------
   ${
-    receiptObj.sales.map(x=>{
-      return x.name + "\t$" + x.price + "\t" + x.quantity 
+    receiptObj.sales.map(x => {
+      return x.name + "\t$" + x.price + "\t" + x.quantity
     })
-  }  
+    }  
   -----------------------------
   Thank You
   `
@@ -1661,10 +1692,36 @@ router.get('/report/:name', function (req, res) {
   // note that the report is dynamically generated and returned
 })
 
-router.get('/ping', function(req, res) {
-  res.json({"success": true, "message": "Done", name:req.decoded.name})
+router.get('/ping', function (req, res) {
+  res.json({ "success": true, "message": "Done", name: req.decoded.name })
 })
 
+router.get('/user-settings', function (req, res) {
+  // get user details
+  // get settings if exist; if not return blank
+
+  sharedPersistenceMapping["users"].findById(req.decoded.admin).then(u => {
+    // user must exist
+    sharedPersistenceMapping["settings"].findOne({ where: { "sett_user_id": req.decoded.admin } }).then(r => {
+      // no result? return empty with user id set
+
+      if (!r) {
+        r = { "sett_user_id": req.decoded.admin };
+      }
+      let results = { user: u, settings: r }
+
+      res.json(results);
+    }).catch(e => {
+      res.status(403).json({ success: false, "message": "Failed because " + e })
+    })
+  }).catch(e => {
+    res.status(403).json({ success: false, "message": "Failed because " + e })
+  });
+})
+
+router.put('/user-settings', function (req, res) {
+
+})
 
 app.post("/register", function (req, res) {
   // create a new user
@@ -1719,7 +1776,7 @@ app.post('/login', function (req, res) {
         // we don't want to pass in the entire user since that has the password
         const payload = {
           admin: user.user_id,// i want the user name
-          name: user.user_fname + " " + user.user_lname          
+          name: user.user_fname + " " + user.user_lname
         };
         var token = jwt.sign(payload, app.get('superSecret'), {
           expiresIn: 86400 // expires in 24 hours

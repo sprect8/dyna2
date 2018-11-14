@@ -21,7 +21,7 @@ import {
 import CheckoutPageWrapper from './checkout.style';
 
 const styles = theme => ({});
-const { checkout } = actions;
+const { checkout, clearCart } = actions;
 
 class Checkout extends React.Component {
   state = {
@@ -120,7 +120,7 @@ class Checkout extends React.Component {
 
             <HalfColumn>
               <Papersheet>
-                <OrderInfo notifyChange={this.handleChanged} checkingOut={this.state.loading} notifyCheckout={this.handleCheckout} />
+                <OrderInfo notifyChange={this.handleChanged} clearCart={this.props.clearCart} checkingOut={this.state.loading} notifyCheckout={this.handleCheckout} />
               </Papersheet>
             </HalfColumn>
           </Row>
@@ -135,6 +135,6 @@ export default connect(
     ...state.App,
     ...state.Ecommerce
   }),
-  { checkout }
+  { checkout, clearCart }
 )(withStyles(styles, { withTheme: true })(Checkout));
 

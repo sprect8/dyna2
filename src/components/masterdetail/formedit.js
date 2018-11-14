@@ -93,12 +93,15 @@ class FormDialog extends React.Component {
                 let readonly = false;
                 if (control.ref) {
                     // table reference?
-                    return (<Autocomplete config={control.ref} label={control.display} value={value} error={error} onChange={this.handleChange(control.name)} />)
+                    return (<Autocomplete disabled={control.disabled} config={control.ref} label={control.display} value={value} error={error} onChange={this.handleChange(control.name)} />)
                 }
                 else if (control.key) {
                     readonly = true;
                 }
                 else {
+                    if (control.disabled) {
+                        readonly = true;
+                    }
 
                 }
                 return (<TextField
@@ -168,7 +171,7 @@ class FormDialog extends React.Component {
             case "barcode":
                 return <BarcodeBox onChange={this.handleChange(control.name)} />
             case "picture":
-                return <PictureBox onChange={this.handleChange(control.name)} value={value} />
+                return <PictureBox name={control.name} onChange={this.handleChange(control.name)} value={value} />
 
             default:
                 return (<div></div>);

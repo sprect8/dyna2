@@ -19,7 +19,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
  * This tool is for data entry into the system based on an underlying database model 
  **/
 
-const { loadData, saveData, updateData, deleteData, openToEdit, openForNew, closedEditBox } = actions;
+const { loadData, saveData, updateData, deleteData, openToEdit, openForNew, closedEditBox, formModified } = actions;
 
 
 class MasterView extends React.Component {
@@ -100,6 +100,7 @@ class MasterView extends React.Component {
 
 	handleUpdate = (record) => {
 		console.log(this.props.saveData);
+		this.props.formModified();
 		this.updating = true;
 		this.props.saveData(this.props.config, record);
 		//let st = this.state.records;
@@ -151,7 +152,7 @@ const appConect = connect(
 	state => ({
 		...state.MasterDetailsReducer,
 	}),
-	{ loadData, updateData, saveData, deleteData, openToEdit, openForNew, closedEditBox }
+	{ loadData, updateData, saveData, deleteData, openToEdit, openForNew, closedEditBox, formModified}
 )(MasterView);
 export default appConect;
 

@@ -8,12 +8,18 @@ const actions = {
 	CHECKOUT_SAGA: "ECOMMERCE_CHECKOUT_SAGA",
 	CHECKOUT_SUCCESS: "ECOMMERCE_CHECKOUT_SUCCESS",
 	CHECKOUT_FAIL: "ECOMMERCE_CHECKOUT_FAIL",
+	CLEAR_CART:"CLEAR_CART",
 	checkout: payload => {
 		return {
 			type: actions.CHECKOUT_SAGA,
 			payload: payload,
 		}
 	},	
+	clearCart: () => {
+		return {
+			type: actions.CLEAR_CART
+		}
+	},
 	initData: () => ({ type: actions.INIT_DATA_SAGA }),
 	changeView: view => ({
 		type: actions.CHANGE_VIEW,

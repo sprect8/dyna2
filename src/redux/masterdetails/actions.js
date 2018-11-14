@@ -19,6 +19,19 @@
     EDIT_DATA: "EDIT_DATA",
     CREATE_DATA: "CREATE_DATA",
     CLOSED_EDIT: "CLOSED_EDIT",
+    FORM_MODIFIED: "FORM_MODIFIED",
+    LOAD_USER_SETTINGS: "LOAD_USER_SETTINGS",
+    LOAD_USER_SETTINGS_SAGA: "LOAD_USER_SETTINGS_SAGA",
+    loadUserSettings: () => {
+        return {
+            type: actions.LOAD_USER_SETTINGS_SAGA
+        }
+    },
+    formModified: () => {
+        return {
+            type: actions.FORM_MODIFIED
+        }
+    },
     closedEditBox: () => {
         return {
             type: actions.CLOSED_EDIT

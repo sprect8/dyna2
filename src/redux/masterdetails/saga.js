@@ -38,6 +38,20 @@ export function* loadData({ config, pageStart, total }) {
         return;
     }
 }
+export function* loadUserSettings() {
+    try {
+        let res = yield call(fetch, '/api/user-settings');
+        let json = yield res.json();
+        console.log(json);
+        // fail condition validation here
+        yield put({type:actions.LOAD_USER_SETTINGS, payload: json})
+    }
+    catch (e) {        
+        console.log("Login error", e);
+        yield put({ type: actions.DATA_ERROR, message: "Failed to save data because of " + e });
+        return;
+    }
+}
 export function* saveData({ config, row }) {
     let fetchData = {
         method: 'PUT',
@@ -103,6 +117,7 @@ export default function* () {
         takeEvery(actions.LOAD_DATA_SAGA, loadData),
         takeEvery(actions.UPDATE_DATA, updateData),
         takeEvery(actions.SAVE_DATA, saveData),
-        takeEvery(actions.DELETE_DATA, deleteData)
+        takeEvery(actions.DELETE_DATA, deleteData),
+        takeEvery(actions.LOAD_USER_SETTINGS_SAGA, loadUserSettings)
     ]);
 }

@@ -11,6 +11,13 @@ export default function masterDetailsReducer(state = initState, action) {
         rows: action.payload,
         selectedData: null,
       };
+    case actions.FORM_MODIFIED:
+      return {
+        ...state,
+        loaded: false,
+        success: false,
+        action: action.name,
+      }
     case actions.ACTION_SUCCESS:
       return {
         ...state,
@@ -34,6 +41,11 @@ export default function masterDetailsReducer(state = initState, action) {
         success: false,
         message: action.message,
         selectedData: null,
+      }
+    case actions.LOAD_USER_SETTINGS:
+      return {
+        ...state,
+        profile: action.payload
       }
     case actions.DELETE_SUCCESS:
       return {

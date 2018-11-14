@@ -16,6 +16,12 @@ export default (state = initState, action) => {
         products: action.payload.products,
         loadingInitData: true
       };
+    case actions.CLEAR_CART:
+      return {
+        ...state,
+        productQuantity: [],
+        products: {}
+      }
     case actions.CHANGE_VIEW:
       return {
         ...state,

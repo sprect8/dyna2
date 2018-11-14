@@ -69,6 +69,9 @@ class OrderInfo extends Component {
           <Button disabled={this.props.productQuantity.length === 0} variant="raised" color="primary" className="orderBtn" onClick={this.handleClicked}>
             Place Order
           </Button>
+          <Button onClick={this.props.clearCart}>
+            Next Order
+          </Button>
         </div>
       </div>
     );

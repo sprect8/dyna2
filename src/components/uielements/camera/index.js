@@ -27,6 +27,7 @@ class PictureBox extends React.Component {
     };
 
     onFileLoad = (event, file) => {
+        console.log(this.props.name);
         //getBase64(event.target.files[0]);
         var reader = new FileReader();
         reader.readAsDataURL(event.target.files[0]);
@@ -116,18 +117,18 @@ class PictureBox extends React.Component {
                 <Button onClick={() => { this.setState({ open: true }) }} color="primary">Take Photo</Button>
                 <input
                     accept="image/*"
-                    id="contained-button-file"
+                    id={"contained-button-file" + this.props.name}
                     type="file"
                     style={{ "display": "none" }}
                     onChange={this.onFileLoad}
                 />
-                <label htmlFor="contained-button-file">
-                    <Button variant="contained" component="span">
+                <label htmlFor={"contained-button-file" + this.props.name}>
+                    <Button variant="contained" component="span" id={"upload-"+this.props.name}>
                         Upload Photo
                         </Button>
                 </label>
                 <br/>
-                <img src={this.state.snapshot} style={{"width":"40%"}}/>
+                <img id={this.props.name} src={this.state.snapshot} style={{"width":"40%"}}/>
             </div>
         )
     }

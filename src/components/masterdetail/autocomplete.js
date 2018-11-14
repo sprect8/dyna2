@@ -45,6 +45,7 @@ export default class Async extends React.Component {
                     className={this.state.error ? "has-error" : ""}
                     {...this.state}
                     minLength={2}
+                    disabled={this.props.disabled}
                     filterBy={() => { return true }}
                     onSearch={this._handleSearch}
                     selected={this.state.selected}
