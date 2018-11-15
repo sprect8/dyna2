@@ -84,6 +84,16 @@ class FormDialog extends React.Component {
         let data = this.state.data;
         data[name] = event.target.value;
         this.setState({ data });
+        if (this.props.notifyValid) {
+            if (this.timerValue) {
+                window.clearTimeout(this.timerValue);
+
+                this.timerValue = window.setTimeout(()=>{
+                    this.props.notifyValid(this.props.name, this.validate());
+                    this.timerValue = 0;
+                }, 1000);
+            }
+        }
     };
 
     createControl = (control, value) => {
@@ -182,10 +192,7 @@ class FormDialog extends React.Component {
         return this.props.onClose ? this.props.onClose() : null;
     };
 
-    handleSave = () => {
-        // validate all
-        // if invalid set state to validating and force mark invalid
-
+    validate = () => {
         let allValid = true;
 
         this.props.config.columns.forEach(x => {
@@ -193,6 +200,15 @@ class FormDialog extends React.Component {
                 allValid = false;
             }
         })
+
+        return allValid;
+    }
+
+    handleSave = () => {
+        // validate all
+        // if invalid set state to validating and force mark invalid
+
+        let allValid = this.validate();
 
         if (!allValid) {
             this.setState({ validating: true })
@@ -220,6 +236,10 @@ class FormDialog extends React.Component {
 
         if (!props.updateSuccess && !props.updateError) {
             this.setState({ loading: false, success: false, error: false, message: "" });
+        }
+
+        if (props.validating !== this.props.validating) {
+            this.setState({validating: props.validating})
         }
     }
 

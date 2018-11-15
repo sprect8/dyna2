@@ -253,6 +253,7 @@ function getConfiguration() {
     "tableName": "receipts",
     "displayName": "Receipts Records",
     "key": "recp_id",
+    "display": "recp_id",
     "description": "These are your Receipt records, edit, add, remove and view any details",
     "columns": [
       { "name": "recp_id", "display": "Receipts Id", "type": "number", "sequence": "recp_id_seq", "mandatory": true, "unique": true, "key": true },

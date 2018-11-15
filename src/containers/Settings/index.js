@@ -47,12 +47,12 @@ const settings = {
 	"columns": [
 		{ "name": "sett_id", "display": "Setting ID", "type": "number", "sequence": "cate_id_seq", "mandatory": true, "unique": true, "key": true },
 		{ "name": "sett_user_id", "display": "User ID", "type": "number", "mandatory": true, "unique": true, "disabled": true },
-		{ "name": "sett_company_name", "display": "Company Name", "type": "text" },
+		{ "name": "sett_company_name", "display": "Company Name", "type": "text", "mandatory": true},
 		{ "name": "sett_company_logo", "display": "Logo", "type": "picture" },
 		{ "name": "sett_company_motto", "display": "Motto", "type": "text" },
 		{ "name": "sett_company_email", "display": "Email", "type": "text" },
 		{ "name": "sett_company_phone", "display": "Phone", "type": "text" },
-		{ "name": "sett_indt_id", "display": "Industry", "type": "text" }
+		{ "name": "sett_indt_id", "display": "Industry", "type": "text", "lov": ["Food and Beverage", "Clothing", "Local Spa", "Beauty Products", "Retail"] }
 	]
 }
 
@@ -115,8 +115,15 @@ class Settings extends React.Component {
 		records: [],
 		user: {},
 		settings: {},
-		loadingRows: true,
+		loadingRows: true,		
 	};
+
+	validating = (name, status) => {
+		if (!this.validate) {
+			this.validate = {"personal": false, "company": false}
+		}
+		this.validate[name] = status;
+	}
 
 	componentDidMount = () => {
 		this.props.loadUserSettings();
@@ -168,27 +175,11 @@ class Settings extends React.Component {
 		}
 	}
 
-	handleClickOpen = () => {
-		// clear items
-		let data = {};
-		this.props.config.columns.forEach(x => {
-			data[x.name] = "";
-		});
-		data[this.props.config.key] = null;
-		//this.setState({ open: true, sel: data });
-		this.props.openForNew(data);
-	};
-
 	handleClose = () => {
 		this.props.closedEditBox();
 		this.setState({ open: false });
 
 	};
-
-	handleEditRow = (row) => {
-		//this.setState({open: true, sel: row});
-		this.props.openToEdit(row);
-	}
 
 	handleUpdate = (record) => {
 		console.log(this.props.saveData);
@@ -197,6 +188,19 @@ class Settings extends React.Component {
 		//let st = this.state.records;
 		//st.push(record);
 		//this.setState({records:st, open: false});
+	}
+
+	handleSave = () => {
+		// company validation is important
+		// personal default is valid; but if they change it can be invalid
+		// without change, personal becomes valid (undefined) so we check false
+		if (!this.validate || this.validate["personal"] == false || !this.validate["company"]) {
+			this.setState({validating: true});
+			return;
+		}
+		else {
+			this.setState({validating: false, loading: true, success: false, error: false});
+		}
 	}
 
 	render() {
@@ -213,10 +217,13 @@ class Settings extends React.Component {
 			<FullColumn>
 				<h3>Personal</h3>
 				<FormEditView config={users} open={this.state.open}
+					name="personal"
 					updateError={this.state.error}
 					updateSuccess={this.state.saved}
 					message={this.state.message}
+					notifyValid={this.validating}
 
+					validating = {this.state.validating}
 					onClose={this.handleClose}
 					onUpdate={this.handleUpdate}
 					data={this.state.user}
@@ -226,13 +233,16 @@ class Settings extends React.Component {
 			<FullColumn>
 				<h3>Company</h3>
 				<FormEditView config={settings} open={this.state.open}
+					name="company"
 					updateError={this.state.error}
 					updateSuccess={this.state.saved}
 					message={this.state.message}
+					notifyValid={this.validating}
 
 					onClose={this.handleClose}
 					onUpdate={this.handleUpdate}
 					data={this.state.settings}
+					validating = {this.state.validating}
 					isPanel={true}
 				/>
 			</FullColumn>
