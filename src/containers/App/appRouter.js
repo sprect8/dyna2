@@ -61,6 +61,10 @@ const routes = [
     {
         path: 'user-settings',
         component: asyncComponent(() => import('../Settings/'))
+    },
+    {
+        path: 'receipts-manage',
+        component: asyncComponent(() => import('../ReceiptManage/'))
     }
 ];
 

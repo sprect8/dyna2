@@ -20,13 +20,22 @@ import {
 } from '../../../components/utility/rowColumn';
 import CheckoutPageWrapper from './checkout.style';
 
+
+function getDate() {
+  let val = new Date().toISOString()
+
+  val = val.substring(0, val.indexOf("."));
+
+  return val;
+}
+
 const styles = theme => ({});
 const { checkout, clearCart } = actions;
 
 class Checkout extends React.Component {
   state = {
-    loading: false
-
+    loading: false,
+    timestamp: getDate()
   }
   handleChanged = (name, value) => {
     this.setState({ [name]: value })
@@ -76,7 +85,8 @@ class Checkout extends React.Component {
         "latitude": lat,
         "staff_id": that.state.recp_staff_id,
         "staffName": that.state.staffName,
-        "sales": []
+        "sales": [],
+        "timestamp": that.state.recp_timestamp,
       }
 
       that.props.productQuantity.forEach(x => {

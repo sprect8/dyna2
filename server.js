@@ -58,7 +58,12 @@ function sidebarConfiguration() {
           label: 'Checkout',
           key: 'checkout-page',
           leftIcon: 'shopping_cart'
-        },
+        }/*,
+        {
+          label: 'Manage Receipts',
+          key: 'receipts-manage',
+          leftIcon: 'inbox'
+        },*/
       ]
     },
     {
@@ -1513,6 +1518,14 @@ function sendEmail(to, receiptObj) {
   });
 }
 
+function getDate() {
+  let val = new Date().toISOString()
+
+  val = val.substring(0, val.indexOf("."));
+
+  return val;
+}
+
 function registerReceiptService(app) {
   app.put('/saveReceipt', (req, res) => {
     let body = req.body;
@@ -1528,12 +1541,20 @@ function registerReceiptService(app) {
 
     let email = body.customerEmail || "Not Defined";
     let name = body.customerName || "Not Defined";
+
+    let timestamp = body.timestamp;
+
+    if (!timestamp || timestamp === "") {
+      timestamp = getDate();
+    }
+
+
     let receipt =
     {
       "recp_uuid": uuid(),
       "recp_customer": name,
       "recp_customer_email": email,
-      "recp_timestamp": new Date().toString(),
+      "recp_timestamp": timestamp,
       "recp_staff_id": body.staff_id,
       "recp_latitude": body.latitude,
       "recp_longitude": body.longitude,
@@ -1704,6 +1725,11 @@ router.get('/user/:userId', (req, res) => {
   });
 })
 
+router.get('/api/receipts-manage', function(req, res) {
+  // we return receipts list
+  // but we also return an array of items for each receipt
+})
+
 router.get('/tableProfiles', function (req, res) {
   // get the table configurations
 
@@ -1858,6 +1884,11 @@ app.post("/resetpass", function(req, res) {
     res.json({ success: false, message: "Failed to reset user password" });
   })
 })
+
+app.get("/uuid", function(req, res){
+  res.json({"uuid":uuid()});
+});
+
 app.post("/register", function (req, res) {
   // create a new user
   // we need to admin key when login, and this key is hard coded 

@@ -69,7 +69,35 @@ const styles = theme => ({
     },
 });
 
+async function getUUID() {
+    let value = await (fetch("/uuid"));
+    let json = await value.json();
+    return json.uuid;
+}
 
+async function getPosition(isLat) {
+    let promise = new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(function (position) {
+
+            // Get the coordinates of the current position.
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
+            if (isLat)
+                resolve(lat);
+            else
+                resolve(lng);
+        });
+    });
+
+    return promise;
+}
+
+
+async function getLongitude() {
+    let result = await navigator.geolocation.getCurrentPosition();
+
+    return result.coords.longitude;
+}
 
 class FormDialog extends React.Component {
     state = {
@@ -99,6 +127,22 @@ class FormDialog extends React.Component {
     };
 
     createControl = (control, value) => {
+        if (control.uuid && value === "") {
+            getUUID().then(r => {
+                this.handleChange(control.name)({ target: { value: r } })
+            });
+        }
+        if (control.latitude && value === "") {
+            getPosition(true).then(r => {
+                this.handleChange(control.name)({ target: { value: r } })
+            });
+        }
+
+        if (control.longitude && value === "") {
+            getPosition().then(r => {
+                this.handleChange(control.name)({ target: { value: r } })
+            });
+        }
         let error = (!value || value === "") && this.state.validating && control.mandatory && !control.key
         switch (control.type) {
             case "number":
@@ -140,6 +184,7 @@ class FormDialog extends React.Component {
                                 native
                                 error={error}
                                 fullWidth
+                                disabled={control.disabled}
                                 value={value ? value : ""}
                                 onChange={this.handleChange(control.name)}
                                 name={control.name}
@@ -161,6 +206,7 @@ class FormDialog extends React.Component {
                         id={control.name}
                         error={error}
                         fullWidth
+                        disabled={control.disabled}
                         label={control.display}
                         value={value}
                         onChange={this.handleChange(control.name)}
