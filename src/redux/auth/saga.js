@@ -77,6 +77,30 @@ export function* checkAuthorization() {
     });
   }
 }
+export function* resetPassword({payload}) {
+  let fetchData = {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  try {
+    let response = yield call(fetch, '/resetpass', fetchData);
+    let json = yield response.json();
+    if (json.success) {
+      yield put({ type: actions.RESETPASS, result: json });
+    }
+    else {
+      yield put({ type: actions.REGISTER_ERROR, error: json.message }); // server side error caught and handled
+    }
+  }
+  catch (e) {
+    yield put(actions.registerError(e)); // unhandled server side error
+    return;
+  }
+}
 
 export function* registerUser(payload) {
   let fetchData = {
@@ -110,6 +134,7 @@ export default function* rootSaga() {
     yield takeEvery(actions.LOGIN_REQUEST, loginRequest),
     yield takeEvery(actions.LOGIN_SUCCESS, loginSuccess),
     yield takeEvery(actions.LOGOUT_SAGA, logoutRequest),
-    yield takeEvery(actions.REGiSTER_REQUEST_SAGA, registerUser),
+    yield takeEvery(actions.REGiSTER_REQUEST_SAGA, registerUser),    
+    yield takeEvery(actions.RESETPASS_SAGA, resetPassword),
   ]);
 }

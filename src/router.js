@@ -14,13 +14,13 @@ const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
       isLoggedIn ? (
         <Component {...props} />
       ) : (
-        <Redirect
-          to={{
-            pathname: "/signin",
-            state: { from: props.location }
-          }}
-        />
-      )
+          <Redirect
+            to={{
+              pathname: "/signin",
+              state: { from: props.location }
+            }}
+          />
+        )
     }
   />
 );
@@ -44,10 +44,9 @@ const PublicRoutes = ({ history, isLoggedIn }) => (
         component={asyncComponent(() => import("./containers/Page/signin"))}
       />
       <Route
-        path="/auth0loginCallback"
-        render={props => {
-          Auth0.handleAuthentication(props);
-        }}
+        exact
+        path="/resetpass"
+        component={asyncComponent(() => import("./containers/Page/resetpassword"))}
       />
       <RestrictedRoute
         path="/dashboard"
@@ -67,7 +66,7 @@ const PublicRoutes = ({ history, isLoggedIn }) => (
       <Route
         exact
         path="/demopage"
-        component={asyncComponent(()=>import('./containers/CustomApp'))}
+        component={asyncComponent(() => import('./containers/CustomApp'))}
       />
       <Route
         exact

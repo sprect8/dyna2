@@ -15,7 +15,7 @@ import { fetch, get } from '../api';
 
 */
 
-export function* saveCompanyData(payload) {
+export function* saveCompanyData({payload}) {
     let fetchData = {
         method: 'PUT',
         body: JSON.stringify(payload),
@@ -27,8 +27,13 @@ export function* saveCompanyData(payload) {
     try {
         let res = yield call(fetch, '/api/company-settings', fetchData);
         let json = yield res.json();
-        console.log(json);
-        yield put({ type: actions.SAVE_COMPANY_SETTINGS, payload: json });
+        
+        if (json.success === false) {
+            yield put({ type: actions.DATA_ERROR, message: json.message});            
+        }
+        else {
+            yield put({ type: actions.SAVE_COMPANY_SETTINGS, payload: json });
+        }
         return;
     }
     catch (e) {
@@ -38,7 +43,7 @@ export function* saveCompanyData(payload) {
     }
 }
 
-export function* saveUserData(payload) {
+export function* saveUserData({payload}) {
     let fetchData = {
         method: 'PUT',
         body: JSON.stringify(payload),
@@ -51,7 +56,12 @@ export function* saveUserData(payload) {
         let res = yield call(fetch, '/api/user-settings', fetchData);
         let json = yield res.json();
         console.log(json);
-        yield put({ type: actions.SAVE_USER_SETTINGS, payload:json });
+        if (json.success === false) {
+            yield put({ type: actions.DATA_ERROR, message: json.message});            
+        }
+        else {
+            yield put({ type: actions.SAVE_USER_SETTINGS, payload:json });
+        }
         return;
     }
     catch (e) {

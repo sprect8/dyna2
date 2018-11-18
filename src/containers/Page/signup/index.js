@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Link, Redirect } from "react-router-dom";
+
 import { connect } from "react-redux";
 import signinImg from "../../../images/signin.svg";
 import TextField from "../../../components/uielements/textfield";
@@ -17,11 +19,11 @@ class SignUp extends Component {
   state = {
     redirectToReferrer: false,
     register: {
-      user_name:"",
+      user_name: "",
       user_password: "",
-      user_fname:"",
-      user_lname:"",
-      authKey: "",      
+      user_fname: "",
+      user_lname: "",
+      authKey: "",
       confirmPassword: ""
     },
     validate: false,
@@ -41,12 +43,12 @@ class SignUp extends Component {
 
     if (nextProps.success === true) {
       alert("User has been created successfully, please login");
-      this.props.history.push("/signin");      
+      this.props.history.push("/signin");
     }
     else if (nextProps.error && !this.shownError) {
       this.shownError = true;
       // alert("An error occurred trying to create the user, please check the details and try again");
-      this.setState({error:nextProps.error, open: true});
+      this.setState({ error: nextProps.error, open: true });
       return;
     }
   }
@@ -56,12 +58,12 @@ class SignUp extends Component {
     // validate then submit?
     let valid = true;
 
-    Object.keys(this.state.register).forEach(e=>{
+    Object.keys(this.state.register).forEach(e => {
       if (this.state.register[e] === "") valid = false;
     });
 
     if (!valid) {
-      this.setState({validate:true});
+      this.setState({ validate: true });
       return;
     }
 
@@ -69,7 +71,7 @@ class SignUp extends Component {
     // this.props.history.push("/dashboard");
   };
   handleClose = () => {
-    this.setState({open : false});
+    this.setState({ open: false });
   }
   changedValue = (event) => {
     let st = this.state
@@ -87,26 +89,37 @@ class SignUp extends Component {
 
         <div className="mateSignInPageContent">
           <div className="mateSignInPageLink">
+            <Link to="#">
+              <button className="mateSignInPageLinkBtn" type="button" onClick={() => { this.props.history.push("/signin"); }}>
+                Login
+              </button>
+              <button className="mateSignInPageLinkBtn active" type="button" onClick={() => { this.props.history.push("/signup"); }}>
+                Sign Up
+              </button>
+              <button className="mateSignInPageLinkBtn" type="button" onClick={() => { this.props.history.push("/resetpass"); }}>
+                Reset Password
+              </button>
+            </Link>
           </div>
           <Scrollbars style={{ height: "100%" }}>
-              <p style={{"textAlign":"center"}}>
-                <img src={"/dyna-logo2.png"} alt="Logo" />
+            <p style={{ "textAlign": "center" }}>
+              <img src={"/dyna-logo2.png"} alt="Logo" />
+            </p>
+            <p>
+              Welcome to TM Dynapreneur 2018, This is the registration page. Only authorized users may use this
               </p>
-              <p>
-                Welcome to TM Dynapreneur 2018, This is the registration page. Only authorized users may use this
-              </p>
-              <p class="hasError">
-                {this.state.error ? <SnackbarContent message={"Failed to create User - Please check configuration and try again"}  /> : ""}
-              </p>
-              <Snackbar
-                anchorOrigin={{ vertical:"top", horizontal:"center" }}
-                open={this.state.open}
-                onClose={this.handleClose}
-                ContentProps={{
-                  'aria-describedby': 'message-id',
-                }}
-                message={<span id="message-id">Failed to create the User; please check your settings and try again</span>}
-              />
+            <p class="hasError">
+              {this.state.error ? <SnackbarContent message={"Failed to create User - Please check configuration and try again"} /> : ""}
+            </p>
+            <Snackbar
+              anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              open={this.state.open}
+              onClose={this.handleClose}
+              ContentProps={{
+                'aria-describedby': 'message-id',
+              }}
+              message={<span id="message-id">Failed to create the User; please check your settings and try again</span>}
+            />
             <div className="mateSignInPageForm">
               <div className="mateInputWrapper">
                 <TextField
@@ -155,7 +168,7 @@ class SignUp extends Component {
                   error={this.state.validate && this.state.register.user_password === ""}
                 />
               </div>
-              
+
               <div className="mateInputWrapper">
                 <TextField
                   name="authKey"
@@ -165,7 +178,7 @@ class SignUp extends Component {
                   type="Password"
                   onChange={this.changedValue}
                   value={this.state.register.authKey}
-                  error={this.state.validate && this.state.register.authKey === ""}     
+                  error={this.state.validate && this.state.register.authKey === ""}
                 />
               </div>
               <div className="mateInputWrapper">
@@ -174,10 +187,10 @@ class SignUp extends Component {
                   label="Confirm Password"
                   placeholder="Confirm Password"
                   margin="normal"
-                  type="Password"             
+                  type="Password"
                   onChange={this.changedValue}
                   value={this.state.register.confirmPassword}
-                  error={this.state.validate && this.state.register.confirmPassword !== this.state.register.user_password}     
+                  error={this.state.validate && this.state.register.confirmPassword !== this.state.register.user_password}
                 />
               </div>
             </div>

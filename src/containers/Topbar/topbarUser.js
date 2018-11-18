@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import IntlMessages from '../../components/utility/intlMessages';
 import TopbarDropdownWrapper from './topbarDropdown.style';
 import { withRouter } from 'react-router-dom';
+import actions from '../../redux/masterdetails/actions';
 
 import {
   IconButtons,
@@ -19,6 +20,8 @@ import authAction from '../../redux/auth/actions';
 import Image from '../../images/user.jpg';
 
 const { logout } = authAction;
+
+const { loadUserSettings } = actions;
 
 const theme = createMuiTheme({
   overrides: {
@@ -40,6 +43,9 @@ class TopbarUser extends Component {
     visible: false,
     anchorEl: null,
   };
+  componentDidMount() {
+    this.props.loadUserSettings();
+  }
   hide = () => {
     this.setState({ visible: false });
   };
@@ -49,17 +55,23 @@ class TopbarUser extends Component {
       anchorEl: findDOMNode(this.button),
     });
   };
+  componentWillReceiveProps = (props) => {
+    console.log("Top Bar", props);
+    if (props.profile && props.profile.user) {
+      this.setState({userName: props.profile.user.user_fname + " " + props.profile.user.user_lname, image:"/api/user/" + props.profile.user.user_id})
+    }
+  }
   render() {
     const content = (
       <TopbarDropdown>
         <UserInformation>
           <div className="userImage">
-            <img src={Image} alt="user" />
+            <img src={this.state.image} alt="user" />
           </div>
 
           <div className="userDetails">
-            <h3>John Doe</h3>
-            <p>Sr. Marketing Officer</p>
+            <h3>{this.state.userName}</h3>
+            <p>Dynapreneur</p>
           </div>
         </UserInformation>
 
@@ -92,7 +104,7 @@ class TopbarUser extends Component {
           onClick={this.handleVisibleChange}
         >
           <div className="userImgWrapper">
-            <img src={Image} alt="#" />
+            <img src={this.state.image} alt="#" />
           </div>
         </IconButtons>
 
@@ -122,8 +134,9 @@ class TopbarUser extends Component {
 
 export default withRouter(connect(
   state => ({
-    ...state.App,
+    ...state.App,    
+		...state.MasterDetailsReducer,
     customizedTheme: state.ThemeSwitcher.topbarTheme,
   }),
-  { logout }
+  { logout, loadUserSettings }
 )(TopbarUser));

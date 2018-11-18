@@ -63,6 +63,9 @@ class SignIn extends Component {
               <button className="mateSignInPageLinkBtn" type="button" onClick={()=>{    this.props.history.push("/signup");}}>
                 Sign Up
               </button>
+              <button className="mateSignInPageLinkBtn" type="button" onClick={()=>{    this.props.history.push("/resetpass");}}>
+                Reset Password
+              </button>
             </Link>
           </div>
           <Scrollbars style={{ height: "100%" }}>

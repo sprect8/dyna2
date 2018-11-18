@@ -378,6 +378,7 @@ function getUserStructures() {
       { "name": "user_timestamp", "display": "Created Date", "type": "timestamp" },
       { "name": "user_status", "display": "Current Status", "type": "text", "mandatory": true, "lov": ["ACTIVE", "INACTIVE", "PENDING"] },
       { "name": "user_password", "display": "Password Hash", "type": "text", "mandatory": true },
+      { "name": "user_user_pics", "display": "User Photo", "type": "picture" },
     ]
   }
   const roles = {
@@ -1673,6 +1674,36 @@ router.use(function (req, res, next) {
 
 generateRoutes(router, getConfiguration());
 
+router.get('/user/:userId', (req, res) => {
+
+  // query for first 20 items matching the search
+  // if empty we return firt 20 items
+  // order it by the display
+
+  let query = req.params.userId;
+  let user = req.decoded.admin;
+
+  sharedPersistenceMapping["users"].findById(query).then(inst => {
+    let img = "";
+    let type = "image/png";
+    if (inst === null || !inst.user_user_pics || inst.user_user_pics === "" || inst.user_id !== user) {
+      // 
+      // send not-found image
+      img = new Buffer(noImage, "base64");
+    }
+    else {
+      let pic = inst.user_user_pics.substring(inst.user_user_pics.indexOf(","));
+      img = new Buffer(pic, "base64");
+    }
+
+    res.writeHead(200, {
+      'Content-Type': type,
+      'Content-Length': img.length
+    });
+    res.end(img);
+  });
+})
+
 router.get('/tableProfiles', function (req, res) {
   // get the table configurations
 
@@ -1709,6 +1740,8 @@ router.get('/user-settings', function (req, res) {
       if (!r) {
         r = { "sett_user_id": req.decoded.admin };
       }
+      u.user_password = "";
+      u.user_user_pics = "/api/user/" + req.decoded.admin; // do not send
       let results = { user: u, settings: r }
 
       res.json(results);
@@ -1724,20 +1757,27 @@ router.put('/user-settings', function (req, res) {
   let body = req.body;
 
   if (body.user_id !== req.decoded.admin) {
+    console.log("No permission because the user_id does not match the admin id", body.user_id, req.decoded.admin)
     res.status(403).json({ success: false, "message": "No permission to edit user" });
     return;
   }
 
   // resolve references first
   // assume data saved will be from the id (and not the value)
-  sharedPersistenceMapping[tableName].findById(body["user_id"]).then(inst => {
+  sharedPersistenceMapping["users"].findById(body["user_id"]).then(inst => {
     if (!inst) {
       res.json({ "success": false, message: "Failed to update because we could not find the instance" });
       return;
     }
 
+    if (body.user_password !== "") {
+      body.user_password = bcrypt.hashSync(body.user_password, 10);
+      console.log("Password was updated");
+    } 
+
     inst.update(body)
       .then(i => {
+        i.user_password = "";
         res.json(i); // return as json instance
       })
       .catch(e => {
@@ -1755,9 +1795,22 @@ router.put('/company-settings', function (req, res) {
     return;
   }
 
+  if (!body.sett_id) {
+    
+    sharedPersistenceMapping["settings"].create(body)
+      .then(i => {
+        res.json(i); // return as json instance
+      })
+      .catch(e => {
+        console.log(e);
+        res.status(400).json({ "success": false, message: "Failed because of " + e });
+      });
+    return;
+  }
+
   // resolve references first
   // assume data saved will be from the id (and not the value)
-  sharedPersistenceMapping[tableName].findById(body["sett_id"]).then(inst => {
+  sharedPersistenceMapping["settings"].findById(body["sett_id"]).then(inst => {
     if (!inst) {
       res.json({ "success": false, message: "Failed to update because we could not find the instance" });
       return;
@@ -1777,7 +1830,34 @@ router.put('/company-settings', function (req, res) {
       });
   })
 })
+app.post("/resetpass", function(req, res) {
+  let payload = req.body;
 
+  if (payload.authKey !== "Dynapreneur2018") {
+    res.json({success: false, message:"Invalid Auth Key"});
+    return;
+  }
+  payload.user_timestamp = new Date().getTime();
+  payload.user_password = bcrypt.hashSync(payload.user_password, 10);
+
+  
+  sharedPersistenceMapping["users"].findOne({where:{user_name: payload.user_name}}).then(r => {
+    if (!r) {
+      res.json({ success: false, message: "Failed to reset password, user not found" })
+    }
+    else {
+      r.update(payload, { fields: Object.keys(payload).filter(e => { return e.startsWith("user_"); }) }).then(inst=>{
+        res.json({ success: true, userId: inst.user_id });
+      })      
+      .catch(e=>{    
+        res.json({ success: false, message: "Failed to reset user password" });
+      })
+    }
+  }).catch(e => {
+    console.log("Failed creating user because of ", e);
+    res.json({ success: false, message: "Failed to reset user password" });
+  })
+})
 app.post("/register", function (req, res) {
   // create a new user
   // we need to admin key when login, and this key is hard coded 

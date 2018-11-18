@@ -1,12 +1,64 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from "react-router-dom";
 import Button from '../../../components/uielements/button';
 import IntlMessages from '../../../components/utility/intlMessages';
 import signinImg from '../../../images/signup.svg';
 import TextField from '../../../components/uielements/textfield';
 import SignInStyleWrapper from './resetPassword.style';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+import Snackbar from '@material-ui/core/Snackbar';
+import { Row, HalfColumn, FullColumn } from '../../../components/utility/rowColumn';
+import authAction from "../../../redux/auth/actions";
+import { connect } from "react-redux";
+
+const { resetPassword } = authAction;
 
 class ResetPassword extends Component {
+  state = {
+    redirectToReferrer: false,
+    register: {
+      user_name: "",
+      user_password: "",
+      authKey: "",
+      confirmPassword: ""
+    },
+    validate: false,
+    open: false,
+    success: false,
+    error: "",
+    message: "",
+  };
+  validateAndSubmit = () => {
+    // confirm all details correct
+    let register = this.state.register;
+    let valid = register.user_name !== "";
+    valid = valid && register.user_password === register.confirmPassword
+    valid = valid && register.user_password !== "";
+    valid = valid && register.authKey !== "";
+
+    if (!valid) {
+      this.setState({validate: true});
+    }
+    else {
+      this.setState({validate: false});
+      this.shownError = false;
+
+      this.props.resetPassword(register);
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    
+    if (nextProps.success === true) {
+      alert("User password reset successfully, please login");
+      this.props.history.push("/signin");
+    }
+    else if (nextProps.error && !this.shownError) {
+      this.shownError = true;
+      alert("An error occurred trying to create the user, please check the details and try again");
+      this.setState({ error: nextProps.error, open: true });
+      return;
+    }
+  }
   render() {
     return (
       <SignInStyleWrapper className="mateSignInPage">
@@ -17,29 +69,56 @@ class ResetPassword extends Component {
         </div>
 
         <div className="mateSignInPageContent">
+          <div className="mateSignInPageLink">
+            <Link to="#">
+              <button className="mateSignInPageLinkBtn" type="button" onClick={() => { this.props.history.push("/signin"); }}>
+                Login
+              </button>
+              <button className="mateSignInPageLinkBtn" type="button" onClick={() => { this.props.history.push("/signup"); }}>
+                Sign Up
+              </button>
+              <button className="mateSignInPageLinkBtn active" type="button" onClick={() => { this.props.history.push("/resetpass"); }}>
+                Reset Password
+              </button>
+            </Link>
+          </div>
           <div className="mateSignInPageGreet">
-            <h1>
-              <IntlMessages id="page.resetPassSubTitle" />
-            </h1>
+            <p style={{ "textAlign": "center" }}>
+              <img src={"/dyna-logo2.png"} alt="Logo" />
+            </p>
             <p>
-              <IntlMessages id="page.resetPassDescription" />
+              Welcome to TM Dynapreneur 2018, This is the registration page. Only authorized users may use this
+              </p>
+            <p class="hasError">
+              {this.state.error ? <SnackbarContent message={"Failed to create User - Please check configuration and try again"} /> : ""}
             </p>
           </div>
-          <div className="mateSignInPageForm">
-            <div className="mateInputWrapper">
-              <TextField label="Enter new password" margin="normal" />
-            </div>
+          <Row>
+            <FullColumn>
 
-            <div className="mateInputWrapper">
-              <TextField label="Confirm password" margin="normal" />
-            </div>
+              <div className="mateInputWrapper">
+                <TextField error={this.state.validate && this.state.register.user_name === ""} fullWidth label="Enter Username" value={this.state.register.user_name} onChange={(e) => {let r = this.state.register; r.user_name = e.target.value; this.setState({register: r})}} margin="normal" />
+              </div>
+              <div className="mateInputWrapper">
+                <TextField error={this.state.validate && this.state.register.authKey === ""} type="password" fullWidth label="Enter Dynapreneur Key" value={this.state.register.authKey} onChange={(e) => {let r = this.state.register; r.authKey = e.target.value; this.setState({register: r})}}  margin="normal" />
+              </div>
 
-            <div className="mateLoginSubmit">
-              <Button type="primary">
-                <IntlMessages id="page.resetPassSave" />
-              </Button>
-            </div>
-          </div>
+              <div className="mateInputWrapper">
+                <TextField error={this.state.validate && (this.state.register.user_password === "" || this.state.register.confirmPassword !== this.state.register.user_password)} type="password" fullWidth label="Enter new password" value={this.state.register.user_password} onChange={(e) => {let r = this.state.register; r.user_password = e.target.value; this.setState({register: r})}}  margin="normal" />
+              </div>
+              <div className="mateInputWrapper">
+                <TextField error={this.state.validate && (this.state.register.confirmPassword === "" || this.state.register.confirmPassword !== this.state.register.user_password)} type="password" fullWidth label="Confirm password" value={this.state.register.confirmPassword} onChange={(e) => {let r = this.state.register; r.confirmPassword = e.target.value; this.setState({register: r})}}  margin="normal" />
+              </div>
+
+              <div className="mateLoginSubmit">
+                <Button type="primary" onClick={this.validateAndSubmit}>
+                  <IntlMessages id="page.resetPassSave" />
+                </Button>
+              </div>
+            
+            </FullColumn>
+            
+          </Row>
 
           <p className="homeRedirection">
             Or go back to{' '}
@@ -53,4 +132,11 @@ class ResetPassword extends Component {
   }
 }
 
-export default ResetPassword;
+export default connect(
+  state => ({
+    success: state.Auth.success,
+    message: state.Auth.message,
+    error: state.Auth.error
+  }),
+  { resetPassword }
+)(ResetPassword);

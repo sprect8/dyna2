@@ -23,6 +23,11 @@ export default function authReducer(state = initState, action) {
         success: action.result.success,
         message: action.result.message,
       }
+    case actions.RESETPASS:
+      return {
+        success: action.result.success,
+        message: action.result.message
+      }
     case actions.REGISTER_ERROR:
       return {
         success: false,

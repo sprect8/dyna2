@@ -60,7 +60,6 @@ const SignInStyleWrapper = styled.div`
     }
     display: flex;
     flex-direction: column;
-    justify-content: center;
     padding: 70px 60px;
     @media (min-width: 1400px) {
       padding: 85px;
@@ -106,7 +105,6 @@ const SignInStyleWrapper = styled.div`
       }
     }
     .mateSignInPageGreet {
-      padding: 30px 0;
       padding-top: 15px;
 
       h1 {
@@ -134,12 +132,11 @@ const SignInStyleWrapper = styled.div`
         margin-top: -25px;
       }
       .mateInputWrapper {
-        margin-right: 10px;
-        width: calc(40% - 10px);
+        margin-right: 15px;
+        width: calc(50% - 15px);
         @media (max-width: 480px) {
           margin-right: 0px;
           width: 100%;
-          margin-top: 15px;
         }
         > div {
           width: 100%;

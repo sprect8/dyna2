@@ -9,6 +9,12 @@ const actions = {
   REGISTER_REQUEST: 'REGISTER_REQUEST',
   REGiSTER_REQUEST_SAGA: 'REGISTER_REQUEST_SAGA',
   REGISTER_ERROR: 'REGISTER_ERROR',
+  RESETPASS: "RESET_PASSWORD",
+  RESETPASS_SAGA: "RESET_PASSWORD_SAGA",
+  resetPassword: payload => ({
+    type: actions.RESETPASS_SAGA,
+    payload
+  }),
   checkAuthorization: () => ({ type: actions.CHECK_AUTHORIZATION }),
   login: payload => ({
     type: actions.LOGIN_REQUEST,

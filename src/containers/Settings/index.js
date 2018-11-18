@@ -62,7 +62,7 @@ const users = {
 		{ "name": "user_fname", "display": "First Name", "type": "text", "mandatory": true },
 		{ "name": "user_lname", "display": "Surname", "type": "text", "mandatory": true },
 		{ "name": "user_email", "display": "Email", "type": "text", "mandatory": false },
-		{ "name": "user_user_pic", "display": "User Photo", "type": "picture" },
+		{ "name": "user_user_pics", "display": "User Photo", "type": "picture" },
 	]
 }
 
@@ -135,9 +135,14 @@ class Settings extends React.Component {
 		this.props.loadUserSettings();
 	}
 
+	componentWillUnmount = () => {
+		console.log("Unmounted");
+	}
+
 	componentWillReceiveProps = (props) => {
-		console.log(props)
-		if (props.profile && !this.props.profile) {
+		console.log(props);
+		console.log(this.state);
+		if (props.profile && (!this.props.profile || !this.state.user.user_id)) {
 			this.setState({ user: props.profile.user, settings: props.profile.settings })
 			let userValid = true;
 			let companyValid = false;
@@ -146,6 +151,40 @@ class Settings extends React.Component {
 			}
 
 			this.validate = { personal: userValid, company: companyValid };
+		}
+
+		if (props.success && (this.state.statusDetails === SAVING || this.state.statusCompany === SAVING)) {
+			// message
+			swal(
+				'Saved!',
+				'Your Settings have been Saved successfully.',
+				'success'
+			)
+		}
+
+		if (!props.success && (this.state.statusDetails === SAVING || this.state.statusCompany === SAVING)) {
+			// message
+			swal(
+				'Failed to Save!',
+				'Your Settings have not been saved. Error was ' + props.message,
+				'error'
+			)
+		}
+
+		if (this.state.statusCompany === SAVING && props.success) {
+			this.setState({statusCompany : SAVED});
+		}
+
+		if (this.state.statusDetails === SAVING && props.success) {
+			this.setState({statusDetails : SAVED});
+		}
+
+		if (this.state.statusDetails === SAVING && !props.success && props.message) {
+			this.setState({statusDetails : ERROR})
+		}
+
+		if (this.state.statusCompany === SAVING && !props.success && props.message) {
+			this.setState({statusCompany : ERROR})
 		}
 	}
 
@@ -192,15 +231,23 @@ class Settings extends React.Component {
 			}
 			this.setState({ statusDetails: SAVING, validatingUser: false });
 			// save user details
+			if (this.state.newPass !== "") {
+				this.state.user.user_password = this.state.newPass;
+			}
 			this.props.saveUserSettings(this.state.user);
 		}
 	}
 
 	render() {
-		const { success, error } = this.state;
 
 		let loading = this.state.statusCompany === LOADING || this.state.statusDetails === LOADING ||
 			this.state.statusCompany === SAVING || this.state.statusDetails === SAVING;
+
+		let success = this.state.statusCompany === SAVED;
+		let successSettings = this.state.statusDetails === SAVED;
+
+		let error = this.state.statusCompany === ERROR;
+		let errorSettings = this.state.statusDetails === ERROR;
 
 		const { classes } = this.props;
 		const buttonClassname = classNames({
@@ -262,7 +309,7 @@ class Settings extends React.Component {
 						onClick={this.handleSaveUser}
 						disabled={loading}
 					>
-						{success ? <CheckIcon /> : (error ? <CrossIcon /> : <SaveIcon />)}
+						{successSettings ? <CheckIcon /> : (errorSettings ? <CrossIcon /> : <SaveIcon />)}
 					</Button>
 
 					{loading && <CircularProgress size={68} className={classes.fabProgress} style={{ left: "0px", bottom: "unset" }} />}
