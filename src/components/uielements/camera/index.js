@@ -55,7 +55,7 @@ class PictureBox extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        this.setState({ open: props.open });
+        this.setState({ open: props.open ? true : false });
         if (props.data) {
             this.setState(props.data);
         }

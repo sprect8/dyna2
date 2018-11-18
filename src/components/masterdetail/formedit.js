@@ -87,12 +87,14 @@ class FormDialog extends React.Component {
         if (this.props.notifyValid) {
             if (this.timerValue) {
                 window.clearTimeout(this.timerValue);
-
-                this.timerValue = window.setTimeout(()=>{
-                    this.props.notifyValid(this.props.name, this.validate());
-                    this.timerValue = 0;
-                }, 1000);
             }
+
+            this.timerValue = window.setTimeout(() => {
+                this.props.notifyValid(this.props.name, this.validate());
+                this.props.updateValue(name, data[name]);
+                this.timerValue = 0;
+            }, 1000);
+
         }
     };
 
@@ -239,7 +241,7 @@ class FormDialog extends React.Component {
         }
 
         if (props.validating !== this.props.validating) {
-            this.setState({validating: props.validating})
+            this.setState({ validating: props.validating })
         }
     }
 

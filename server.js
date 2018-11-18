@@ -1273,7 +1273,7 @@ function createLOVService(app, conf) {
     try {
       r(where);
     }
-    catch(e) {
+    catch (e) {
       delete r[display];
       r(where);
     }
@@ -1721,7 +1721,61 @@ router.get('/user-settings', function (req, res) {
 })
 
 router.put('/user-settings', function (req, res) {
+  let body = req.body;
 
+  if (body.user_id !== req.decoded.admin) {
+    res.status(403).json({ success: false, "message": "No permission to edit user" });
+    return;
+  }
+
+  // resolve references first
+  // assume data saved will be from the id (and not the value)
+  sharedPersistenceMapping[tableName].findById(body["user_id"]).then(inst => {
+    if (!inst) {
+      res.json({ "success": false, message: "Failed to update because we could not find the instance" });
+      return;
+    }
+
+    inst.update(body)
+      .then(i => {
+        res.json(i); // return as json instance
+      })
+      .catch(e => {
+        console.log(e);
+        res.status(400).json({ success: false, message: "Failed internal error " + e });
+      });
+  })
+})
+
+router.put('/company-settings', function (req, res) {
+  let body = req.body;
+
+  if (body.sett_user_id !== req.decoded.admin) {
+    res.status(403).json({ success: false, "message": "No permission to edit company settings" });
+    return;
+  }
+
+  // resolve references first
+  // assume data saved will be from the id (and not the value)
+  sharedPersistenceMapping[tableName].findById(body["sett_id"]).then(inst => {
+    if (!inst) {
+      res.json({ "success": false, message: "Failed to update because we could not find the instance" });
+      return;
+    }
+
+    if (inst.owner_user_id !== req.decoded.admin) {
+      res.status(403).json({ success: false, "message": "No permission to edit company settings" });
+      return;
+    }
+    inst.update(body)
+      .then(i => {
+        res.json(i); // return as json instance
+      })
+      .catch(e => {
+        console.log(e);
+        res.status(400).json({ success: false, message: "Failed internal error " + e });
+      });
+  })
 })
 
 app.post("/register", function (req, res) {

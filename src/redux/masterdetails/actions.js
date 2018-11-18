@@ -22,11 +22,28 @@
     FORM_MODIFIED: "FORM_MODIFIED",
     LOAD_USER_SETTINGS: "LOAD_USER_SETTINGS",
     LOAD_USER_SETTINGS_SAGA: "LOAD_USER_SETTINGS_SAGA",
+    SAVE_USER_SETTINGS: "SAVE_USER_SETTINGS",
+    SAVE_USER_SETTINGS_SAGA: "SAVE_USER_SETTINGS_SAGA",
+    SAVE_COMPANY_SETTINGS: "SAVE_COMPANY_SETTINGS",
+    SAVE_COMPANY_SETTINGS_SAGA: "SAVE_COMPANY_SETTINGS_SAGA",
+    
     loadUserSettings: () => {
         return {
             type: actions.LOAD_USER_SETTINGS_SAGA
         }
     },
+    saveUserSettings: (payload) => {
+        return {
+            type: actions.SAVE_USER_SETTINGS_SAGA,
+            payload: payload
+        }
+    },
+    saveCompanySettings:(payload) => {
+        return {
+            type: actions.SAVE_COMPANY_SETTINGS_SAGA,
+            payload: payload
+        }
+    }, 
     formModified: () => {
         return {
             type: actions.FORM_MODIFIED

@@ -15,6 +15,52 @@ import { fetch, get } from '../api';
 
 */
 
+export function* saveCompanyData(payload) {
+    let fetchData = {
+        method: 'PUT',
+        body: JSON.stringify(payload),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try {
+        let res = yield call(fetch, '/api/company-settings', fetchData);
+        let json = yield res.json();
+        console.log(json);
+        yield put({ type: actions.SAVE_COMPANY_SETTINGS, payload: json });
+        return;
+    }
+    catch (e) {
+        console.log("Login error", e);
+        yield put({ type: actions.DATA_ERROR, message: "Failed to save data because of " + e });
+        return;
+    }
+}
+
+export function* saveUserData(payload) {
+    let fetchData = {
+        method: 'PUT',
+        body: JSON.stringify(payload),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try {
+        let res = yield call(fetch, '/api/user-settings', fetchData);
+        let json = yield res.json();
+        console.log(json);
+        yield put({ type: actions.SAVE_USER_SETTINGS, payload:json });
+        return;
+    }
+    catch (e) {
+        console.log("Login error", e);
+        yield put({ type: actions.DATA_ERROR, message: "Failed to save data because of " + e });
+        return;
+    }
+}
+
 export function* loadData({ config, pageStart, total }) {
     let fetchData = {
         method: 'GET',
@@ -118,6 +164,8 @@ export default function* () {
         takeEvery(actions.UPDATE_DATA, updateData),
         takeEvery(actions.SAVE_DATA, saveData),
         takeEvery(actions.DELETE_DATA, deleteData),
-        takeEvery(actions.LOAD_USER_SETTINGS_SAGA, loadUserSettings)
+        takeEvery(actions.LOAD_USER_SETTINGS_SAGA, loadUserSettings),
+        takeEvery(actions.SAVE_COMPANY_SETTINGS_SAGA, saveCompanyData),
+        takeEvery(actions.SAVE_USER_SETTINGS_SAGA, saveUserData),
     ]);
 }

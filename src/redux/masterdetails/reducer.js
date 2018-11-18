@@ -42,10 +42,29 @@ export default function masterDetailsReducer(state = initState, action) {
         message: action.message,
         selectedData: null,
       }
+    case actions.LOAD_USER_SETTINGS_SAGA: 
+      return {
+        ...state,
+        loaded: false,
+        success: false,
+        message: null,
+      }
     case actions.LOAD_USER_SETTINGS:
       return {
         ...state,
         profile: action.payload
+      }    
+    case actions.SAVE_COMPANY_SETTINGS:
+      return {
+        ...state,
+        success: true,
+        message: action.message,
+      }
+    case actions.SAVE_USER_SETTINGS:
+      return {
+        ...state,
+        success: action.success,
+        message: action.message,        
       }
     case actions.DELETE_SUCCESS:
       return {
