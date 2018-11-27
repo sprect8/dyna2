@@ -120,6 +120,11 @@ function sidebarConfiguration() {
           label: 'Investments',
           key: 'investments-page',
           leftIcon: 'equalizer'
+        },
+        {
+          label: 'Subscriptions',
+          key: 'subscriptions-page',
+          leftIcon: 'equalizer'
         }
       ]
     },
@@ -353,6 +358,23 @@ function getConfiguration() {
     ]
   }
 
+  const subscriptions = {
+    "tableName": "subscriptions",
+    "displayName": "Subscription Records",
+    "key": "subs_id",
+    "display": "subs_name",
+    "description": "Subscriptions",
+    "columns": [
+      { "name": "subs_id", "display": "Investment Id", "type": "number", "sequence": "inst_id_seq", "mandatory": true, "unique": true, "key": true },
+      { "name": "subs_name", "display": "Name", "type": "text", "mandatory": true },
+      { "name": "subs_desc", "display": "Description", "type": "text" },
+      { "name": "subs_started", "display": "Subscription Started", "type": "timestamp", "mandatory": true },
+      { "name": "subs_type", "display": "Subscription Type", "type": "text", "mandatory": true, "lov":["RECURRING MONTHLY", "RECURRING YEARLY"] },
+      { "name": "subs_cost", "display": "Cost", "type": "number", "mandatory": true },
+      { "name" : "subs_status", "display": "Subscription Status", "type": "text", "mandatory": true, "lov":["ACTIVE", "INACTIVE"]}
+    ]
+  }
+
   const tableConfiguration = [
     { "path": "staff-page", "table": staff },
     { "path": "suppliers-page", "table": suppliers },
@@ -363,6 +385,7 @@ function getConfiguration() {
     { "path": "receipts-page", "table": receipts },
     { "path": "sales-page", "table": sales },
     { "path": "deliveries-page", "table": deliveries },
+    { "path": "subscriptions-page", "table": subscriptions },
   ]
 
   return tableConfiguration;
@@ -447,6 +470,32 @@ function getUserStructures() {
   ]
 
   return tableConfiguration;
+}
+
+function getReportQueries() {
+  const inventoryOptimisations = {
+
+  };
+
+  const businessProcess = {
+
+  };
+
+  const businessWaste = {
+
+  };
+
+  const customerSatisfaction = {
+
+  };
+
+  const platformEngagement = {
+
+  };
+
+  const costEfficiency = {
+
+  };
 }
 
 function getReportConfig() {

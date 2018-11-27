@@ -101,7 +101,7 @@ export default class FormDialog extends React.Component {
                     </TableRow> 
                 </TableHead>
                 <TableBody>
-                    {data.map(n => {
+                    {data && data.map(n => {
                         return (<TableRow key={n[config.columns[0].name]} hover onClick={event => this.props.editRow(n)}>
                             <TableCell key={"edit"}><DeleteIcon style={{"color":"red"}} onClick={this.confirmDeleteRow(n)}/></TableCell>
                             {config.columns.map(c => {
