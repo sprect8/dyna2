@@ -472,32 +472,6 @@ function getUserStructures() {
   return tableConfiguration;
 }
 
-function getReportQueries() {
-  const inventoryOptimisations = {
-
-  };
-
-  const businessProcess = {
-
-  };
-
-  const businessWaste = {
-
-  };
-
-  const customerSatisfaction = {
-
-  };
-
-  const platformEngagement = {
-
-  };
-
-  const costEfficiency = {
-
-  };
-}
-
 function getReportConfig() {
   let data2 = []
   const businessProcess = {

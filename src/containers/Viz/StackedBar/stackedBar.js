@@ -17,7 +17,7 @@ const opts = {
 class BarChart extends React.Component {
 
   render() {
-    return <Bar data={data} options={opts} />;
+    return <Bar data={this.props.data ? this.props.data : data} options={opts} />;
   }
 }
 
