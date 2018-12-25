@@ -35,7 +35,7 @@ group by mon order by mon ) x`;
 // staff scoring -- staff and how much they bring in each month
 // scored - 
 // avg staff scoring each month
-const staffScore = `select mon, avg(score) from (
+const staffScore = `select mon, avg(score) score from (
 select staff_name, mon, 
 case when profit_after_salary > 2000 then 5 
      when profit_after_salary > 100 then 4 
@@ -47,7 +47,7 @@ where recp_id = sale_recp_id and recp_staff_id = staff_id and xx.owner_user_id =
 `;
 // supplier scoring 
 // scored based on on time, late, very late and business impacting; scaled as 1, 0.5, 1, 2; 5 + (a) - 0.5*b - c - d*2
-const supplierScore = `select year||'/'||case when monthly < 9 then '0' else '' end || monthly, case when score > 5 then 5 when score < 0 then 0 else score end score
+const supplierScore = `select year||'/'||case when monthly < 9 then '0' else '' end || monthly mon, case when score > 5 then 5 when score < 0 then 0 else score end score
 from (
 select supl_company, date_part('year', to_date(devy_delivery_date, 'YYYY-MM-DD')) as year,
 	date_part('month', to_date(devy_delivery_date, 'YYYY-MM-DD')) AS monthly, 
@@ -107,7 +107,141 @@ ORDER BY year, weekly
 
 const investments = `select * from investments xx where xx.owner_user_id = ?`
 
+async function getResults(db) {
+  
+  let queries = {"Product Score":productScore, "Staff Score":staffScore, "Sales Score":salesScore, "Supplier Score":supplierScore};
 
+  // query results
+  
+
+  let datasets = [
+    {
+      backgroundColor: "rgba(72,166,242,1)",
+      borderColor: "rgba(72,166,242,1)",
+      pointBorderColor: "rgba(72,166,242,1)",
+      pointHoverBackgroundColor: "rgba(72,166,242,1)",
+      pointHoverBorderColor: "rgba(72,166,242,1)",
+    },
+    {
+      backgroundColor: "orange",
+      borderColor: "orange",
+      pointBorderColor: "orange",
+      pointBackgroundColor: "#fff",
+      pointHoverBackgroundColor: "orange",
+      pointHoverBorderColor: "orange",
+    },
+    {
+      backgroundColor: "purple",
+      borderColor: "purple",
+      pointBorderColor: "purple",
+      pointBackgroundColor: "#fff",
+      pointHoverBackgroundColor: "purple",
+      pointHoverBorderColor: "purple",
+    },
+    {
+      backgroundColor: "darkgreen",
+      borderColor: "darkgreen",
+      pointBorderColor: "darkgreen",
+      pointBackgroundColor: "#fff",
+      pointHoverBackgroundColor: "darkgreen",
+      pointHoverBorderColor: "darkgreen",
+    },
+  ]
+  let result = {
+    labels:[],
+    datasets: []
+  };
+}
+
+  {    
+  labels: Array.apply(null, {length:30}).map(Number.call, Number),
+  datasets: [
+    {
+      label: "Worker Score",
+      fill: true,
+      lineTension: 0.1,
+      backgroundColor: "rgba(72,166,242,1)",
+      borderColor: "rgba(72,166,242,1)",
+      borderCapStyle: "butt",
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: "miter",
+      pointBorderColor: "rgba(72,166,242,1)",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "rgba(72,166,242,1)",
+      pointHoverBorderColor: "rgba(72,166,242,1)",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      data: Array.apply(null, {length:30}).map(Function.call, ()=>{return Math.random() + 4;})
+    },
+    {
+      label: "Supplier Score",
+      fill: true,
+      lineTension: 0.1,
+      backgroundColor: "orange",
+      borderColor: "orange",
+      borderCapStyle: "butt",
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: "miter",
+      pointBorderColor: "orange",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "orange",
+      pointHoverBorderColor: "orange",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      data: Array.apply(null, {length:30}).map(Function.call, ()=>{return Math.random() + 2;})
+    },
+    {
+      label: "Agent Score",
+      fill: true,
+      lineTension: 0.1,
+      backgroundColor: "purple",
+      borderColor: "purple",
+      borderCapStyle: "butt",
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: "miter",
+      pointBorderColor: "purple",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "purple",
+      pointHoverBorderColor: "purple",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      data: Array.apply(null, {length:30}).map(Function.call, ()=>{return Math.random() + 3})
+    },
+    {
+      label: "Investment Score",
+      fill: true,
+      lineTension: 0.1,
+      backgroundColor: "darkgreen",
+      borderColor: "darkgreen",
+      borderCapStyle: "butt",
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: "miter",
+      pointBorderColor: "darkgreen",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "darkgreen",
+      pointHoverBorderColor: "darkgreen",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      data: Array.apply(null, {length:30}).map(Function.call, ()=>{return Math.random() + 2})
+    }
+  ]
+}; 
 
 const costEfficiency = {
     "title": "Cost Efficiency Matrix",
