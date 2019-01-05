@@ -475,6 +475,7 @@ function getUserStructures() {
 function getReportConfig() {
   let data2 = []
   const businessProcess = {
+    "key": "business-improvement-page",
     "title": "Business Process Improvement",
     "description": "Measure your Business Process",
     "rows": [
@@ -570,70 +571,16 @@ function getReportConfig() {
   ]
 
   const costEfficiency = {
+    "key": "cost-efficiency",
     "title": "Cost Efficiency Matrix",
     "description": "Measure your Business Process",
     "rows": [
-      [
-        {
-          "title": "Cost Efficiency Score",
-          "description": "Your Cost Efficiency Score over time",
-          "type": "STACKEDBAR",
-          "options": {},
-          "datasource": "",
-          "layout": "halfcolumn"
-        },
-        {
-          "title": "Cost Efficiency Matrix",
-          "description": "Your Cost Efficiency Score for different scores",
-          "type": "BREAKDOWN",
-          "options": {},
-          "data": datax,
-          "datasource": "",
-          "layout": "halfcolumn"
-        }
-      ],
-      [
-        {
-          "title": "Sales Agent Profitability",
-          "description": "Your Sales Staff and the revenue they bring in",
-          "type": "AREA",
-          "options": {},
-          "datasource": "",
-          "layout": "halfcolumn"
-        },
-        {
-          "title": "Supplier Score",
-          "description": "A rating of your suppliers and how well they perform",
-          "type": "AREA",
-          "options": {},
-          "datasource": "",
-          "layout": "halfcolumn"
-        }
-      ],
-      [
-        {
-          "title": "Investments",
-          "description": "These are records of investments you made (Last Month: 3,214 RM Total: 92,321 RM)",
-          "type": "HISTORY",
-          "options": {},
-          "datasource": "",
-          "data": [
-            { "type": "work", "date": "2011 - Present", "title": "Laptop Computer", "subtitle": "HP Spectre", "description": "text mother father" },
-            { "type": "work", "date": "2011 - Present", "title": "Laser Printer", "subtitle": "HP LaserJet", "description": "text mother father" },
-            { "type": "work", "date": "2011 - Present", "title": "Color Ink Jet Printer", "subtitle": "HP InkJet", "description": "text mother father" },
-            { "type": "education", "date": "2011 - Present", "title": "Digital Camera", "subtitle": "Canon 7D", "description": "text mother father" },
-            { "type": "education", "date": "2011 - Present", "title": "Scanner", "subtitle": "HP Flatbed Scanner", "description": "text mother father" },
-            { "type": "work", "date": "2011 - Present", "title": "Fridge", "subtitle": "Samsung Smart Fridge", "description": "text mother father" },
-            { "type": "work", "date": "2011 - Present", "title": "Cake Mixer", "subtitle": "Kitchen mate Express Mixer", "description": "text mother father" },
-          ],
-          "layout": "fullcolumn"
-        }
-      ],
     ]
   }
 
 
   const businessWaste = {
+    "key": "business-waste-page",
     "title": "Business Waste Index",
     "description": "How well are you managing revenue leakage on items, staff and suppliers",
     "rows": [
@@ -705,6 +652,7 @@ function getReportConfig() {
   }
 
   const customerSatisfaction = {
+    "key": "customer-satisfaction-page",
     "title": "Business Process Improvement",
     "description": "Measure your Business Process",
     "rows": [
@@ -800,6 +748,7 @@ function getReportConfig() {
   ]
 
   const inventoryOptimisation = {
+    "key":"inventory-optimisation-page",
     "title": "Inventory Optimisations",
     "description": "Measure how well you manage your Inventory",
     "rows": [
@@ -872,6 +821,7 @@ function getReportConfig() {
   }
 
   const platformEngagement = {
+    "key":"platform-engagement-page",
     "title": "Business Process Improvement",
     "description": "Measure your Business Process",
     "rows": [
@@ -1768,9 +1718,29 @@ router.get('/reportProfiles', function (req, res) {
   res.json(getReportConfig());
 });
 
+const reportMapping = {
+  //"business-improvement-page":
+  //"business-waste-page":
+  //"platform-engagement-page":
+  //"customer-satisfaction-page":
+  //"inventory-optimisation-page":
+  "cost-efficiency":require("./queries/salesAnalysisQueries")
+}
+
 router.get('/report/:name', function (req, res) {
   // get report based on name
   // note that the report is dynamically generated and returned
+  let query = req.params.name;
+
+  console.log("Getting results for : ", query);
+
+  if (reportMapping[query]) {
+    let result = reportMapping[query].loadConfig("")
+    res.json(result);
+    return;
+  }
+  res.json({});
+
 })
 
 router.get('/ping', function (req, res) {

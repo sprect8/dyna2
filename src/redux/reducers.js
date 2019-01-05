@@ -6,6 +6,7 @@ import Mails from './mail/reducer';
 import Ecommerce from "./ecommerce/reducer";
 import AppReducer from './app/reducer';
 import MasterDetailsReducer from './masterdetails/reducer';
+import ReportReducer from './reports/reducer';
 
 export default {
 	Auth,
@@ -15,5 +16,6 @@ export default {
 	Mails,
 	Ecommerce,
 	AppReducer,
-	MasterDetailsReducer
+	MasterDetailsReducer,
+	ReportReducer
 };

@@ -1,4 +1,26 @@
-
+create table ps_sample_sales (
+row_id text,
+order_id text,
+order_date text,
+ship_date text,
+ship_mode text,
+customer_id text,
+customer_name text,
+customer_segment text,
+country text,
+city text,
+state text,
+postcode text,
+region text,
+product_id text,
+category text,
+sub_category text,
+product_name text,
+sales text,
+quantity text,
+discount text,
+profit text
+);
 
 create table sample_sales (
 row_id integer,
@@ -25,7 +47,7 @@ profit float
 );
 
 
-copy sample_sales from 'c:\temp\samplestore.csv' delimiter ',' cs
+copy sample_sales from '/Users/hc834bq/dev/dyna2/data/samplestore.csv' delimiter ',' csv
 
 
 select * from staffs
@@ -36,7 +58,7 @@ select distinct category from sample_sales) x
 
 ;
 create table lt_products as 
-select product_name, cate_id - 2 supl_id, cate_id, (sales + sales * discount)/quantity prod_list_price, 1, (sales - profit) / quantity prod_unit_price from sample_sales, product_categories where category = cate_name;
+select product_name, cate_id supl_id, cate_id, (sales + sales * discount)/quantity prod_list_price, 1, (sales - profit) / quantity prod_unit_price from sample_sales, product_categories where category = cate_name;
 
 
 insert into products (prod_name, prod_desc, prod_supl_id, prod_cate_id, prod_units_on_order, prod_discontinued, prod_sku, prod_unit_price, owner_user_id, "createdAt", "updatedAt", prod_list_price)
@@ -57,12 +79,12 @@ select * from suppliers
 -- inventories first
 
 insert into inventories (inv_prod_id, inv_purchase_date, inv_expiry_date, inv_units_in_stock, owner_user_id, "createdAt", "updatedAt")
-select prod_id, now()-interval '100 days', now() + interval '100 days', 10000, 1, now(), now() from products where prod_id > 8
+select prod_id, now()-interval '100 days', now() + interval '100 days', 10000, 1, now(), now() from products where prod_id <= 8
 
 -- then receipts
 
 insert into receipts (recp_staff_id, recp_uuid, recp_latitude, recp_longitude, recp_customer, recp_customer_email, recp_timestamp, owner_user_id, "createdAt", "updatedAt")
-select  case when region = 'West' then 1 when region = 'East' then 9 else 10 end,
+select  case when region = 'West' then 1 when region = 'East' then 2 else 3 end,
 	order_id, case when region = 'West' then 2.9925 when region = 'East' then 3.0733 else 3.1390 end, case when region = 'West' then 101.5415 when region = 'East' then 101.5185 else 101.6869 end, 
 	customer_name, customer_name||'@something.com', to_date(order_date,'DD/MM/YYYY'),1, Now(), now() from 
 	(select distinct order_id, region, customer_name, order_date from sample_sales) x;
