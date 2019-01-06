@@ -17,7 +17,7 @@ export default class Breakdown extends Component {
 
     return (
       <WidgetBox title={title} description={description} stretched={stretched}>
-        <AreaChart/>        
+        <AreaChart data={data}/>        
       </WidgetBox>
     );
   }

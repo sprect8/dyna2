@@ -1727,7 +1727,7 @@ const reportMapping = {
   "cost-efficiency":require("./queries/salesAnalysisQueries")
 }
 
-router.get('/report/:name', function (req, res) {
+router.get('/report/:name', async function (req, res) {
   // get report based on name
   // note that the report is dynamically generated and returned
   let query = req.params.name;
@@ -1735,7 +1735,7 @@ router.get('/report/:name', function (req, res) {
   console.log("Getting results for : ", query);
 
   if (reportMapping[query]) {
-    let result = reportMapping[query].loadConfig("")
+    let result = await reportMapping[query].loadConfig(sequelize, req.decoded.admin)
     res.json(result);
     return;
   }

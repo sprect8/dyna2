@@ -13,7 +13,7 @@ const opts = {
 class AreaChart extends React.Component {
   
   render() {
-    return <Line data={data} options={opts}/>;
+    return <Line data={this.props.data ? this.props.data : data} options={opts}/>;
   }
 }
 
