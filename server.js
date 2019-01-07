@@ -692,73 +692,7 @@ function getReportConfig() {
     "key":"inventory-optimisation-page",
     "title": "Inventory Optimisations",
     "description": "Measure how well you manage your Inventory",
-    "rows": [
-      [
-        {
-          "title": "Inventory Optimisation Score",
-          "description": "How well are you managing your Inventory?",
-          "type": "STACKEDBAR",
-          "options": {},
-          "datasource": "",
-          "layout": "halfcolumn"
-        },
-        {
-          "title": "Inventory Optimisation Matrix",
-          "description": "Rating for each category we are evaluating",
-          "type": "TXNBREAKDOWN",
-          "options": {},
-          "data": datainv,
-          "datasource": "",
-          "layout": "halfcolumn"
-        }
-      ],
-      [
-        {
-          "title": "Inventory Stock Monitoring",
-          "description": "These are your top performing products",
-          "type": "AREA",
-          "options": {},
-          "datasource": "",
-          "layout": "halfcolumn"
-        },
-        {
-          "title": "Inventory Trend Analysis",
-          "description": "Customer Requesting similar product groups",
-          "type": "STACKEDBAR",
-          "options": {},
-          "datasource": "",
-          "layout": "halfcolumn"
-        }
-      ],
-      [
-        {
-          "title": "Inventory Count Sheet",
-          "description": "Products stuck in different manufacturing process steps",
-          "type": "PIE",
-          "options": {},
-          "datasource": "",
-          "layout": "halfcolumn"
-        },
-        {
-          "title": "Item Expiry",
-          "description": "Location Analysis of different sales and opportunities",
-          "type": "LINE",
-          "options": {},
-          "datasource": "",
-          "layout": "halfcolumn"
-        }
-      ],
-      [
-        {
-          "title": "Supplier Cost Comparisons",
-          "description": "Compare how much you pay vs price online",
-          "type": "PIE",
-          "options": {},
-          "datasource": "",
-          "layout": "fullcolumn"
-        }
-      ],
-    ]
+    "rows": []
   }
 
   const platformEngagement = {
@@ -1664,7 +1598,7 @@ const reportMapping = {
   //"business-waste-page":
   //"platform-engagement-page":
   //"customer-satisfaction-page":
-  //"inventory-optimisation-page":
+  "inventory-optimisation-page":require("./queries/inventoryOptimisations"),
   "cost-efficiency":require("./queries/salesAnalysisQueries"),
   "business-improvement-page":require("./queries/businessProcessImprovement")
 
