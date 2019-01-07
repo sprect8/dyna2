@@ -98,3 +98,31 @@ select * from sample_sales limit 100
 insert into sales (sale_inv_id, sale_price, sale_cost, sale_recp_id, sale_status, sale_total_purchase, owner_user_id, "createdAt", "updatedAt")
 select inv_id, sales, sales - profit, recp_id, 'SOLD', quantity, 1, now(), now() from sample_sales, inventories, receipts, products where product_name = prod_name and order_id = recp_uuid and inv_prod_id = prod_id 
 
+
+
+
+-- inventory count
+create table f_monthly_inventory(
+	user_id integer,
+	prod_id integer,
+	total integer,
+	month integer,
+	year integer,
+	load_src integer,
+	load_timestamp timestamp,
+	unique(user_id, prod_id, month, year)
+);
+
+
+
+
+-- Days of Supply: current sales (last month) vs current inventory
+-- Inventory Turn
+   -- Monthly: total sold vs total avg inventory
+-- Stock Sales Ratio
+   -- Monthly: products
+-- Inventory Count Sheet
+   -- Giant list of product vs current count
+-- Inventory Lookup
+-- Inventory Expiration Count (monthly)
+

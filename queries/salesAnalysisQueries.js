@@ -115,7 +115,7 @@ GROUP BY year, weekly
 ORDER BY year, weekly
 `;
 
-const investments = `select * from investments xx where xx.owner_user_id = ? order by order by inst_timestamp desc`
+const investments = `select * from investments xx where xx.owner_user_id = ? order by inst_timestamp desc`
 
 let ds = {    
   labels: Array.apply(null, {length:30}).map(Number.call, Number),
@@ -413,8 +413,6 @@ const costEfficiency = {
       ce.rows[1][0].data = workerds;
 
       // get unique suppliers
-      console.log(suppliers)
-
       let supplierds = {
         labels: uniqueDates,
         datasets: []
@@ -441,6 +439,26 @@ const costEfficiency = {
 
       ce.rows[1][1].data = supplierds
 
+
+      let invest = await db.query(investments,
+        { type: db.QueryTypes.SELECT, replacements: [user, user] });
+  
+      let totalInvest = 0;
+      let data = [];
+
+      invest.forEach(x=>{
+        totalInvest += (+x.inst_cost * +x.inst_units);
+        let start = x.inst_timestamp.split("-")[0]
+        let end = "Present";
+        if (x.inst_timestamp_inactive.length > 0) {
+          end = x.inst_timestamp_inactive.split("-")[0];
+        }
+
+        data.push({type: "work", "date": start + " - " + end, "title": x.inst_category, "subtitle": x.inst_name, "description":x.inst_desc})
+      })
+
+      ce.rows[2][0].description = totalInvest > 0 ? "These are records of your investments (" + totalInvest + " RM)" : "No investments found";
+      ce.rows[2][0].data = data;
 
       return ce;
 

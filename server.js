@@ -348,13 +348,15 @@ function getConfiguration() {
     "columns": [
       { "name": "inst_id", "display": "Investment Id", "type": "number", "sequence": "inst_id_seq", "mandatory": true, "unique": true, "key": true },
       { "name": "inst_name", "display": "Name", "type": "text", "mandatory": true },
+      { "name": "inst_category", "display": "Category", "type":"text", "mandatory": true},
       { "name": "inst_desc", "display": "Description", "type": "text" },
       { "name": "inst_timestamp", "display": "Investment Made", "type": "timestamp", "mandatory": true },
+      { "name": "inst_timestamp_inactive", "display": "Investment Decomissioned", "type": "timestamp", "mandatory": false },
       { "name": "inst_units", "display": "Total Amount", "type": "number", "mandatory": true },
       { "name": "inst_cost", "display": "Total Cost", "type": "number", "mandatory": true },
       { "name": "inst_status", "display": "Status", "type": "text", "mandatory": true, "lov": ["DECOMMISSIONED", "ACTIVE", "ORDERED"] },
       { "name": "inst_comment", "display": "Comment", "type": "text" },
-      { "name": "inst_picture", "display": "Picture", "type": "file" }
+      { "name": "inst_picture", "display": "Picture", "type": "file" },
     ]
   }
 
