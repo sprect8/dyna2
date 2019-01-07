@@ -790,6 +790,9 @@ var sequelize = new Sequelize(process.env.postgres_db || 'postgres', process.env
     acquire: 30000,
     idle: 10000
   },
+  dialectOptions: {
+        ssl: true
+    },
 }); // connect to sequelize
 
 function deriveType(entry, column) {
