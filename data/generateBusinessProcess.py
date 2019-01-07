@@ -19,9 +19,9 @@ create table f_monthly_stock_expiry (
 
 insQuery = "insert into f_monthly_stock_expiry values (%s, %s, %s, %s, %s, %s, %s, %s, 1, now());"
 
-prodId = [1, 2, 3]
-userId = 1
-badId = 1
+prodId = [5569, 5570, 5580]
+userId = 11
+badId = 5580
 # generate for the list of items which represent our types and inventory (which I won't even bother mapping to properly for the demo)
 # enter 12 months of data
 

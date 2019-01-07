@@ -33,7 +33,7 @@ order by year asc, month asc
 // product type sales mix
 const productType = `select cate_name, count(*) sold,  to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY/MM') mon
 from receipts, product_categories xx, products, inventories, sales 
-where recp_id = sale_recp_id and cate_id = prod_cate_id and prod_id = inv_prod_id and inv_id = sale_inv_id and xx.owner_user_id = 1
+where recp_id = sale_recp_id and cate_id = prod_cate_id and prod_id = inv_prod_id and inv_id = sale_inv_id and xx.owner_user_id = ?
 and to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY') = '2017'
 group by cate_name, mon
 `;
