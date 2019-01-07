@@ -785,10 +785,13 @@ var sequelize = new Sequelize(process.env.postgres_db || 'postgres', process.env
   dialect: 'postgres',
   operatorsAliases: false,
   pool: {
-    max: 5,
+    max: 20,
     min: 0,
     acquire: 30000,
     idle: 10000
+  },
+  dialectOptions: {
+    ssl: true
   },
 }); // connect to sequelize
 
