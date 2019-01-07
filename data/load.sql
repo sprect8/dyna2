@@ -113,9 +113,39 @@ create table f_monthly_inventory(
 	unique(user_id, prod_id, month, year)
 );
 
+-- number of sales over a given month
+create table f_monthly_sales(
+	user_id integer,
+	prod_id integer,
+	total integer,
+	month integer,
+	year integer,
+	load_src integer,
+	load_timestamp timestamp,
+	unique(user_id, prod_id, month, year)
+);
+-- expiring stocks
 
+create table f_monthly_stock_expiry (
+	user_id integer,
+	prod_id integer,
+	inv_id integer,	
+	expired integer,
+	expiring_30 integer,
+	expiring_60 integer,
+	month integer,
+	year integer,
+	load_src integer,
+	load_timestamp timestamp,
+	unique(user_id, prod_id, inv_id, month, year)
+);
 
+-- lets load in some random sales data
+-- this is for each of the 
 
+----
+-- Inventory Optimisation
+----
 -- Days of Supply: current sales (last month) vs current inventory
 -- Inventory Turn
    -- Monthly: total sold vs total avg inventory
@@ -123,6 +153,17 @@ create table f_monthly_inventory(
    -- Monthly: products
 -- Inventory Count Sheet
    -- Giant list of product vs current count
--- Inventory Lookup
 -- Inventory Expiration Count (monthly)
+-- Inventory Lookup
 
+
+
+---
+-- Business Process
+---
+-- Profitable and Non-profitable products
+-- Dashboard on Profitable areas and potential
+-- Product Sales
+-- Product Backlog
+
+-- Current manufacturing process?

@@ -1,4 +1,27 @@
 
+// additional charts (pies)
+// product type sales mix
+const productType = `select cate_name, count(*) sold 
+from receipts, product_categories xx, products, inventories, sales 
+where recp_id = sale_recp_id and cate_id = prod_cate_id and prod_id = inv_prod_id and inv_id = sale_inv_id and xx.owner_user_id = ?
+and to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY/MM') = '2017/12'
+group by cate_name
+`;
+// product type sales 
+const productTypeProfit = `select cate_name, sum(sale_price - sale_cost) profit 
+from receipts, product_categories xx, products, inventories, sales 
+where recp_id = sale_recp_id and cate_id = prod_cate_id and prod_id = inv_prod_id and inv_id = sale_inv_id and xx.owner_user_id = ?
+and to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY/MM') = '2017/12'
+group by cate_name
+`;
+
+
+
+
+
+
+
+
 const salesScore = `select *, case when s > 1 then 5 else s*5 end score from (
     select *,        profitable / (select sum(b.sale_price - b.sale_cost)
            from receipts a, sales b where a.recp_id = b.sale_recp_id

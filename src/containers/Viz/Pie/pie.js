@@ -4,7 +4,9 @@ import { data } from "./pieConfig";
 
 class PieChart extends React.Component {
   render() {
-    return <Pie data={data} />;
+    return <Pie data={this.props.data ? this.props.data : data}
+      
+    />;
   }
 }
 

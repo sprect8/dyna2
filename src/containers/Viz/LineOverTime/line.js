@@ -16,7 +16,7 @@ const opts = {
 
 class LineChart extends React.Component {
   render() {
-    return <Line data={data} options={opts}/>;
+    return <Line data={this.props.data ? this.props.data : data} options={opts}/>;
   }
 }
 
