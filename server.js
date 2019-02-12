@@ -378,15 +378,15 @@ function getConfiguration() {
   }
 
   const tableConfiguration = [
-    { "path": "staff-page", "table": staff },
-    { "path": "suppliers-page", "table": suppliers },
     { "path": "product-catalog", "table": productCategory },
-    { "path": "investments-page", "table": investments },
     { "path": "products-page", "table": products },
     { "path": "inventory-page", "table": inventory },
+    { "path": "suppliers-page", "table": suppliers },
     { "path": "receipts-page", "table": receipts },
-    { "path": "sales-page", "table": sales },
-    { "path": "deliveries-page", "table": deliveries },
+    { "path": "sales-page", "table": sales },    
+    { "path": "staff-page", "table": staff },
+    { "path": "deliveries-page", "table": deliveries },    
+    { "path": "investments-page", "table": investments },
     { "path": "subscriptions-page", "table": subscriptions },
   ]
 
@@ -791,7 +791,7 @@ var sequelize = new Sequelize(process.env.postgres_db || 'postgres', process.env
     idle: 10000
   },
   dialectOptions: {
-        ssl: true
+        ssl: false
     },
 }); // connect to sequelize
 
@@ -1669,10 +1669,13 @@ router.put('/user-settings', function (req, res) {
       return;
     }
 
-    if (body.user_password !== "") {
+    if (body.user_password && body.user_password !== "") {
       body.user_password = bcrypt.hashSync(body.user_password, 10);
       console.log("Password was updated");
     } 
+    else {
+      delete body.user_password;
+    }
 
     inst.update(body)
       .then(i => {
