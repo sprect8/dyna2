@@ -757,7 +757,7 @@ var sequelize = new Sequelize(process.env.postgres_db || 'postgres', process.env
     idle: 10000
   },
   dialectOptions: {
-        ssl: false
+        ssl: process.env.PORT ? true : false
     },
 }); // connect to sequelize
 
