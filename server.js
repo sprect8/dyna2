@@ -160,6 +160,7 @@ function sidebarConfiguration() {
           key: 'customer-satisfaction-page',
           leftIcon: 'face'
         },
+        // report is global
         {
           label: 'Platform Engagement',
           key: 'platform-engagement-page',
@@ -172,7 +173,7 @@ function sidebarConfiguration() {
   return sidebarOptions;
 }
 
-function getConfiguration() {
+function getConfiguration(view) {
   const staff = {
     "tableName": "staffs",
     "displayName": "Staff Records",
@@ -377,18 +378,33 @@ function getConfiguration() {
     ]
   }
 
-  const tableConfiguration = [
+  let tableConfiguration = [
+    { "path": "staff-page", "table": staff },
+    { "path": "suppliers-page", "table": suppliers },
     { "path": "product-catalog", "table": productCategory },
     { "path": "products-page", "table": products },
-    { "path": "inventory-page", "table": inventory },
-    { "path": "suppliers-page", "table": suppliers },
+    { "path": "inventory-page", "table": inventory },    
     { "path": "receipts-page", "table": receipts },
     { "path": "sales-page", "table": sales },    
-    { "path": "staff-page", "table": staff },
     { "path": "deliveries-page", "table": deliveries },    
     { "path": "investments-page", "table": investments },
     { "path": "subscriptions-page", "table": subscriptions },
   ]
+
+  if (view) {
+    tableConfiguration = [
+      { "path": "product-catalog", "table": productCategory },
+      { "path": "products-page", "table": products },
+      { "path": "inventory-page", "table": inventory },    
+      { "path": "receipts-page", "table": receipts },
+      { "path": "staff-page", "table": staff },
+      { "path": "sales-page", "table": sales },    
+      { "path": "suppliers-page", "table": suppliers },
+      { "path": "deliveries-page", "table": deliveries },    
+      { "path": "investments-page", "table": investments },
+      { "path": "subscriptions-page", "table": subscriptions },
+    ];
+  }
 
   return tableConfiguration;
 }
@@ -409,6 +425,16 @@ function getUserStructures() {
       { "name": "user_status", "display": "Current Status", "type": "text", "mandatory": true, "lov": ["ACTIVE", "INACTIVE", "PENDING"] },
       { "name": "user_password", "display": "Password Hash", "type": "text", "mandatory": true },
       { "name": "user_user_pics", "display": "User Photo", "type": "picture" },
+    ]
+  }
+  const user_audit = {
+    "tableName": "user_audits",
+    "displayName": "User Audit",
+    "description": "User Login Audit",
+    "columns": [
+      { "name": "user_id", "display": "User Id", "type": "number"},
+      { "name": "user_timestamp", "display": "Created Date", "type": "timestamp" },
+      { "name": "user_status", "display": "Current Status", "type": "text", "lov": ["SUCCESS", "FAILED"] }
     ]
   }
   const roles = {
@@ -465,6 +491,7 @@ function getUserStructures() {
 
   const tableConfiguration = [
     { "path": "user-page", "table": users },
+    { "path": "user-page", "table": user_audit },
     { "path": "roles-page", "table": roles },
     { "path": "user-roles-catalog", "table": user_roles },
     { "path": "logins-page", "table": logins },
@@ -697,70 +724,9 @@ function getReportConfig() {
 
   const platformEngagement = {
     "key":"platform-engagement-page",
-    "title": "Business Process Improvement",
-    "description": "Measure your Business Process",
-    "rows": [
-      [
-        {
-          "title": "Malls In Malaysia",
-          "description": "A list of malls in Malaysia with target opportunities",
-          "type": "MAP",
-          "options": {},
-          "datasource": "",
-          "layout": "twothird"
-        },
-        {
-          "title": "Business Process Improvement Score",
-          "description": "A rating of your overall Business Process Improvement initiatives",
-          "type": "TRANSACTIONS",
-          "options": {},
-          "data": [
-            { "title": "Presence Score", "duration": "Jun 24 - Jul 23", "amount": "2.01", "currency": "d", "data": data2, "direction": "upward" },
-            { "title": "Opportunity Score", "duration": "Jun 24 - Jul 23", "amount": "3.51", "currency": "d", "data": data2, "direction": "upward" },
-            { "title": "Product Sales Score", "duration": "Jun 24 - Jul 23", "amount": "4.71", "currency": "d", "data": data2, "direction": "upward" },
-            { "title": "Product Backlog Score", "duration": "Jun 24 - Jul 23", "amount": "4.21", "currency": "d", "data": data2, "direction": "upward" }
-          ],
-          "datasource": "",
-          "layout": "onethird"
-        }
-      ],
-      [
-        {
-          "title": "Top Products by Revenue",
-          "description": "These are your top performing products",
-          "type": "AREA",
-          "options": {},
-          "datasource": "",
-          "layout": "halfcolumn"
-        },
-        {
-          "title": "Opportunity Analysis",
-          "description": "Customer Requesting similar product groups",
-          "type": "STACKEDBAR",
-          "options": {},
-          "datasource": "",
-          "layout": "halfcolumn"
-        }
-      ],
-      [
-        {
-          "title": "Products in Progress",
-          "description": "Products stuck in different manufacturing process steps",
-          "type": "PIE",
-          "options": {},
-          "datasource": "",
-          "layout": "halfcolumn"
-        },
-        {
-          "title": "Sales Generated per Location",
-          "description": "Location Analysis of different sales and opportunities",
-          "type": "LINE",
-          "options": {},
-          "datasource": "",
-          "layout": "halfcolumn"
-        }
-      ],
-    ]
+    "title": "Platform Engagement",
+    "description": "Measure Dynapreneur Platform Engagement",
+    "rows": []
   }
 
   const reportConfiguration = [
@@ -791,7 +757,7 @@ var sequelize = new Sequelize(process.env.postgres_db || 'postgres', process.env
     idle: 10000
   },
   dialectOptions: {
-        ssl: process.env.PORT ? true : false
+        ssl: false
     },
 }); // connect to sequelize
 
@@ -1584,7 +1550,7 @@ router.get('/api/receipts-manage', function(req, res) {
 router.get('/tableProfiles', function (req, res) {
   // get the table configurations
 
-  res.json(getConfiguration());
+  res.json(getConfiguration(true));
 });
 
 router.get('/sidebarConfig', function (req, res) {
@@ -1599,7 +1565,7 @@ router.get('/reportProfiles', function (req, res) {
 const reportMapping = {
   //"business-improvement-page":
   //"business-waste-page":
-  //"platform-engagement-page":
+  "platform-engagement-page":require("./queries/platformEngagement"),
   //"customer-satisfaction-page":
   "inventory-optimisation-page":require("./queries/inventoryOptimisations"),
   "cost-efficiency":require("./queries/salesAnalysisQueries"),
@@ -1692,6 +1658,8 @@ router.put('/user-settings', function (req, res) {
 router.put('/company-settings', function (req, res) {
   let body = req.body;
 
+  console.log("IDs are ", body.sett_user_id, req.decoded.admin);
+
   if (body.sett_user_id !== req.decoded.admin) {
     res.status(403).json({ success: false, "message": "No permission to edit company settings" });
     return;
@@ -1718,7 +1686,10 @@ router.put('/company-settings', function (req, res) {
       return;
     }
 
-    if (inst.owner_user_id !== req.decoded.admin) {
+    if (inst.sett_user_id !== req.decoded.admin) {
+
+      console.log("IDs are ", inst.owner_user_id, req.decoded.admin, inst);
+
       res.status(403).json({ success: false, "message": "No permission to edit company settings" });
       return;
     }
@@ -1794,6 +1765,22 @@ app.post("/register", function (req, res) {
   })
 });
 
+app.get('/dynareport', function (req, res) {
+  // engagement report
+  // Daily bar chart of number of distinct users using the system
+  // > Login
+  // > Sales / Receipts >> Sales made per Dyna
+  // > Inventory / Product >> Inventory/Product updates (distinct by user)
+  // 
+
+  // Login
+  // select ts, count(*) from (select distinct (user_id, to_char("updatedAt", 'YYYYMMDD')) un, to_char( "updatedAt", 'YYYYMMDD') ts from user_audits) x group by ts order by ts asc;
+  // 
+
+
+
+});
+
 // login the user
 app.post('/login', function (req, res) {
 
@@ -1806,11 +1793,17 @@ app.post('/login', function (req, res) {
 
     if (!user) {
       res.json({ success: false, message: 'Authentication failed. User not found.' });
+      sharedPersistenceMapping["user_audits"].create(
+        {user_id: user.user_id, user_timestamp: new Date().getTime(), user_status: "FAILED"}
+      );
     } else if (user) {
 
       // check if password matches
       if (!bcrypt.compareSync(req.body.password, user.user_password)) {
         res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+        sharedPersistenceMapping["user_audits"].create(
+          {user_id: user.user_id, user_timestamp: new Date().getTime(), user_status: "FAILED"}
+        );
       } else {
 
         // if user is found and password is right
@@ -1833,6 +1826,13 @@ app.post('/login', function (req, res) {
           httpOnly: true,
           expires: date
         }
+
+        // update the user.updatedAt to now() 
+        // 
+        sharedPersistenceMapping["user_audits"].create(
+          {user_id: user.user_id, user_timestamp: new Date().getTime(), user_status: "SUCCESS"}
+        );
+
 
         res.cookie('authToken', token, cookie);
         res.json({

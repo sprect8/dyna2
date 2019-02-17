@@ -204,7 +204,7 @@ module.exports = {
             "3.1390" : "KL Sentral Sams Grocers"
         }
         locn.forEach(x => {
-            let name = locnName["" + x.latitude]
+            let name = locnName["" + x.latitude] ? locnName["" + x.latitude] : x.latitude;
             console.log(name, x.latitude);
             if (!ltN[name]) {
                 ltN[name] = Array.apply(null, { length: uniqueDates.length }).map(Function.call, () => { 0 });
