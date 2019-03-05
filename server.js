@@ -10,7 +10,6 @@ var morgan = require('morgan');
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 var uuid = require('uuid/v4');
-
 const bcrypt = require('bcrypt');
 
 const app = express();
@@ -1299,40 +1298,12 @@ function generateProductImage(app) {
             "quantity": b.sale_total_purchase,
           }*/
 
-function sendEmail(to, receiptObj) {
-  var helper = require('sendgrid').mail;
-  var from_email = new helper.Email('admin@dynapreneur.com');
-  var to_email = new helper.Email(to);
-  var subject = 'Your Receipt';
-  let c = `Invoice from 
-  -----------------------------
-  Inv No: ${receiptObj.recp_uuid}
-  Time: ${new Date().toISOString()}
-  -----------------------------
-  ${
-    receiptObj.sales.map(x => {
-      return x.name + "\t$" + x.price + "\t" + x.quantity
-    })
-    }  
-  -----------------------------
-  Thank You
-  `
+function sendEmail(to, receiptObj, companyObj) {
+  let invoicing = require("./backend/invoicing");
 
-  var content = new helper.Content('text/plain', c);
-  var mail = new helper.Mail(from_email, subject, to_email, content);
-
-  var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
-  var request = sg.emptyRequest({
-    method: 'POST',
-    path: '/v3/mail/send',
-    body: mail.toJSON(),
-  });
-
-  sg.API(request, function (error, response) {
-    console.log(response.statusCode);
-    console.log(response.body);
-    console.log(response.headers);
-  });
+  let email = invoicing.getEmail(to, receiptObj, companyObj);
+  
+  return email;
 }
 
 function getDate() {
@@ -1427,9 +1398,10 @@ function registerReceiptService(app) {
         return;
       }
 
+      let companyObj = await sequelize.query("select * from settings where sett_user_id = " + user);
 
       if (success && email !== "Not Defined")
-        sendEmail(email, receipt);
+        sendEmail(email, receipt, companyObj);
       if (success) {
         res.json({ "success": true, "message": "Done" });
       }
@@ -1765,19 +1737,119 @@ app.post("/register", function (req, res) {
   })
 });
 
-app.get('/dynareport', function (req, res) {
-  // engagement report
-  // Daily bar chart of number of distinct users using the system
-  // > Login
-  // > Sales / Receipts >> Sales made per Dyna
-  // > Inventory / Product >> Inventory/Product updates (distinct by user)
+// app.get('/invoiceSample', function (req, res) {
+//   // engagement report
+//   // Daily bar chart of number of distinct users using the system
+//   // > Login
+//   // > Sales / Receipts >> Sales made per Dyna
+//   // > Inventory / Product >> Inventory/Product updates (distinct by user)
+//   // 
+
+//   // Login
+//   // select ts, count(*) from (select distinct (user_id, to_char("updatedAt", 'YYYYMMDD')) un, to_char( "updatedAt", 'YYYYMMDD') ts from user_audits) x group by ts order by ts asc;
+//   // 
+
+//   let invoicing = require("./backend/invoicing");
+
+//   let email = invoicing.getEmail();
+  
+//   res.send(email);
+  
+  
+// });
+app.get('/logo/:companyId', (req, res) => {
+
+  // query for first 20 items matching the search
+  // if empty we return firt 20 items
+  // order it by the display
+
+  let query = req.params.companyId;
+
+  sharedPersistenceMapping["settings"].findById(query).then(inst => {
+    let img = "";
+    let type = "image/png";
+    if (inst === null || !inst.sett_company_logo || inst.sett_company_logo === "") {
+      // 
+      // send not-found image
+      img = new Buffer(noImage, "base64");
+    }
+    else {
+      let pic = inst.sett_company_logo.substring(inst.sett_company_logo.indexOf(","));
+      img = new Buffer(pic, "base64");
+    }
+
+    res.writeHead(200, {
+      'Content-Type': type,
+      'Content-Length': img.length
+    });
+    res.end(img);
+  });
+})
+
+// request survey; check if exists and if provided already
+app.get('/survey/:id', async function(req, res) {
+  let query = req.params.id;
+
+  // find if feedback already provided; if not show the details for customer feedback!
   // 
+  
+  let recp = await sharedPersistenceMapping["receipts"].findOne({ where: { "recp_uuid": query } })
+  let survey = require('./backend/surveys')
 
-  // Login
-  // select ts, count(*) from (select distinct (user_id, to_char("updatedAt", 'YYYYMMDD')) un, to_char( "updatedAt", 'YYYYMMDD') ts from user_audits) x group by ts order by ts asc;
-  // 
+  console.log(query, "Bob");
 
+  if (!recp) {
+    // survey not exists
+    res.send(survey.getNoSurvey())
+    return;
+  }
 
+  if (recp.recp_customer_rating > 0) {
+    // survey already completed
+    res.send(survey.getSurveyCompleted());
+    return;
+  }
+  let companyObj = await sharedPersistenceMapping["settings"].findOne({ where: {"sett_user_id": recp.owner_user_id}});
+  res.send(survey.getSurvey(query, companyObj, recp));
+});
+
+// response for survey
+app.post('/survey-response', function(req, res) {
+  // get the uuid of the survey
+  // populate the 6 fields  
+  console.log(req.body);
+
+  let surveyId = req.body.surveyId;
+  let q1 = req.body.q1;
+  let q2 = req.body.q2;
+  let q3 = req.body.q3;
+  let q4 = req.body.q4;
+  let q5 = req.body.q5;
+  let text = req.body["feedback-text"];
+
+  let recp = await sharedPersistenceMapping["receipts"].findOne({ where: { "recp_uuid": query } })
+  
+
+  // confirm surveyId exists
+  // confirm that survey response not yet provided
+
+  if (recp && !recp.recp_customer_rating) {
+    let result = {
+      recp_customer_rating:+q1,
+      recp_customer_rating1:+q2,
+      recp_customer_rating2:+q3,
+      recp_customer_rating3:+q4,
+      recp_customer_rating4:+q5,
+      recp_customer_comment:text
+    }
+
+    let r = recp.update(result)
+    console.log(r);
+  }
+
+  let survey = require('./backend/surveys')
+
+  res.send(survey.getThankyou());
 
 });
 
