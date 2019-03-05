@@ -581,8 +581,8 @@ function populateCompanyDetails(invoiceTemplate, companyObj, receiptObj) {
 
 
 module.exports = {
-    getSurvey : (surveyId, companyObj) => {
-        let iv = populateCompanyDetails(invoiceTemplate, companyObj);
+    getSurvey : (surveyId, companyObj, receiptObj) => {
+        let iv = populateCompanyDetails(invoiceTemplate, companyObj, receiptObj);
         iv = iv.replace(/%UUID%/g, surveyId);
         return iv;
     },

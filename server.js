@@ -1792,7 +1792,7 @@ app.get('/survey/:id', async function(req, res) {
 
   // find if feedback already provided; if not show the details for customer feedback!
   // 
-  
+  console.log("Hello");
   let recp = await sharedPersistenceMapping["receipts"].findOne({ where: { "recp_uuid": query } })
   let survey = require('./backend/surveys')
 
@@ -1814,7 +1814,7 @@ app.get('/survey/:id', async function(req, res) {
 });
 
 // response for survey
-app.post('/survey-response', function(req, res) {
+app.post('/survey-response', async function(req, res) {
   // get the uuid of the survey
   // populate the 6 fields  
   console.log(req.body);
@@ -1827,7 +1827,7 @@ app.post('/survey-response', function(req, res) {
   let q5 = req.body.q5;
   let text = req.body["feedback-text"];
 
-  let recp = await sharedPersistenceMapping["receipts"].findOne({ where: { "recp_uuid": query } })
+  let recp = await sharedPersistenceMapping["receipts"].findOne({ where: { "recp_uuid": surveyId } })
   
 
   // confirm surveyId exists
