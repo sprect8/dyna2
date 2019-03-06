@@ -620,70 +620,9 @@ function getReportConfig() {
 
   const customerSatisfaction = {
     "key": "customer-satisfaction-page",
-    "title": "Business Process Improvement",
-    "description": "Measure your Business Process",
-    "rows": [
-      [
-        {
-          "title": "Malls In Malaysia",
-          "description": "A list of malls in Malaysia with target opportunities",
-          "type": "MAP",
-          "options": {},
-          "datasource": "",
-          "layout": "twothird"
-        },
-        {
-          "title": "Business Process Improvement Score",
-          "description": "A rating of your overall Business Process Improvement initiatives",
-          "type": "TRANSACTIONS",
-          "options": {},
-          "data": [
-            { "title": "Presence Score", "duration": "Jun 24 - Jul 23", "amount": "2.01", "currency": "d", "data": data2, "direction": "upward" },
-            { "title": "Opportunity Score", "duration": "Jun 24 - Jul 23", "amount": "3.51", "currency": "d", "data": data2, "direction": "upward" },
-            { "title": "Product Sales Score", "duration": "Jun 24 - Jul 23", "amount": "4.71", "currency": "d", "data": data2, "direction": "upward" },
-            { "title": "Product Backlog Score", "duration": "Jun 24 - Jul 23", "amount": "4.21", "currency": "d", "data": data2, "direction": "upward" }
-          ],
-          "datasource": "",
-          "layout": "onethird"
-        }
-      ],
-      [
-        {
-          "title": "Top Products by Revenue",
-          "description": "These are your top performing products",
-          "type": "AREA",
-          "options": {},
-          "datasource": "",
-          "layout": "halfcolumn"
-        },
-        {
-          "title": "Opportunity Analysis",
-          "description": "Customer Requesting similar product groups",
-          "type": "STACKEDBAR",
-          "options": {},
-          "datasource": "",
-          "layout": "halfcolumn"
-        }
-      ],
-      [
-        {
-          "title": "Products in Progress",
-          "description": "Products stuck in different manufacturing process steps",
-          "type": "PIE",
-          "options": {},
-          "datasource": "",
-          "layout": "halfcolumn"
-        },
-        {
-          "title": "Sales Generated per Location",
-          "description": "Location Analysis of different sales and opportunities",
-          "type": "LINE",
-          "options": {},
-          "datasource": "",
-          "layout": "halfcolumn"
-        }
-      ],
-    ]
+    "title": "Customer Satisfaction",
+    "description": "How Happy are your customers? ",
+    "rows": []
   }
 
   function getRowX(color) {
@@ -1538,7 +1477,7 @@ const reportMapping = {
   //"business-improvement-page":
   //"business-waste-page":
   "platform-engagement-page":require("./queries/platformEngagement"),
-  //"customer-satisfaction-page":
+  "customer-satisfaction-page":require("./queries/customerSatisfaction"),
   "inventory-optimisation-page":require("./queries/inventoryOptimisations"),
   "cost-efficiency":require("./queries/salesAnalysisQueries"),
   "business-improvement-page":require("./queries/businessProcessImprovement")

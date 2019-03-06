@@ -25,7 +25,7 @@ const inventoryStock = `
 select cate_name, sum(total) total, month mon, year
 from f_monthly_inventory a , products b, product_categories
 where a.prod_id = b.prod_id and a.user_id = ? and b.prod_cate_id = cate_id
-and year = '2017'
+and year = ?
 group by cate_name, month, year 
 order by year asc, month asc
 `
@@ -34,14 +34,14 @@ order by year asc, month asc
 const productType = `select cate_name, count(*) sold,  to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY/MM') mon
 from receipts, product_categories xx, products, inventories, sales 
 where recp_id = sale_recp_id and cate_id = prod_cate_id and prod_id = inv_prod_id and inv_id = sale_inv_id and xx.owner_user_id = ?
-and to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY') = '2017'
+and to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY') = ?
 group by cate_name, mon
 `;
 // product type sales 
 const productTypeProfit = `select cate_name, sum(sale_price - sale_cost) profit,  to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY/MM') mon
 from receipts, product_categories xx, products, inventories, sales 
 where recp_id = sale_recp_id and cate_id = prod_cate_id and prod_id = inv_prod_id and inv_id = sale_inv_id and xx.owner_user_id = ?
-and to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY') = '2017'
+and to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY') = ?
 group by cate_name, mon
 `;
 
@@ -149,14 +149,23 @@ let colors = ["rgba(72,166,242,1)", "orange", "purple", "darkgreen", '#a6cee3', 
 module.exports = {
   loadConfig: async (db, user) => {
 
+    let year = new Date().getFullYear();
+
+    if (user === 11) {
+      year = 2017;
+    }
+
+
+    year = year + "";
+
     let inventory = await db.query(inventoryStock,
-      { type: db.QueryTypes.SELECT, replacements: [user, user] });
+      { type: db.QueryTypes.SELECT, replacements: [user, year] });
 
     let prodType = await db.query(productType,
-      { type: db.QueryTypes.SELECT, replacements: [user, user] });
+      { type: db.QueryTypes.SELECT, replacements: [user, year] });
 
     let prodProfit = await db.query(productTypeProfit,
-      { type: db.QueryTypes.SELECT, replacements: [user, user] });
+      { type: db.QueryTypes.SELECT, replacements: [user, year] });
 
     let expiring = await db.query(expiringInventory,
       { type: db.QueryTypes.SELECT, replacements: [user, user] });

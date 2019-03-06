@@ -11,7 +11,7 @@ const salesScore = `select *, case when s > 1 then 5 else s*5 end score from (
            date_part('mon', to_date(recp_timestamp, 'YYYY/MM/DD')) AS mon,       
            sum(sale_price - sale_cost) profitable
     FROM receipts xx, sales
-    where sale_recp_id = recp_id and date_part('year', to_date(recp_timestamp, 'YYYY/MM/DD')) = 2017
+    where sale_recp_id = recp_id and date_part('year', to_date(recp_timestamp, 'YYYY/MM/DD')) = ?
     and xx.owner_user_id = ?
     GROUP BY year, mon
     ORDER BY year, mon) x) y
@@ -30,7 +30,7 @@ select to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY/MM') mon, sum(case w
 sum(case when sale_price - sale_cost <= 0 then 1 else 0 end) nonprofitable,
 count(*) total 
 from products xx, receipts, inventories, sales where recp_id = sale_recp_id and sale_inv_id = inv_id and inv_prod_id = prod_id and xx.owner_user_id = ? 
-and date_part('year', to_date(recp_timestamp, 'YYYY/MM/DD')) = 2017
+and date_part('year', to_date(recp_timestamp, 'YYYY/MM/DD')) = ?
 group by mon order by mon ) x`;
 
 
@@ -46,7 +46,7 @@ case when profit_after_salary > 1000 then 5
      else 1 end score     
 from (select staff_name, to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY/MM') mon, sum(sale_price - sale_cost) - avg(staff_salary) profit_after_salary  from receipts xx, staffs, sales 
 where recp_id = sale_recp_id and recp_staff_id = staff_id and xx.owner_user_id = ? 
-and date_part('year', to_date(recp_timestamp, 'YYYY/MM/DD')) = 2017
+and date_part('year', to_date(recp_timestamp, 'YYYY/MM/DD')) = ?
 group by staff_name, mon order by mon asc) x) y group by mon
 `;
 // supplier scoring 
@@ -57,7 +57,7 @@ select date_part('year', to_date(devy_delivery_date, 'YYYY-MM-DD')) as year,
 	date_part('month', to_date(devy_delivery_date, 'YYYY-MM-DD')) AS monthly, 
        5 - 0.2 * sum(case when devy_status = 'LATE' then 1 else 0 end) - 0.3 * sum(case when devy_status = 'VERY LATE' then 1 else 0 end) - 0.5 * sum(case when devy_status = 'BUSINESS IMPACTING' then 1 else 0 end) score
 from deliveries xx, suppliers where supl_id = devy_supl_id and xx.owner_user_id = ?
-and date_part('year', to_date(devy_delivery_date, 'YYYY/MM/DD')) = 2017
+and date_part('year', to_date(devy_delivery_date, 'YYYY/MM/DD')) = ?
 group by year, monthly) x
 `;
 
@@ -67,7 +67,7 @@ group by year, monthly) x
 const salesProfit = `select staff_name, to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY/MM') mon, 
 sum(sale_price - sale_cost) - avg(staff_salary) profit_after_salary  from receipts xx, staffs, sales 
 where recp_id = sale_recp_id and recp_staff_id = staff_id and xx.owner_user_id = ? 
-and date_part('year', to_date(recp_timestamp, 'YYYY/MM/DD')) = 2017
+and date_part('year', to_date(recp_timestamp, 'YYYY/MM/DD')) = ?
 group by staff_name, mon order by mon asc
 `;
 // top best performing
@@ -300,22 +300,32 @@ const costEfficiency = {
 
   module.exports = {
     loadConfig : async (db, user)=>{
+
+      let year = new Date().getFullYear();
+
+      if (user === 11) {
+        year = 2017;
+      }
+
+      year = year + "";
+
       let sScore = await db.query(salesScore,
-      { type: db.QueryTypes.SELECT, replacements: [user, user] });
+      { type: db.QueryTypes.SELECT, replacements: [user, year, user] });
 
       let pScore = await db.query(productScore, 
-        { type: db.QueryTypes.SELECT, replacements: [user]})
+        { type: db.QueryTypes.SELECT, replacements: [user, year]})
 
       let stScore = await db.query(staffScore, 
-        { type: db.QueryTypes.SELECT, replacements: [user]})  
+        { type: db.QueryTypes.SELECT, replacements: [user, year]})  
       let spScore = await db.query(supplierScore, 
-        { type: db.QueryTypes.SELECT, replacements: [user]})  
+        { type: db.QueryTypes.SELECT, replacements: [user, year]})  
+      console.log(sScore);
       sScore = sScore.map(x=>{return {mon: x.year + "/" + (x.mon<=9?"0":"") + x.mon, score: x.score};});
       
       // take avg of each to generate score value
       // worker score
       let workers = await db.query(salesProfit, 
-        { type: db.QueryTypes.SELECT, replacements: [user]}) 
+        { type: db.QueryTypes.SELECT, replacements: [user, year]}) 
 
       // supplier score
       let suppliers = await db.query(supplierStatus, 

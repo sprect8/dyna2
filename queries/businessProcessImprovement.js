@@ -5,16 +5,16 @@
 // top best performing
 const bestPerformer = `select prod_name, sum(sale_price - sale_cost) profit, count(*) total from products xx, receipts, inventories, sales 
 where recp_id = sale_recp_id and sale_inv_id = inv_id and inv_prod_id = prod_id and xx.owner_user_id = ?
-and date_part('year', to_date(recp_timestamp, 'YYYY/MM/DD')) = 2017
-and date_part('month', to_date(recp_timestamp, 'YYYY/MM/DD')) = 12
+and date_part('year', to_date(recp_timestamp, 'YYYY/MM/DD')) = ?
+and date_part('month', to_date(recp_timestamp, 'YYYY/MM/DD')) = ?
 group by prod_name order by 2 desc limit 10`;
 
 // top 10 worst performing products by sales (month)
 
 const worstPerformer = `select prod_name, sum(sale_price - sale_cost) profit, count(*) total from products xx, receipts, inventories, sales 
 where recp_id = sale_recp_id and sale_inv_id = inv_id and inv_prod_id = prod_id and xx.owner_user_id = ?
-and date_part('year', to_date(recp_timestamp, 'YYYY/MM/DD')) = 2017
-and date_part('month', to_date(recp_timestamp, 'YYYY/MM/DD')) = 12
+and date_part('year', to_date(recp_timestamp, 'YYYY/MM/DD')) = ?
+and date_part('month', to_date(recp_timestamp, 'YYYY/MM/DD')) = ?
 group by prod_name order by 2 asc limit 10`;
 
 
@@ -22,7 +22,7 @@ group by prod_name order by 2 asc limit 10`;
 const regionalProfit = `select round(recp_latitude, 4) latitude, round(recp_longitude, 4) longitude, 
 sum(sale_price - sale_cost) profit from receipts xx, sales 
 where recp_id = sale_recp_id and xx.owner_user_id = ?
-and to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY/MM') = '2017/12'
+and to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY/MM') = ?
 group by latitude, longitude order by profit asc
 `;
 
@@ -33,13 +33,13 @@ sum(sale_price - sale_cost) profit from receipts xx, sales, inventories, product
 where recp_id = sale_recp_id and xx.owner_user_id = ?           
 and cate_id = prod_cate_id and prod_id = inv_prod_id                                                                                                                                   
 and sale_inv_id = inv_id and inv_prod_id = prod_id
-and to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY') = '2017' group by mon, cate_name order by mon asc`;
+and to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY') = ? group by mon, cate_name order by mon asc`;
 
 
 const locationAnalysis = `select round(recp_latitude, 4) latitude, round(recp_longitude, 4) longitude, to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY/MM') mon,
 sum(sale_price - sale_cost) profit from receipts xx, sales 
 where recp_id = sale_recp_id and xx.owner_user_id = ?
-and to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY') = '2017'
+and to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY') = ?
 group by latitude, longitude, mon order by mon asc`
 
 const businessProcess = {
@@ -100,26 +100,40 @@ let colors = ["rgba(72,166,242,1)", "orange", "purple", "darkgreen", '#a6cee3', 
 
 module.exports = {
     loadConfig: async (db, user) => {
+        let year = new Date().getFullYear();
+        let month = new Date().getMonth() + 1;
+        if (user === 11) {
+            year = 2017;
+            month = 12;
+        }
+
+        if (month < 10) {
+            month = "0" + month;
+        }
+
+
+        year = year + "";
+
         let ce = JSON.parse(JSON.stringify(businessProcess));
 
 
         let regional = await db.query(regionalProfit,
-            { type: db.QueryTypes.SELECT, replacements: [user, user] });
+            { type: db.QueryTypes.SELECT, replacements: [user, year + "/" + month] });
 
 
         let best = await db.query(bestPerformer,
-            { type: db.QueryTypes.SELECT, replacements: [user, user] });
+            { type: db.QueryTypes.SELECT, replacements: [user, year, month] });
 
 
         let worst = await db.query(worstPerformer,
-            { type: db.QueryTypes.SELECT, replacements: [user, user] });
+            { type: db.QueryTypes.SELECT, replacements: [user, year, month] });
 
 
         let monthly = await db.query(monthlyProfit,
-            { type: db.QueryTypes.SELECT, replacements: [user, user] });
+            { type: db.QueryTypes.SELECT, replacements: [user, year] });
         
         let locn = await db.query(locationAnalysis,
-            { type: db.QueryTypes.SELECT, replacements: [user, user] });
+            { type: db.QueryTypes.SELECT, replacements: [user, year] });
 
         let uniqueDates = [...new Set([...monthly.map(x=>x.mon) ,...locn.map(x=>x.mon)])]; //   => remove duplication
 
