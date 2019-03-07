@@ -533,6 +533,9 @@ const noSurvey = `<!doctype html>
 
 function populateCompanyDetails(invoiceTemplate, companyObj, receiptObj) {
  
+    if (!companyObj) {
+        companyObj = {};
+    }
 
     let inv = invoiceTemplate;
     inv = inv.replace(/%INV_NUMBER%/g, receiptObj.recp_uuid);

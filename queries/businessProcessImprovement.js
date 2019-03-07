@@ -139,6 +139,7 @@ module.exports = {
 
         uniqueDates = uniqueDates.sort();
 
+        ce.rows[0][0].data = regional;
 
         // best dataset
         let bestds = {
