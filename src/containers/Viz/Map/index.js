@@ -4307,6 +4307,8 @@ class BasicMap extends Component {
       });
     })
 
+    this.showBubbles();
+
     this.changeSkins(style);
   }
   changeSkins(mapSkinsForBasicDemo) {
@@ -4321,8 +4323,68 @@ class BasicMap extends Component {
       this.mateMap.setMapTypeId('styled_map');
     } catch (err) { }
   }
+  showBubbles () {
+    if (this.mateMap && this.props.data && this.props.data.length > 0) {
+      let min = 0;
+      let max = 0;
+      this.props.data.forEach(e=> {
+        let p = +e.profit
+        if (max < p) {
+          max = p;
+        }
+        if (min > p) {
+          min = p;
+        }
+      });
+
+      this.infowindow = new window.google.maps.InfoWindow({});
+      this.marker = new window.google.maps.Marker({
+        map: this.mateMap
+      });
+
+      this.props.data.forEach(e=>{
+        let bubbleSize = 1000/max * (+e.profit);
+        if (min < 0 && max > 0) {
+          bubbleSize = 1000/(max + (-1 * min)) * (+e.profit + (-1 * min)) 
+        }
+        if (max < 0) {
+          bubbleSize = 100; // no profit!
+        }
+        console.log(bubbleSize);
+        let circle = new window.google.maps.Circle({
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: 'green',
+          fillOpacity: 0.3,
+          map: this.mateMap,
+          center: {lat: +e.latitude, lng: +e.longitude},
+          radius: bubbleSize,
+        })   
+        let that = this;
+        circle.addListener('mouseover',function(){
+          console.log("Mouse-over")
+          that.marker.setPosition(this.getCenter()); // get circle's center
+          that.infowindow.setContent("<b>Profitability: " + e.profit + "</b>"); // set content
+          that.infowindow.open(that.mateMap, that.marker); // open at marker's location
+          that.marker.setVisible(false); // hide the marker
+
+        });
+        
+        circle.addListener('mouseout',function(){
+          console.log("Mouse-out")            
+            that.infowindow.close();
+        });
+        console.log("Bubble generated")     
+      })
+    }
+  }
   render() {
     const { loaded, title, description, stretched } = this.props;
+    console.log(this.props, "Done")
+
+    this.showBubbles();
+
     return (
       <WidgetBox title={title} description={description} stretched={stretched}>
 

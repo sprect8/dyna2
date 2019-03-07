@@ -1053,7 +1053,7 @@ function generateProductSearch(app) {
 
     let categoryFilters = query.params.facetFilters;
     let countSel = 'SELECT count(*) FROM products a where a.owner_user_id = ?';
-    let prodSel = `select a.prod_id, b.cate_desc, a.prod_name, a.prod_desc, a.prod_unit_price, c.inv_id,
+    let prodSel = `select a.prod_id, b.cate_desc, a.prod_name, a.prod_desc, a.prod_list_price, c.inv_id,
     sum(c.inv_units_in_stock) over (partition by prod_id) total
     from products a
     inner join product_categories b on a.prod_cate_id = b.cate_id
@@ -1077,7 +1077,7 @@ function generateProductSearch(app) {
       replacements.push(categoryFilters[0].map(x => {
         return x.substring(x.indexOf(":") + 1);
       }));
-      prodSel = `SELECT a.prod_id, b.cate_desc, a.prod_name, a.prod_desc, a.prod_unit_price, c.inv_id 
+      prodSel = `SELECT a.prod_id, b.cate_desc, a.prod_name, a.prod_desc, a.prod_list_price, c.inv_id 
       FROM products a inner join product_categories b on a.prod_cate_id = b.cate_id
       left outer join inventories c      
       on a.prod_id = c.inv_prod_id     
@@ -1107,7 +1107,7 @@ function generateProductSearch(app) {
       return {
         "total": +x.total,
         "categories": [x.cate_desc],
-        "price": +x.prod_unit_price,
+        "price": +x.prod_list_price,
         "rating": 4,
         "image": "/api/product/image/" + x.prod_id,
         "objectID": x.prod_id,
