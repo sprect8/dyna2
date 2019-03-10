@@ -24,8 +24,8 @@ self.__precacheManifest = [
     "url": "/static/media/algolia.fd4c766f.svg"
   },
   {
-    "revision": "c80f4864f848c190f4e5",
-    "url": "/static/js/main.c80f4864.chunk.js"
+    "revision": "c027871e94ac489bc872",
+    "url": "/static/js/main.c027871e.chunk.js"
   },
   {
     "revision": "efea65b3236d31d25681",
@@ -140,7 +140,7 @@ self.__precacheManifest = [
     "url": "/static/media/signup.1b64e34c.svg"
   },
   {
-    "revision": "c80f4864f848c190f4e5",
+    "revision": "c027871e94ac489bc872",
     "url": "/static/css/main.71951f9a.chunk.css"
   },
   {
@@ -156,7 +156,7 @@ self.__precacheManifest = [
     "url": "/static/css/12.a9c7dbd3.chunk.css"
   },
   {
-    "revision": "00076f624aa9e1dcbbacbb4df433cee9",
+    "revision": "527d9c8d9178a4eef8a1c6674d84d98d",
     "url": "/index.html"
   }
 ];
