@@ -31,7 +31,7 @@
 // month_id integer not null, total_inv_available double not null);
 
 // create table f_daily_product (date_id integer not null, 
-// month_id integer not null,  
+// month_id integer not null, price float not null,  
 // cost_of_goods_sold double not null, total_inv_sold integer not null);
 
 // create table f_daily_sales (date_id integer not null, 
