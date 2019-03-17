@@ -49,8 +49,8 @@ const businessProcess = {
     "rows": [
         [
             {
-                "title": "Malls In Malaysia",
-                "description": "A list of malls in Malaysia with target opportunities",
+                "title": "Profitable Business Locations",
+                "description": "Areas of profitability where the Business made the most sales",
                 "type": "MAP",
                 "options": {},
                 "datasource": "",

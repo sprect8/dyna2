@@ -16,9 +16,52 @@
 -- Inventory Lookup
 */
 
-const dayOfSupply = "";
-const inventoryTurn = "";
+// monthly data capture [daily] - evaluated to monthly
+// cost of good sold - cost_of_goods_sold
+// inventory available - total_inv_available
+// units sold - total_inv_sold
+// price of good sold - price
+// date (yyyy-mm-dd) - date_id
+// month (yyyy-mm) - month_id
+
+
+// Create index on each table
+// Merge the f_daily_product and f_daily_inventories into f_daily_sales (use current date to merge)
+// create table f_daily_inventories (date_id integer not null, 
+// month_id integer not null, total_inv_available double not null);
+
+// create table f_daily_product (date_id integer not null, 
+// month_id integer not null,  
+// cost_of_goods_sold double not null, total_inv_sold integer not null);
+
+// create table f_daily_sales (date_id integer not null, 
+// month_id integer not null, total_inv_available double not null, 
+// cost_of_goods_sold double not null, total_inv_sold integer not null);
+// 
+
+// select sum(inv_units_in_stock) total_inv_available, inv_prod_id, to_char(now(), 'YYYYMMDD') date_id, to_char(now(), 'YYYYMM') month_id from inventories where owner_user_id = 11 group by inv_prod_id;
+// select sum(sale_price) price, sum(sale_cost) cost_of_goods_sold, sum(sale_total_purchase) total_inv_sold, inv_prod_id prod_id,to_char(to_date(recp_timestamp, 'YYYY-MM-DD'), 'YYYYMMDD') date_id,to_char(to_date(recp_timestamp, 'YYYY-MM-DD'), 'YYYYMM') month_id from sales, receipts, inventories where sale_inv_id = inv_id and sale_recp_id = recp_id group by prod_id, date_id, month_id
+
+
+// f_daily_products
+// f_daily_inventories
+// f_daily_sales
+
+// current inventory (how long our current inventory will last?)
+// 1 / [Inventory Turn] * 365 - month
+const dayOfSupply = "select sum(inv_units_in_stock) current_stock_level from inventories where owner_user_id = ?";
+const dayOfSupply1 = "select count(*) from sales a, receipts b where sale_recp_id = recp_id and a.owner_user_id = ? and left(recp_timestamp, 7) = ?";
+
+// calculate stock levels and such over time? need monthly stock level evaluated; and we query for latest copy of the trade 
+// we should calculate stock levels vs sales across all products, and sum up total for fact table
+
+// average monthly inentory vs average total sold
+const inventoryTurn = ""; // cost of goods sold / average inventory
+
+// average units sold vs average units of inventory available
 const stockSalesRatio = "";
+
+// 
 const sellThrough = "";
 
 const inventoryStock = `
