@@ -89,7 +89,9 @@ const CronJob = require('cron').CronJob;
 
 module.exports = {
     startCron: (db) => {
+        console.log("Starting Cron Jobs");
         const job = new CronJob('00 00 00 * * *', function() {
+            console.log("Running daily job", new Date());
             db.query(sqlInv);
             db.query(sqlProd);
             db.query(sqlSales);
@@ -97,6 +99,7 @@ module.exports = {
         job.start();
 
         const job2 = new CronJob('* * 1 * *', function() {
+            console.log("Running monthly job", new Date());
             db.query(monthlyExpiring);
             db.query(monthlySales);
         });
