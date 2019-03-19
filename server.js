@@ -12,6 +12,8 @@ var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var uuid = require('uuid/v4');
 const bcrypt = require('bcrypt');
 
+const cron = require('./cron');
+
 const app = express();
 // parse application/json
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -698,6 +700,8 @@ var sequelize = new Sequelize(process.env.postgres_db || 'postgres', process.env
         ssl: process.env.PORT ? true : false
     },
 }); // connect to sequelize
+
+cron.startCron(sequelize); // start the cron job!
 
 function deriveType(entry, column) {
   switch (column.type) {
