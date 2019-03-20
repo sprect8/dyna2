@@ -249,17 +249,17 @@ module.exports = {
     let ie = JSON.parse(JSON.stringify(inventoryOptimisation));
 
     let stats = ie[0][1].data;
-    stats[0].widgets[0].amount = dos;
+    stats[0].widgets[0].amount = dos ? dos.dos : 0;
     stats[0].widgets[0].data.datasets.data = dosM.map(e=>e.dos);
     
-    stats[0].widgets[1].amount = invT;
-    stats[0].widgets[1].data.datasets.data = invTM.map(e=>e.dos);
+    stats[0].widgets[1].amount = invT ? invT.inv_turn : 0;
+    stats[0].widgets[1].data.datasets.data = invTM.map(e=>e.inv_turn);
     
-    stats[1].widgets[0].amount = ssr;
-    stats[1].widgets[0].data.datasets.data = ssrM.map(e=>e.dos);
+    stats[1].widgets[0].amount = ssr ? ssr.stock_sales_ratio : 0;
+    stats[1].widgets[0].data.datasets.data = ssrM.map(e=>e.stock_sales_ratio);
     
-    stats[1].widgets[1].amount = st;
-    stats[1].widgets[1].data.datasets.data = stM.map(e=>e.dos);
+    stats[1].widgets[1].amount = st ? st.sell_through : 0;
+    stats[1].widgets[1].data.datasets.data = stM.map(e=>e.sell_through);
     
     let invds = {
       labels: uniqueDates,
