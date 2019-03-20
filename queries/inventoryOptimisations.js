@@ -49,20 +49,20 @@
 
 // current inventory (how long our current inventory will last?)
 // 1 / [Inventory Turn] * 365 - month
-const dayOfSupply = "select sum(inv_units_in_stock) current_stock_level from inventories where owner_user_id = ?";
-const dayOfSupply1 = "select count(*) from sales a, receipts b where sale_recp_id = recp_id and a.owner_user_id = ? and left(recp_timestamp, 7) = ?";
-
+const dayOfSupply = "select 1/(avg(cost_of_goods_sold)/avg(total_inv_available)) dos from f_daily_sales where month_id = ? and owner_user_id = ?";
+const dosMonth = "select 1/(avg(cost_of_goods_sold)/avg(total_inv_available)) dos, month_id from f_daily_sales where month_id >= ? and owner_user_id = ? group by month_id order by month_id asc";
 // calculate stock levels and such over time? need monthly stock level evaluated; and we query for latest copy of the trade 
 // we should calculate stock levels vs sales across all products, and sum up total for fact table
 
 // average monthly inentory vs average total sold
-const inventoryTurn = ""; // cost of goods sold / average inventory
-
+const inventoryTurn = "select avg(cost_of_goods_sold) / avg(total_inv_available) inv_turn from f_daily_sales where month_id = ? and owner_user_id = ?"; // cost of goods sold / average inventory
+const invTurnMonth = "select avg(cost_of_goods_sold) / avg(total_inv_available) inv_turn, month_id from f_daily_sales where month_id >= ? and owner_user_id = ? group by month_id order by month_id asc"; // cost of goods sold / average inventory
 // average units sold vs average units of inventory available
-const stockSalesRatio = "";
-
+const stockSalesRatio = "select avg(total_inv_available) / avg(total_inv_sold) stock_sales_ratio from f_daily_sales where month_id = ? and owner_user_id = ?";
+const ssrMonth = "select avg(total_inv_available) / avg(total_inv_sold) stock_sales_ratio, month_id from f_daily_sales where month_id >= ? and owner_user_id = ? group by month_id order by month_id asc";
 // 
-const sellThrough = "";
+const sellThrough = "select avg(total_inv_sold) / avg(total_inv_available) sell_through from f_daily_sales where month_id = ? and owner_user_id = ?";
+const stMonth = "select avg(total_inv_sold) / avg(total_inv_available) sell_through, month_id from f_daily_sales where month_id >= ? and owner_user_id = ? group by month_id order by month_id asc";
 
 const inventoryStock = `
 select cate_name, sum(total) total, month mon, year
@@ -72,6 +72,7 @@ and year = ?
 group by cate_name, month, year 
 order by year asc, month asc
 `
+
 // additional charts (pies)
 // product type sales mix
 const productType = `select cate_name, count(*) sold,  to_char(to_date(recp_timestamp, 'YYYY/MM/DD'), 'YYYY/MM') mon
@@ -193,6 +194,7 @@ module.exports = {
   loadConfig: async (db, user) => {
 
     let year = new Date().getFullYear();
+    let mon = new Date().getMonth() + 1;
 
     if (user === 11) {
       year = 2017;
@@ -200,6 +202,31 @@ module.exports = {
 
 
     year = year + "";
+
+    let ym = year + (mon < 10 ? "0" : "") + mon;
+
+    let dos = await db.query(dayOfSupply,
+      { type: db.QueryTypes.SELECT, replacements: [ym, user] });
+
+    let invT = await db.query(inventoryTurn,
+      { type: db.QueryTypes.SELECT, replacements: [ym, user] });
+
+    let ssr = await db.query(stockSalesRatio,
+      { type: db.QueryTypes.SELECT, replacements: [ym, user] });
+
+    let st = await db.query(sellThrough,
+      { type: db.QueryTypes.SELECT, replacements: [ym, user] });
+
+    let dosM = await db.query(dosMonth,
+      { type: db.QueryTypes.SELECT, replacements: [year + "01", user] });
+    let invTM = await db.query(invTurnMonth,
+      { type: db.QueryTypes.SELECT, replacements: [year + "01", user] });
+    let ssrM = await db.query(ssrMonth,
+      { type: db.QueryTypes.SELECT, replacements: [year + "01", user] });
+    let stM = await db.query(stMonth,
+      { type: db.QueryTypes.SELECT, replacements: [year + "01", user] });
+
+
 
     let inventory = await db.query(inventoryStock,
       { type: db.QueryTypes.SELECT, replacements: [user, year] });
@@ -221,6 +248,19 @@ module.exports = {
 
     let ie = JSON.parse(JSON.stringify(inventoryOptimisation));
 
+    let stats = ie[0][1].data;
+    stats[0].widgets[0].amount = dos;
+    stats[0].widgets[0].data.datasets.data = dosM.map(e=>e.dos);
+    
+    stats[0].widgets[1].amount = invT;
+    stats[0].widgets[1].data.datasets.data = invTM.map(e=>e.dos);
+    
+    stats[1].widgets[0].amount = ssr;
+    stats[1].widgets[0].data.datasets.data = ssrM.map(e=>e.dos);
+    
+    stats[1].widgets[1].amount = st;
+    stats[1].widgets[1].data.datasets.data = stM.map(e=>e.dos);
+    
     let invds = {
       labels: uniqueDates,
       datasets: []
