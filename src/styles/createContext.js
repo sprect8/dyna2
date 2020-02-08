@@ -6,7 +6,9 @@ import green from '@material-ui/core/colors/green';
 import { createGenerateClassName } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
-  palette: {
+  typography: {
+    useNextVariants: true,
+  },palette: {
     primary: purple,
     secondary: green,
   },

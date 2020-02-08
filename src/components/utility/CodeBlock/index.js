@@ -16,7 +16,9 @@ import notification from '../../notification';
 import getPrevalCode from '../../../helpers/getPrevalCode';
 
 const theme = createMuiTheme({
-  overrides: {
+  typography: {
+    useNextVariants: true,
+  },overrides: {
     MuiExpansionPanelDetails: {
       root: {
         background: '#ECECEC',

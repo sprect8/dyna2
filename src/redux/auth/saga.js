@@ -2,7 +2,6 @@ import { all, takeEvery, put, call } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import { clearToken, getToken } from '../../helpers/utility';
 import actions from './actions';
-import { fetch } from '../api'
 
 const fakeApiCall = true; // auth0 or express JWT
 
@@ -52,6 +51,7 @@ export function* logoutRequest() {
   yield put(push('/'));
 }
 export function* checkAuthorization() {
+  console.log("We are about to checkAuth");
   let response = yield call(fetch, '/api/ping');
   
   const token = getToken();

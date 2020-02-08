@@ -28,6 +28,8 @@ const theme = createMuiTheme({
         marginTop: 10,
       },
     },
+  },typography: {
+    useNextVariants: true,
   },
 });
 

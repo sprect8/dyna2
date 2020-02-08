@@ -27,6 +27,9 @@ const theme = createMuiTheme({
       },
     },
   },
+  typography: {
+    useNextVariants: true,
+  },
 });
 
 const getContact = (seletedContact, otherAttributes) => {

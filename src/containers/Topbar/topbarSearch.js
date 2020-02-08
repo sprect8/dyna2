@@ -9,7 +9,9 @@ import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import BasicAutoComplete from '../UiElements/Autocomplete/basicAutoComplete';
 
 const theme = createMuiTheme({
-  overrides: {
+  typography: {
+    useNextVariants: true,
+  },overrides: {
     MuiPopover: {
       paper: {
         width: 700,

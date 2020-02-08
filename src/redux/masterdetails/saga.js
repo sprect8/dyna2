@@ -1,7 +1,7 @@
 import { all, takeEvery, put, call } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 import actions from './actions';
-import { fetch, get } from '../api';
+import { get } from '../api';
 
 // Load Data (paged)
 // Save Data (new)

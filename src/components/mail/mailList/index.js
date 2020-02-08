@@ -20,7 +20,9 @@ import {
 } from '../../uielements/expansionPanel';
 
 const theme = createMuiTheme({
-  overrides: {
+  typography: {
+    useNextVariants: true,
+  },overrides: {
     MuiExpansionPanelSummary: {
       expanded: {
         borderBottom: '1px solid #e0e0e0',

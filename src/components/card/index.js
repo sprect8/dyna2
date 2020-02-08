@@ -24,6 +24,9 @@ const theme = createMuiTheme({
       },
     },
   },
+  typography: {
+    useNextVariants: true,
+  },
 });
 
 export default class extends Component {

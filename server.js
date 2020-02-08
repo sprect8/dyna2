@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser')
 const favicon = require('express-favicon');
 const path = require('path');
 const Sequelize = require('sequelize');
+require('dotenv').config()
 const port = process.env.PORT || 3000;
 var bodyParser = require('body-parser')
 var morgan = require('morgan');

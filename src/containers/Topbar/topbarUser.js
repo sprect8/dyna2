@@ -24,7 +24,9 @@ const { logout } = authAction;
 const { loadUserSettings } = actions;
 
 const theme = createMuiTheme({
-  overrides: {
+  typography: {
+    useNextVariants: true,
+  },overrides: {
     MuiModal: {
       root: {
         zIndex: 1800,

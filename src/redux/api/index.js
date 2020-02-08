@@ -1,3 +1,3 @@
-import { get, fetch } from "http";
+import { get} from "http";
 
-export {fetch, get}
+export {get}

@@ -33,7 +33,9 @@ import MailBox, {
 } from './mailBox.style';
 
 const theme = createMuiTheme({
-  overrides: {
+  typography: {
+    useNextVariants: true,
+  },overrides: {
     MuiDialog: {
       root: {
         zIndex: 1500,

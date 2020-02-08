@@ -12,7 +12,9 @@ import themeActions from '../../redux/themeSwitcher/actions';
 const { switchActivation } = themeActions;
 
 const theme = createMuiTheme({
-	overrides: {
+	typography: {
+		useNextVariants: true,
+	  },overrides: {
 		MuiTab: {
 			root: {
 				minWidth: 'auto !important',
