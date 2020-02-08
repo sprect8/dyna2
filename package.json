@@ -10,6 +10,7 @@
     "autoprefixer": "^9.0.0",
     "autosuggest-highlight": "^3.1.1",
     "bcrypt": "^3.0.2",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "card-react": "1.2.7",
     "chart.js": "2.7.2",
@@ -131,5 +132,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "engines": {
+    "node": "10.16.0"
+  }
 }
