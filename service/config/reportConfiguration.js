@@ -7,33 +7,33 @@ const fn = (db) => {
     "rows": []
   }
 
-  function getRow(color) {
-    return {
-      labels: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-      datasets: [
-        {
-          label: "",
-          backgroundColor: color,
-          borderWidth: 0,
-          data: [65, 59, 80, 81, 56, 55, 40, 88, 58, 19, 22, 60, 40, 85, 22, 21]
-        }
-      ]
-    };
-  }
-  const datax = [
-    {
-      widgets: [
-        { title: "Worker Score", currency: "d", amount: "3.2", progress: "67", color: "rgb(153, 102, 255)", direction: "upward", data: getRow("rgba(72,166,242,1)") },
-        { title: "Supplier Score", currency: "d", amount: "3.1", progress: "67", color: "rgb(153, 102, 255)", direction: "upward", data: getRow("orange") }
-      ]
-    },
-    {
-      widgets: [
-        { title: "Sales Agent Score", currency: "d", amount: "2.1", progress: "42", color: "rgb(153, 102, 255)", direction: "downward", data: getRow("purple") },
-        { title: "Investment Score", currency: "d", amount: "4.2", progress: "80", color: "rgb(153, 102, 255)", direction: "upward", data: getRow("darkgreen") }
-      ]
-    }
-  ]
+//   function getRow(color) {
+//     return {
+//       labels: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+//       datasets: [
+//         {
+//           label: "",
+//           backgroundColor: color,
+//           borderWidth: 0,
+//           data: [65, 59, 80, 81, 56, 55, 40, 88, 58, 19, 22, 60, 40, 85, 22, 21]
+//         }
+//       ]
+//     };
+//   }
+//   const datax = [
+//     {
+//       widgets: [
+//         { title: "Worker Score", currency: "d", amount: "3.2", progress: "67", color: "rgb(153, 102, 255)", direction: "upward", data: getRow("rgba(72,166,242,1)") },
+//         { title: "Supplier Score", currency: "d", amount: "3.1", progress: "67", color: "rgb(153, 102, 255)", direction: "upward", data: getRow("orange") }
+//       ]
+//     },
+//     {
+//       widgets: [
+//         { title: "Sales Agent Score", currency: "d", amount: "2.1", progress: "42", color: "rgb(153, 102, 255)", direction: "downward", data: getRow("purple") },
+//         { title: "Investment Score", currency: "d", amount: "4.2", progress: "80", color: "rgb(153, 102, 255)", direction: "upward", data: getRow("darkgreen") }
+//       ]
+//     }
+//   ]
 
   const costEfficiency = {
     "key": "cost-efficiency",
@@ -56,7 +56,8 @@ const fn = (db) => {
           "type": "STACKEDBAR",
           "options": {},
           "datasource": "",
-          "layout": "halfcolumn"
+          "layout": "halfcolumn",
+          //"data": {labels: ['a', 'b', 'c'], datasets: [{label: 'A', data: [1,2,3]}, {label: 'B', data: [2,3,4]}, {label: 'C', data: [3,4,5]}]}
         },
         {
           "title": "Business Waste Score",
@@ -123,33 +124,33 @@ const fn = (db) => {
     "rows": []
   }
 
-  function getRowX(color) {
-    return {
-      labels: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-      datasets: [
-        {
-          label: "",
-          backgroundColor: color,
-          borderWidth: 0,
-          data: [65, 59, 80, 81, 56, 55, 40, 88, 58, 19, 22, 60, 40, 85, 22, 21]
-        }
-      ]
-    };
-  }
-  const datainv = [
-    {
-      widgets: [
-        { title: "Stock Score", currency: "d", amount: "3.2", progress: "67", color: "rgb(153, 102, 255)", direction: "upward", data: getRowX("rgba(72,166,242,1)") },
-        { title: "Inventory Score", currency: "d", amount: "3.1", progress: "67", color: "rgb(153, 102, 255)", direction: "upward", data: getRowX("orange") }
-      ]
-    },
-    {
-      widgets: [
-        { title: "Inventory Health Score", currency: "d", amount: "2.1", progress: "42", color: "rgb(153, 102, 255)", direction: "downward", data: getRowX("purple") },
-        { title: "Expiration Score", currency: "d", amount: "4.2", progress: "80", color: "rgb(153, 102, 255)", direction: "upward", data: getRowX("darkgreen") }
-      ]
-    }
-  ]
+//   function getRowX(color) {
+//     return {
+//       labels: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+//       datasets: [
+//         {
+//           label: "",
+//           backgroundColor: color,
+//           borderWidth: 0,
+//           data: [65, 59, 80, 81, 56, 55, 40, 88, 58, 19, 22, 60, 40, 85, 22, 21]
+//         }
+//       ]
+//     };
+//   }
+//   const datainv = [
+//     {
+//       widgets: [
+//         { title: "Stock Score", currency: "d", amount: "3.2", progress: "67", color: "rgb(153, 102, 255)", direction: "upward", data: getRowX("rgba(72,166,242,1)") },
+//         { title: "Inventory Score", currency: "d", amount: "3.1", progress: "67", color: "rgb(153, 102, 255)", direction: "upward", data: getRowX("orange") }
+//       ]
+//     },
+//     {
+//       widgets: [
+//         { title: "Inventory Health Score", currency: "d", amount: "2.1", progress: "42", color: "rgb(153, 102, 255)", direction: "downward", data: getRowX("purple") },
+//         { title: "Expiration Score", currency: "d", amount: "4.2", progress: "80", color: "rgb(153, 102, 255)", direction: "upward", data: getRowX("darkgreen") }
+//       ]
+//     }
+//   ]
 
   const inventoryOptimisation = {
     "key":"inventory-optimisation-page",
