@@ -71,7 +71,7 @@ class TopbarUser extends Component {
 
           <div className="userDetails">
             <h3>{this.state.userName}</h3>
-            <p>Dynapreneur</p>
+            <p>DataLytics</p>
           </div>
         </UserInformation>
 

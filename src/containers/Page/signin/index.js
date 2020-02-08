@@ -71,10 +71,10 @@ class SignIn extends Component {
           <Scrollbars style={{ height: "100%" }}>
             <div className="mateSignInPageGreet">
               <p style={{"textAlign":"center"}}>
-                <img src={"/dyna-logo2.png"} alt="Logo" />
+                <img src={"/dyna-logo.png"} alt="Logo" />
               </p>
               <p>
-                Welcome to TM Dynapreneur 2018, Please Login with your personal account
+                Welcome to DataLytics Platform, Please Login with your personal account
                 information.
               </p>
               {this.state.error ? <SnackbarContent message={"Login Failed, please check username / password and try again"}  /> : ""}

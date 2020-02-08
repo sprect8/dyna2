@@ -63,7 +63,7 @@ const ListElement = ({
 const LogoElem = ({ onLogo }) => {
   return (    
       <div to="/dashboard" onClick={onLogo} style={{"fontSize":"12px", fontWeight:"300", textTransform:"uppercase", color:"white", display:"inline-block"}}>
-        <img src={"/dyna-logo2.png"} alt="Logo" style={{ "height": "60px", "float":"left", "paddingRight":"5px"}} />
+        <img src={"/dyna-logo.png"} alt="Logo" style={{ "height": "60px", "float":"left", "paddingRight":"5px"}} />
         
     </div>    
   );
@@ -183,7 +183,7 @@ class Sidebar extends Component {
             <Lists>{opts.map(menuItem)}</Lists>
             
           </Scrollbars>          
-          <a href="https://www.tmdynapreneur.com" style={{"fontSize":"12px", "color":"white", "position":"absolute", "bottom":"0px"}}>Powered by <img src="/ie-logo.jpeg" style={{"height":"18px"}}/> (IE Consulting)   </a>
+          <a href="https://datalytic.herokuapp.com" style={{"fontSize":"12px", "color":"white", "position":"absolute", "bottom":"0px"}}>Powered by <img src="/dyna-logo.png" style={{"height":"18px"}}/> (RZLytics)   </a>
         </div>             
       </Drawer>
     );

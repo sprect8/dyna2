@@ -103,10 +103,10 @@ class SignUp extends Component {
           </div>
           <Scrollbars style={{ height: "100%" }}>
             <p style={{ "textAlign": "center" }}>
-              <img src={"/dyna-logo2.png"} alt="Logo" />
+              <img src={"/dyna-logo.png"} alt="Logo" />
             </p>
             <p>
-              Welcome to TM Dynapreneur 2018, This is the registration page. Only authorized users may use this
+              Welcome to DataLytics Platform, This is the registration page. Only authorized users may use this
               </p>
             <p class="hasError">
               {this.state.error ? <SnackbarContent message={"Failed to create User - Please check configuration and try again"} /> : ""}
