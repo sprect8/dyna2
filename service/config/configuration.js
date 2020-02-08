@@ -43,7 +43,7 @@ const fn = (view, db)=>{
           { "name": "inv_id", "display": "Inventory Id", "type": "number", "sequence": "inv_id_seq", "mandatory": true, "unique": true, "key": true },
           { "name": "inv_prod_id", "display": "Product", "type": "number", "mandatory": true, "ref": "products" },
           { "name": "inv_bar_code", "display": "Barcode", "type": "barcode", "mandatory": false },
-          { "name": "inv_purchase_date", "display": "Purchase Date", "type": "timestamp", "mandatory": true, "default": formatDate() },
+          { "name": "inv_purchase_date", "display": "Purchase Date", "type": "timestamp", "mandatory": true, "default": '2020-01-01' },
           { "name": "inv_expiry_date", "display": "Expiry Date", "type": "timestamp", "mandatory": true },
           { "name": "inv_units_in_stock", "display": "Amount in Stock", "type": "number", "mandatory": true, "lov": ["ACTIVE", "INACTIVE", "PROBATION"] },
     
@@ -164,6 +164,30 @@ const fn = (view, db)=>{
           { "name": "devy_comment", "display": "Comment", "type": "text" }
         ]
       }
+
+      const reportConfiguration = {
+        "tableName": "reportConfiguration",
+        "displayName": "Report Configuration",
+        "key": "report_id",
+        "description": "Generate Reports for configuration",
+        "columns": [
+          { "name": "report_id", "display": "Report Id", "type": "number", "sequence": "report_id_seq", "mandatory": true, "unique": true, "key": true },
+          { "name": "report_name", "display": "Report Name", "type": "text", "mandatory": true },
+          { "name": "report_path", "display": "Report Path", "type": "text", "mandatory": true },
+          { "name": "report_configuration", "display": "Report Configuration", "type": "text", "mandatory": true },          
+        ]
+      }
+
+      const sideBarConfiguration = {
+        "tableName": "sidebarConfiguration",
+        "displayName": "Sidebar Configuration",
+        "key": "sidebar_id",
+        "description": "Configure contents of the sidebar",
+        "columns": [
+          { "name": "sidebar_id", "display": "Sidebar ID", "type": "number", "sequence": "sidebar_id_seq", "mandatory": true, "unique": true, "key": true },
+          { "name": "sidebar_config", "display": "Sidebar Configuration", "type": "text", "mandatory": true},          
+        ]
+      }
     
       const investments = {
         "tableName": "investments",
@@ -204,30 +228,35 @@ const fn = (view, db)=>{
       }
     
       let tableConfiguration = [
-        { "path": "staff-page", "table": staff },
-        { "path": "suppliers-page", "table": suppliers },
-        { "path": "product-catalog", "table": productCategory },
-        { "path": "products-page", "table": products },
-        { "path": "inventory-page", "table": inventory },    
-        { "path": "receipts-page", "table": receipts },
-        { "path": "sales-page", "table": sales },    
-        { "path": "deliveries-page", "table": deliveries },    
-        { "path": "investments-page", "table": investments },
-        { "path": "subscriptions-page", "table": subscriptions },
+        // { "path": "staff-page", "table": staff },
+        // { "path": "suppliers-page", "table": suppliers },
+        // { "path": "product-catalog", "table": productCategory },
+        // { "path": "products-page", "table": products },
+        // { "path": "inventory-page", "table": inventory },    
+        // { "path": "receipts-page", "table": receipts },
+        // { "path": "sales-page", "table": sales },    
+        // { "path": "deliveries-page", "table": deliveries },    
+        // { "path": "investments-page", "table": investments },
+        // { "path": "subscriptions-page", "table": subscriptions },
+        { "path": "report-page", "table": reportConfiguration },
+        { "path": "sidebar-page", "table": sideBarConfiguration },
+        
       ]
     
       if (view) {
         tableConfiguration = [
-          { "path": "product-catalog", "table": productCategory },
-          { "path": "products-page", "table": products },
-          { "path": "inventory-page", "table": inventory },    
-          { "path": "receipts-page", "table": receipts },
-          { "path": "staff-page", "table": staff },
-          { "path": "sales-page", "table": sales },    
-          { "path": "suppliers-page", "table": suppliers },
-          { "path": "deliveries-page", "table": deliveries },    
-          { "path": "investments-page", "table": investments },
-          { "path": "subscriptions-page", "table": subscriptions },
+        //   { "path": "product-catalog", "table": productCategory },
+        //   { "path": "products-page", "table": products },
+        //   { "path": "inventory-page", "table": inventory },    
+        //   { "path": "receipts-page", "table": receipts },
+        //   { "path": "staff-page", "table": staff },
+        //   { "path": "sales-page", "table": sales },    
+        //   { "path": "suppliers-page", "table": suppliers },
+        //   { "path": "deliveries-page", "table": deliveries },    
+        //   { "path": "investments-page", "table": investments },
+        //   { "path": "subscriptions-page", "table": subscriptions },
+          { "path": "report-page", "table": reportConfiguration },
+          { "path": "sidebar-page", "table": sideBarConfiguration },
         ];
       }
     

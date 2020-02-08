@@ -172,7 +172,7 @@ function generateSequelize(config, genUser) {
 // resolve dependencies (id => name)
 async function resolveDependencies(conf, records) {
   let configs = conf.table.columns.filter(x => (x.ref))
-  console.log("Configs is ", configs);
+  
   for (const c in configs) {
 
     let config = configs[c];
@@ -185,13 +185,13 @@ async function resolveDependencies(conf, records) {
     for (const r in records) {
       let record = records[r];
 
-      console.log(record[config.name], config.name, tableName);
+      //console.log(record[config.name], config.name, tableName);
       let inst = await sharedPersistenceMapping[tableName].findById(record[config.name]);
 
       // cannot be null
 
       record[config.name] = inst[disp];
-      console.log("We found something", record[config.name]);
+      //console.log("We found something", record[config.name]);
     }
   }
 }
@@ -817,24 +817,26 @@ router.get('/user/:userId', (req, res) => {
   });
 })
 
-router.get('/api/receipts-manage', function(req, res) {
+router.get('/api/receipts-manage', async function(req, res) {
   // we return receipts list
   // but we also return an array of items for each receipt
 })
 
-router.get('/tableProfiles', function (req, res) {
+router.get('/tableProfiles', async function (req, res) {
   // get the table configurations
 
   res.json(getConfiguration(true));
 });
 
-router.get('/sidebarConfig', function (req, res) {
-  res.json(sidebarConfiguration());
+router.get('/sidebarConfig', async function (req, res) {
+  let r = await sidebarConfiguration(sharedPersistenceMapping)
+  res.json(r);
 })
 
-router.get('/reportProfiles', function (req, res) {
+router.get('/reportProfiles', async function (req, res) {
   // get report profile which defines the report 
-  res.json(getReportConfig());
+  let r = await getReportConfig(sharedPersistenceMapping)
+  res.json(r);
 });
 
 const reportMapping = {
@@ -860,7 +862,19 @@ router.get('/report/:name', async function (req, res) {
     res.json(result);
     return;
   }
-  res.json({});
+  // find config inside the report configuration and return it instead
+  // note: if datasource is defined here we can use the query to generate the data
+  // sharedPersistenceMapping["settings"].findOne({ where: { "sett_user_id": req.decoded.admin } })
+  sharedPersistenceMapping["reportconfiguration"].findOne({ where: { "report_path": query } })
+  .then(e=>{
+    if (!e) {
+      res.json({});
+    }
+    else {
+      res.json(e.report_configuration)
+    }
+  })
+  //res.json({});
 
 })
 

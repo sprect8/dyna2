@@ -40,7 +40,7 @@ let component = (props) => (
 		
 		<Row>
 			<HalfColumn>
-				<Spider title="Dynascore" description="Your overall score for this week" />
+				<Spider title="Overall Score" description="Your overall score for this week" />
 			</HalfColumn>
 			<HalfColumn>
 				<Breakdown title="Score Breakdown" description="Breakdown of your scores in each category" data={data} />
