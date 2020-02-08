@@ -1,3 +1,3 @@
-import { get } from "http";
+import { get, fetch } from "http";
 
 export {fetch, get}
