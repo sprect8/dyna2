@@ -108,7 +108,7 @@ class SignIn extends Component {
             </div>
             <div className="mateLoginSubmitText">
               <span>
-                Please Email Faizal for more information on creating an account
+                Datalytics users can request a trial account from the relevant RZLytics representatives
               </span>
             </div>
             

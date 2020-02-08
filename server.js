@@ -1657,7 +1657,7 @@ app.post("/register", function (req, res) {
 
   let payload = req.body.payload;
 
-  if (payload.authKey !== "Dynapreneur2018") {
+  if (payload.authKey !== "Datalytics2020") {
     res.json({ success: false, message: "Invalid Auth Key" });
     return;
   }
