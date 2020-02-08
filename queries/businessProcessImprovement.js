@@ -102,7 +102,7 @@ module.exports = {
     loadConfig: async (db, user) => {
         let year = new Date().getFullYear();
         let month = new Date().getMonth() + 1;
-        if (user === 11) {
+        if (user === 1) {
             year = 2017;
             month = 12;
         }

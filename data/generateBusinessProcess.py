@@ -19,9 +19,9 @@ create table f_monthly_stock_expiry (
 
 insQuery = "insert into f_monthly_stock_expiry values (%s, %s, %s, %s, %s, %s, %s, %s, 1, now());"
 
-prodId = [5569, 5570, 5580]
-userId = 11
-badId = 5580
+prodId = [1900, 2000, 3000]
+userId = 1
+badId = 2000
 # generate for the list of items which represent our types and inventory (which I won't even bother mapping to properly for the demo)
 # enter 12 months of data
 
@@ -34,4 +34,4 @@ for mon in range(1, 13):
             bad = randint(3, 20)
             vbad = randint(3, 10)
         good = 100 - bad - vbad
-        print insQuery % (str(userId), str(pId), str(123), str(vbad), str(bad), str(good), mon, '2017') 
+        print insQuery % (str(userId), str(pId), str(123), str(vbad), str(bad), str(good), mon, '2020') 

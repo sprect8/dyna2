@@ -1,45 +1,36 @@
-insert into f_monthly_stock_expiry values (11, 5569, 123, 2, 1, 97, 1, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5570, 123, 1, 3, 96, 1, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5580, 123, 3, 19, 78, 1, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5569, 123, 3, 2, 95, 2, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5570, 123, 1, 0, 99, 2, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5580, 123, 4, 17, 79, 2, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5569, 123, 2, 0, 98, 3, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5570, 123, 3, 1, 96, 3, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5580, 123, 10, 8, 82, 3, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5569, 123, 0, 1, 99, 4, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5570, 123, 3, 3, 94, 4, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5580, 123, 10, 6, 84, 4, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5569, 123, 3, 2, 95, 5, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5570, 123, 1, 3, 96, 5, 2017, 1, now());
-
-
-
-insert into f_monthly_stock_expiry values (11, 5580, 123, 7, 15, 78, 5, 2017, 1, now());
-
-insert into f_monthly_stock_expiry values (11, 5569, 123, 0, 0, 100, 6, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5570, 123, 0, 3, 97, 6, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5580, 123, 9, 18, 73, 6, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5569, 123, 2, 2, 96, 7, 2017, 1, now());
-
-
-insert into f_monthly_stock_expiry values (11, 5570, 123, 1, 2, 97, 7, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5580, 123, 4, 11, 85, 7, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5569, 123, 3, 3, 94, 8, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5570, 123, 1, 3, 96, 8, 2017, 1, now());
-
-insert into f_monthly_stock_expiry values (11, 5580, 123, 3, 8, 89, 8, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5569, 123, 2, 0, 98, 9, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5570, 123, 3, 0, 97, 9, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5580, 123, 9, 4, 87, 9, 2017, 1, now());
-
-insert into f_monthly_stock_expiry values (11, 5569, 123, 0, 1, 99, 10, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5570, 123, 1, 1, 98, 10, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5580, 123, 8, 19, 73, 10, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5569, 123, 0, 1, 99, 11, 2017, 1, now());
-
-insert into f_monthly_stock_expiry values (11, 5570, 123, 0, 1, 99, 11, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5580, 123, 5, 7, 88, 11, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5569, 123, 1, 2, 97, 12, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5570, 123, 1, 1, 98, 12, 2017, 1, now());
-insert into f_monthly_stock_expiry values (11, 5580, 123, 6, 13, 81, 12, 2017, 1, now());
+insert into f_monthly_stock_expiry values (1, 1900, 123, 2, 3, 95, 1, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 2000, 123, 10, 13, 77, 1, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 3000, 123, 2, 1, 97, 1, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 1900, 123, 2, 1, 97, 2, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 2000, 123, 9, 13, 78, 2, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 3000, 123, 0, 0, 100, 2, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 1900, 123, 2, 1, 97, 3, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 2000, 123, 9, 7, 84, 3, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 3000, 123, 1, 2, 97, 3, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 1900, 123, 1, 0, 99, 4, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 2000, 123, 8, 19, 73, 4, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 3000, 123, 3, 2, 95, 4, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 1900, 123, 2, 1, 97, 5, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 2000, 123, 7, 5, 88, 5, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 3000, 123, 2, 1, 97, 5, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 1900, 123, 0, 3, 97, 6, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 2000, 123, 3, 13, 84, 6, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 3000, 123, 2, 2, 96, 6, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 1900, 123, 1, 0, 99, 7, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 2000, 123, 3, 13, 84, 7, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 3000, 123, 0, 2, 98, 7, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 1900, 123, 2, 1, 97, 8, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 2000, 123, 10, 12, 78, 8, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 3000, 123, 1, 3, 96, 8, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 1900, 123, 1, 2, 97, 9, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 2000, 123, 4, 10, 86, 9, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 3000, 123, 2, 1, 97, 9, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 1900, 123, 0, 1, 99, 10, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 2000, 123, 7, 13, 80, 10, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 3000, 123, 1, 0, 99, 10, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 1900, 123, 3, 1, 96, 11, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 2000, 123, 8, 15, 77, 11, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 3000, 123, 2, 3, 95, 11, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 1900, 123, 3, 3, 94, 12, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 2000, 123, 5, 3, 92, 12, 2020, 1, now());
+insert into f_monthly_stock_expiry values (1, 3000, 123, 2, 3, 95, 12, 2020, 1, now());

@@ -3,33 +3,33 @@ from random import randint
 
 # devy_id | devy_prod_id | devy_supl_id | devy_request_date | devy_delivery_date | devy_status | devy_comment | owner_user_id | createdAt | updatedAt 
 
-userId = 11
-deliveryIds = [22,23,24]
+userId = 1
+deliveryIds = [1,2,3]
 devId = 5
 
 badDelivery = 3
 
 
-prodIds = [ 5569
- ,   5570
- ,   5571
- ,   5572
- ,   5573
- ,   5574
- ,   5575
- ,   5576
- ,   5577
- ,   5578
- ,   5579
- ,   5580
- ,   5581
- ,   5582
- ,   5583
- ,   5584
- ,   5585
- ,   5586
- ,   5587
- ,   5588] # 20 product ids to loop through
+prodIds = [ 2569
+ ,   2570
+ ,   2571
+ ,   2572
+ ,   2573
+ ,   2574
+ ,   2575
+ ,   2576
+ ,   2577
+ ,   2578
+ ,   2579
+ ,   2580
+ ,   2581
+ ,   2582
+ ,   2583
+ ,   2584
+ ,   2585
+ ,   2586
+ ,   2587
+ ,   2588] # 20 product ids to loop through
 
 query = """insert into deliveries (devy_id, devy_prod_id, devy_supl_id, devy_request_date, devy_delivery_date, devy_status, devy_comment, owner_user_id, "createdAt", "updatedAt") values(%s, %s, %s, to_date('%s', 'YYYY-MM-DD'), to_date('%s', 'YYYY-MM-DD'), '%s', '%s', %s, now(), now());"""
 
@@ -40,9 +40,9 @@ query = """insert into deliveries (devy_id, devy_prod_id, devy_supl_id, devy_req
 # the BAD delivery will have the following breakdown
 # 70% on time, 20% late, 5% very late, 5% business impacting
 
-start = date(2017, 1, 1)
+start = date(2019, 1, 1)
 
-end = date(2018, 1, 1)
+end = date(2020, 1, 1)
 
 week = timedelta(days=4)
 

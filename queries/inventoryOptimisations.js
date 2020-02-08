@@ -247,6 +247,7 @@ module.exports = {
 
 
     let ie = JSON.parse(JSON.stringify(inventoryOptimisation));
+    console.log(ie, ie[0]);
 
     let stats = ie[0][1].data;
     stats[0].widgets[0].amount = dos ? dos.dos : 0;

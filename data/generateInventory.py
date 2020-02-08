@@ -29,9 +29,9 @@ create table f_monthly_sales(
 
 insQuery = "insert into f_monthly_inventory values (%s, %s, %s, %s, %s, 1, now());"
 
-prodId = [5569, 5570, 5580]
-userId = 11
-badId = 5580
+prodId = [1900, 2000, 3000]
+userId = 1
+badId = 2000
 # generate for the list of items which represent our types and inventory (which I won't even bother mapping to properly for the demo)
 # enter 12 months of data
 
@@ -41,4 +41,4 @@ for mon in range(1, 13):
         
         if (badId == pId):
             vbad = randint(20, 40)
-        print insQuery % (str(userId), str(pId), str(vbad), mon, '2017') 
+        print insQuery % (str(userId), str(pId), str(vbad), mon, '2019') 

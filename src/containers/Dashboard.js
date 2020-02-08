@@ -35,7 +35,7 @@ let component = (props) => (
 	<LayoutWrapper>
 		<Row><FullColumn>
 			<h2>Welcome {props.name}</h2>
-			<p className="description">This is your overall score - you have <a href="/dashboard/inbox">{props.notifications} Dynalitics</a> notifications</p>			
+			<p className="description">This is your overall score</p>			
 		</FullColumn></Row>
 		
 		<Row>
