@@ -858,6 +858,41 @@ const reportMapping = {
 
 }
 
+// look at the DS, run the queries, and get the more accurate results 
+// create the necessary datasources
+
+let generator = async (report) => {
+  if (!report.config || !report.config.rows) 
+    return report;
+  
+  await asyncForEach(report.config.rows, async e => {
+    await asyncForEach(e, async f=>{
+      if (!f.datasource) return;
+      let res = await sharedPersistenceMapping["dsconfiguration"].findOne({ where: { "ds_name": f.datasource } });
+      if (!res) return;
+      let query = JSON.parse(res.ds_configuration);
+      let label = query.labelCol;
+      let seriesCol = query.seriesCol;
+      let dataCol = query.dataCol;
+      query = query.query;
+      const [results, metadata] = await sequelize.query(query);
+      let series = {};
+      let labels = {};
+      let data = {}; // series - array
+      await asyncForEach(results, r=>{
+        if (!series[r[seriesCol]]) {
+          
+        }
+        if (!labels[r[label]]) {
+          labels[r[label]] = 1;
+        }
+      })
+    });
+  });
+
+  return report;
+}
+
 router.get('/report/:name', async function (req, res) {
   // get report based on name
   // note that the report is dynamically generated and returned
@@ -874,12 +909,13 @@ router.get('/report/:name', async function (req, res) {
   // note: if datasource is defined here we can use the query to generate the data
   // sharedPersistenceMapping["settings"].findOne({ where: { "sett_user_id": req.decoded.admin } })
   sharedPersistenceMapping["reportconfiguration"].findOne({ where: { "report_path": query } })
-  .then(e=>{
+  .then(async e=>{
     if (!e) {
       res.json({});
     }
     else {
-      res.json(e.report_configuration)
+      let r = await generator(JSON.parse(e.report_configuration));
+      res.json(r)
     }
   })
   //res.json({});
