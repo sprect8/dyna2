@@ -59,6 +59,7 @@ var sequelize = new Sequelize(process.env.postgres_db || 'postgres', process.env
   dialectOptions: {
         ssl: process.env.PORT ? true : false
     },
+    logging: process.env.verboseLogging
 }); // connect to sequelize
 
 cron.startCron(sequelize); // start the cron job!
@@ -712,7 +713,14 @@ function registerReceiptService(app) {
   })
 }
 
-function generateRoutes(app, configuration) {
+async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
+}
+
+function generateRoutes(app) {
+  let configuration = getConfiguration();
 
   getUserStructures().forEach(conf => {
     generateSequelize(conf);
@@ -785,7 +793,7 @@ router.use(function (req, res, next) {
   }
 });
 
-generateRoutes(router, getConfiguration());
+generateRoutes(router);
 
 router.get('/user/:userId', (req, res) => {
 
@@ -824,8 +832,8 @@ router.get('/api/receipts-manage', async function(req, res) {
 
 router.get('/tableProfiles', async function (req, res) {
   // get the table configurations
-
-  res.json(getConfiguration(true));
+  let r = await getConfiguration(true, sharedPersistenceMapping);
+  res.json(r);
 });
 
 router.get('/sidebarConfig', async function (req, res) {
@@ -995,7 +1003,7 @@ router.put('/company-settings', function (req, res) {
 app.post("/resetpass", function(req, res) {
   let payload = req.body;
 
-  if (payload.authKey !== "Dynapreneur2018") {
+  if (payload.authKey !== "Datalytics2020") {
     res.json({success: false, message:"Invalid Auth Key"});
     return;
   }

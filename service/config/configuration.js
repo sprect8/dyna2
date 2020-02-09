@@ -1,4 +1,23 @@
+async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+      await callback(array[index], index, array);
+    }
+  }
 const fn = (view, db)=>{
+    /*try {        
+        let result = await db["systemschemaconfiguration"].findAll();
+
+        let ret = {};
+
+        await asyncForEach(result, async e=>{
+            ret = JSON.parse(e.schema_config);
+        });
+        console.log(ret);
+        return ret;
+    }
+    catch (e) {
+        console.log(e);
+    }*/
     const staff = {
         "tableName": "staffs",
         "displayName": "Staff Records",
@@ -178,6 +197,19 @@ const fn = (view, db)=>{
         ]
       }
 
+      const datasourceConfiguration = {
+        "tableName": "dsconfiguration",
+        "displayName": "Datasource Configuration",
+        "key": "ds_id",
+        "description": "Datasources used by the reports",
+        "columns": [
+          { "name": "ds_id", "display": "DS Id", "type": "number", "sequence": "ds_id_seq", "mandatory": true, "unique": true, "key": true },
+          { "name": "ds_name", "display": "Datasource Name", "type": "text", "mandatory": true },
+          { "name": "ds_desc", "display": "Datasource Desc", "type": "text", "mandatory": true },
+          { "name": "ds_configuration", "display": "DS Configuration", "type": "text", "mandatory": true },          
+        ]
+      }
+
       const sideBarConfiguration = {
         "tableName": "sidebarConfiguration",
         "displayName": "Sidebar Configuration",
@@ -188,7 +220,33 @@ const fn = (view, db)=>{
           { "name": "sidebar_config", "display": "Sidebar Configuration", "type": "text", "mandatory": true},          
         ]
       }
-    
+
+      const infobeatmotor = {
+        "tableName": "infobeatmotor",
+        "displayName": "InfoBeatMotor Configuration",
+        "key": "infobeat_id",
+        "description": "Infobeat Table",
+        "columns": [
+          { "name": "infobeat_id", "display": "Infobeat ID", "type": "number", "sequence": "infobeat_id_seq", "mandatory": true, "unique": true, "key": true },
+          { "name": "infobeat_state", "display": "State", "type": "text", "mandatory": true},          
+          { "name": "infobeat_office", "display": "Office", "type": "text", "mandatory": true},          
+          { "name": "infobeat_vol_motor", "display": "Motor", "type": "text", "mandatory": true},          
+          { "name": "infobeat_vol_van", "display": "Van", "type": "text", "mandatory": true},
+          { "name": "infobeat_month", "display": "Month", "type": "number", "mandatory": true, "default": 202002}          
+        ]
+      }
+
+      const internalConfig = {
+        "tableName": "systemschemaconfiguration",
+        "displayName": "System Schema Config",
+        "key": "schema_id",
+        "description": "Configure table information",
+        "columns": [
+          { "name": "schema_id", "display": "Schema ID", "type": "number", "sequence": "schema_id_seq", "mandatory": true, "unique": true, "key": true },
+          { "name": "schema_config", "display": "Schema Configuration", "type": "text", "mandatory": true},          
+        ]          
+      }
+
       const investments = {
         "tableName": "investments",
         "displayName": "Investment Records",
@@ -239,7 +297,10 @@ const fn = (view, db)=>{
         // { "path": "investments-page", "table": investments },
         // { "path": "subscriptions-page", "table": subscriptions },
         { "path": "report-page", "table": reportConfiguration },
+        { "path": "ds-config-page", "table": datasourceConfiguration },
         { "path": "sidebar-page", "table": sideBarConfiguration },
+        { "path": "infobeat-page", "table": infobeatmotor },
+        { "path": "internal-config-page", "table": internalConfig },
         
       ]
     
@@ -256,9 +317,14 @@ const fn = (view, db)=>{
         //   { "path": "investments-page", "table": investments },
         //   { "path": "subscriptions-page", "table": subscriptions },
           { "path": "report-page", "table": reportConfiguration },
+          { "path": "ds-config-page", "table": datasourceConfiguration },
           { "path": "sidebar-page", "table": sideBarConfiguration },
+          { "path": "infobeat-page", "table": infobeatmotor },
+          //{ "path": "internal-config-page", "table": internalConfig },
         ];
       }
+
+      console.log(JSON.stringify(tableConfiguration));
     
       return tableConfiguration;
 }
